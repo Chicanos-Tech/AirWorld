@@ -709,12 +709,15 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             z-index: 1500;
             opacity: 0;
             pointer-events: none;
             transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .auth-page.visible {
@@ -1269,28 +1272,60 @@
 
     <!-- Ultra Styled Auth Page -->
     <div id="authPage" class="auth-page">
-        <div class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
-            <!-- Dynamic Animated Background Elements -->
-            <div id="authOrbs" class="absolute inset-0">
-                <div class="floating-orb orb-1"></div>
-                <div class="floating-orb orb-2"></div>
-                <div class="floating-orb orb-3"></div>
-                <div class="floating-orb orb-4"></div>
-                <div class="floating-orb orb-5"></div>
-                <div class="floating-orb orb-6"></div>
-            </div>
-            
-            <!-- Ultra Styled Auth Container -->
-            <div class="auth-container rounded-3xl p-8 md:p-12 max-w-md w-full relative z-10">
+        <!-- Dynamic Animated Background Elements -->
+        <div id="authOrbs" class="absolute inset-0">
+            <div class="floating-orb orb-1"></div>
+            <div class="floating-orb orb-2"></div>
+            <div class="floating-orb orb-3"></div>
+            <div class="floating-orb orb-4"></div>
+            <div class="floating-orb orb-5"></div>
+            <div class="floating-orb orb-6"></div>
+        </div>
+        
+        <!-- Ultra Styled Auth Container -->
+        <div class="auth-container rounded-3xl p-8 md:p-12 w-full max-w-md relative z-10">
                 <!-- Enhanced Logo -->
                 <div class="text-center mb-8 relative z-20">
                     <div class="auth-logo mx-auto mb-6">
-                        <div class="futuristic-logo-small">
-                            <div class="logo-core-small">
-                                <div class="core-text-small">AW</div>
-                            </div>
-                            <div class="logo-ring-small ring-1-small"></div>
-                            <div class="logo-ring-small ring-2-small"></div>
+                        <div class="w-20 h-20 mx-auto relative">
+                            <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+                                        <stop offset="50%" style="stop-color:#00f2fe;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+                                    </linearGradient>
+                                    <filter id="logoGlow">
+                                        <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                        <feMerge> 
+                                            <feMergeNode in="coloredBlur"/>
+                                            <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                    </filter>
+                                </defs>
+                                
+                                <!-- Outer circle -->
+                                <circle cx="40" cy="40" r="35" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.8" class="animate-spin" style="animation-duration: 8s;"/>
+                                
+                                <!-- Inner hexagon -->
+                                <polygon points="40,15 55,25 55,45 40,55 25,45 25,25" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.9" class="animate-pulse"/>
+                                
+                                <!-- Central A -->
+                                <g filter="url(#logoGlow)">
+                                    <path d="M 30 50 L 35 30 L 40 20 L 45 30 L 50 50 M 37 40 L 43 40" 
+                                          stroke="url(#logoGradient)" 
+                                          stroke-width="3" 
+                                          stroke-linecap="round" 
+                                          stroke-linejoin="round" 
+                                          fill="none"/>
+                                </g>
+                                
+                                <!-- Orbiting dots -->
+                                <circle cx="40" cy="10" r="2" fill="#ffffff" opacity="0.9" class="animate-bounce"/>
+                                <circle cx="65" cy="40" r="2" fill="#ffffff" opacity="0.8" class="animate-pulse"/>
+                                <circle cx="40" cy="70" r="2" fill="#ffffff" opacity="0.9" class="animate-bounce"/>
+                                <circle cx="15" cy="40" r="2" fill="#ffffff" opacity="0.8" class="animate-pulse"/>
+                            </svg>
                         </div>
                     </div>
                     <h1 class="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
@@ -1670,5 +1705,5 @@
         `;
         document.head.appendChild(style);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9807bfe744f97a6e',t:'MTc1ODEwMzE1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9807cd1206f241da',t:'MTc1ODEwMzY5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
