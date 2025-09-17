@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirWorld - La révolution du développement web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-2xl">🌍</span>
+                    </div>
+                    <span class="text-2xl font-bold">AirWorld</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#features" class="hover:text-blue-200 transition-colors">Fonctionnalités</a>
+                    <a href="#pricing" class="hover:text-blue-200 transition-colors">Tarifs</a>
+                    <a href="#community" class="hover:text-blue-200 transition-colors">Communauté</a>
+                </div>
+                <button class="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
+                    Rejoindre
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 floating">
+                La révolution du <br>
+                <span class="text-yellow-300">développement web</span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
+                Une plateforme mondiale où les clients fixent leurs prix et les développeurs se surpassent. 
+                Transparent, équitable, révolutionnaire.
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
+                <button class="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-colors pulse-animation">
+                    🚀 Lancer mon projet
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                    💻 Devenir développeur
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div class="card-hover p-6">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">10€</div>
+                    <div class="text-gray-600">Commission fixe</div>
+                </div>
+                <div class="card-hover p-6">
+                    <div class="text-4xl font-bold text-green-600 mb-2">3€</div>
+                    <div class="text-gray-600">Abonnement mensuel</div>
+                </div>
+                <div class="card-hover p-6">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">5000€</div>
+                    <div class="text-gray-600">Récompenses mensuelles</div>
+                </div>
+                <div class="card-hover p-6">
+                    <div class="text-4xl font-bold text-orange-600 mb-2">100€</div>
+                    <div class="text-gray-600">Bonus parrainage</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
+                Pourquoi AirWorld change tout ?
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white rounded-xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-3xl">🔄</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Modèle Inversé</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Le client fixe son prix et son besoin. Les développeurs postulent avec leurs meilleures propositions. 
+                        Fini les négociations interminables !
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="bg-white rounded-xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-3xl">🏆</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Ligue des Champions</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Classements mensuels, récompenses de 5000€, challenges trimestriels. 
+                        La gamification qui motive et récompense l'excellence.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="bg-white rounded-xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <span class="text-3xl">🌍</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Accessible à Tous</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Multilingue, mobile-first, sans barrières. Que vous soyez étudiant ou CEO, 
+                        AirWorld s'adapte à vos besoins.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
+                Comment ça marche ?
+            </h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- Client Side -->
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-blue-600 mb-6">👤 Pour les Clients</h3>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Décrivez votre projet</h4>
+                                <p class="text-gray-600">Besoin, deadline, budget - c'est tout !</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Recevez des propositions</h4>
+                                <p class="text-gray-600">Les développeurs postulent avec portfolio et méthode</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Choisissez et payez</h4>
+                                <p class="text-gray-600">Paiement sécurisé, suivi temps réel</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Developer Side -->
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-green-600 mb-6">💻 Pour les Développeurs</h3>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Explorez les projets</h4>
+                                <p class="text-gray-600">Accès temps réel aux opportunités mondiales</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Proposez votre expertise</h4>
+                                <p class="text-gray-600">Montrez votre portfolio et votre approche</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                            <div>
+                                <h4 class="font-semibold mb-2">Gagnez et progressez</h4>
+                                <p class="text-gray-600">Revenus + classements + récompenses</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
+                Tarification transparente
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <!-- Client Pricing -->
+                <div class="bg-white rounded-xl p-8 card-hover border-2 border-blue-200">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-blue-600 mb-2">Clients</h3>
+                        <div class="text-4xl font-bold text-gray-800 mb-2">10€</div>
+                        <div class="text-gray-600">par projet réalisé</div>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Inscription gratuite
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Propositions illimitées
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Paiement sécurisé
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Support 24/7
+                        </li>
+                    </ul>
+                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Commencer gratuitement
+                    </button>
+                </div>
+
+                <!-- Developer Pricing -->
+                <div class="bg-white rounded-xl p-8 card-hover border-2 border-green-200">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-bold text-green-600 mb-2">Développeurs</h3>
+                        <div class="text-4xl font-bold text-gray-800 mb-2">3€</div>
+                        <div class="text-gray-600">par mois</div>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Accès illimité aux projets
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Participation aux ligues
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Récompenses mensuelles
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-3">✓</span>
+                            Bonus parrainage 100€
+                        </li>
+                    </ul>
+                    <button class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        Rejoindre la communauté
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
+                Une communauté qui gagne ensemble
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-4xl">🏆</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Ligues Mensuelles</h3>
+                    <p class="text-gray-600">
+                        Classements, récompenses de 5000€, reconnaissance internationale
+                    </p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-4xl">⚔️</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Battle Devs</h3>
+                    <p class="text-gray-600">
+                        Challenges trimestriels ouverts à tous, cash prizes et visibilité
+                    </p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span class="text-4xl">🤝</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Solidarité</h3>
+                    <p class="text-gray-600">
+                        Fonds solidaires pour étudiants et associations, parrainage actif
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">
+                Prêt à révolutionner votre approche du développement ?
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                Rejoignez des milliers de clients et développeurs qui ont déjà choisi l'excellence
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button class="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-colors">
+                    🚀 Lancer mon premier projet
+                </button>
+                <button class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                    💻 Devenir développeur pro
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <span class="text-2xl">🌍</span>
+                        <span class="text-xl font-bold">AirWorld</span>
+                    </div>
+                    <p class="text-gray-400">
+                        La plateforme qui révolutionne la mise en relation clients-développeurs
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Plateforme</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Comment ça marche</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Tarifs</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Sécurité</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Communauté</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Ligues</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Battle Devs</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Parrainage</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">Support</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Centre d'aide</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">RGPD</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 AirWorld. Tous droits réservés. Révolutionnons ensemble le développement web.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.backgroundColor = 'rgba(102, 126, 234, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.backgroundColor = '';
+                header.style.backdropFilter = '';
+            }
+        });
+
+        // Counter animation for stats
+        function animateCounter(element, target) {
+            let current = 0;
+            const increment = target / 100;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current) + (element.textContent.includes('€') ? '€' : '');
+            }, 20);
+        }
+
+        // Trigger counter animation when stats section is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.text-4xl');
+                    counters.forEach(counter => {
+                        const target = parseInt(counter.textContent);
+                        if (!isNaN(target)) {
+                            animateCounter(counter, target);
+                        }
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        const statsSection = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-4');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9806e2e400295786',t:'MTc1ODA5NDEwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
