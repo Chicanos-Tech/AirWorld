@@ -6,472 +6,833 @@
     <title>AirWorld - La révolution du développement web</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
         body {
             font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
         }
         
+        /* Globe Animation */
+        .globe-container {
+            perspective: 1000px;
+            animation: fadeIn 2s ease-out;
+        }
+        
+        .globe {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+            position: relative;
+            animation: rotate 20s linear infinite;
+            box-shadow: 
+                0 0 50px rgba(79, 172, 254, 0.3),
+                inset -20px -20px 50px rgba(0, 0, 0, 0.1);
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Countries dots */
+        .country-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+        
+        .country-dot:nth-child(1) { top: 20%; left: 30%; animation-delay: 0s; }
+        .country-dot:nth-child(2) { top: 40%; left: 70%; animation-delay: 0.5s; }
+        .country-dot:nth-child(3) { top: 60%; left: 20%; animation-delay: 1s; }
+        .country-dot:nth-child(4) { top: 30%; left: 80%; animation-delay: 1.5s; }
+        .country-dot:nth-child(5) { top: 70%; left: 60%; animation-delay: 2s; }
+        .country-dot:nth-child(6) { top: 50%; left: 40%; animation-delay: 2.5s; }
+        .country-dot:nth-child(7) { top: 80%; left: 30%; animation-delay: 3s; }
+        .country-dot:nth-child(8) { top: 25%; left: 55%; animation-delay: 3.5s; }
+        
+        @keyframes pulse {
+            0%, 100% { 
+                transform: scale(1); 
+                opacity: 1; 
+            }
+            50% { 
+                transform: scale(1.5); 
+                opacity: 0.7; 
+            }
+        }
+        
+        /* Floating particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(79, 172, 254, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(odd) {
+            animation-direction: reverse;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) translateX(0px); }
+            25% { transform: translateY(-20px) translateX(10px); }
+            50% { transform: translateY(-40px) translateX(-10px); }
+            75% { transform: translateY(-20px) translateX(5px); }
+        }
+        
+        /* Welcome screen */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 1s ease-out;
+        }
+        
+        .welcome-screen.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+        
+        /* Choice buttons animation */
+        .choice-btn {
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUp 1s ease-out forwards;
+        }
+        
+        .choice-btn:nth-child(1) { animation-delay: 4s; }
+        .choice-btn:nth-child(2) { animation-delay: 4.5s; }
+        
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        /* Hover effects */
+        .choice-btn:hover {
+            transform: translateY(-10px) scale(1.05);
+            transition: all 0.3s ease;
+        }
+        
+        /* Main content */
+        .main-content {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+        
+        .main-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Gradient backgrounds */
         .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Card animations */
         .card-hover {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         
         .card-hover:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
         }
         
-        .pulse-animation {
-            animation: pulse 2s infinite;
+        /* Ripple effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
         }
         
-        @keyframes pulse {
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .ripple:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Loading animation */
+        .loading-text {
+            animation: loadingPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes loadingPulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            50% { opacity: 0.5; }
         }
         
+        /* Staggered animations */
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        .stagger-5 { animation-delay: 0.5s; }
+        
+        /* Floating elements */
         .floating {
             animation: floating 3s ease-in-out infinite;
         }
         
         @keyframes floating {
             0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            50% { transform: translateY(-15px); }
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="gradient-bg text-white">
-        <nav class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                        <span class="text-2xl">🌍</span>
-                    </div>
-                    <span class="text-2xl font-bold">AirWorld</span>
-                </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#features" class="hover:text-blue-200 transition-colors">Fonctionnalités</a>
-                    <a href="#pricing" class="hover:text-blue-200 transition-colors">Tarifs</a>
-                    <a href="#community" class="hover:text-blue-200 transition-colors">Communauté</a>
-                </div>
-                <button class="bg-white text-blue-600 px-6 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-                    Rejoindre
-                </button>
+<body class="bg-white">
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="globe-container mb-8">
+            <div class="globe">
+                <div class="country-dot"></div>
+                <div class="country-dot"></div>
+                <div class="country-dot"></div>
+                <div class="country-dot"></div>
+                <div class="country-dot"></div>
+                <div class="country-dot"></div>
+                <div class="country-dot"></div>
+                <div class="country-dot"></div>
             </div>
-        </nav>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="gradient-bg text-white py-20">
-        <div class="container mx-auto px-6 text-center">
-            <h1 class="text-5xl md:text-6xl font-bold mb-6 floating">
-                La révolution du <br>
-                <span class="text-yellow-300">développement web</span>
-            </h1>
-            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto opacity-90">
-                Une plateforme mondiale où les clients fixent leurs prix et les développeurs se surpassent. 
-                Transparent, équitable, révolutionnaire.
-            </p>
-            <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
-                <button class="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-colors pulse-animation">
-                    🚀 Lancer mon projet
-                </button>
-                <button class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
-                    💻 Devenir développeur
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="py-16 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-                <div class="card-hover p-6">
-                    <div class="text-4xl font-bold text-blue-600 mb-2">10€</div>
-                    <div class="text-gray-600">Commission fixe</div>
-                </div>
-                <div class="card-hover p-6">
-                    <div class="text-4xl font-bold text-green-600 mb-2">3€</div>
-                    <div class="text-gray-600">Abonnement mensuel</div>
-                </div>
-                <div class="card-hover p-6">
-                    <div class="text-4xl font-bold text-purple-600 mb-2">5000€</div>
-                    <div class="text-gray-600">Récompenses mensuelles</div>
-                </div>
-                <div class="card-hover p-6">
-                    <div class="text-4xl font-bold text-orange-600 mb-2">100€</div>
-                    <div class="text-gray-600">Bonus parrainage</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section id="features" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
-                Pourquoi AirWorld change tout ?
-            </h2>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="bg-white rounded-xl p-8 card-hover">
-                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                        <span class="text-3xl">🔄</span>
+            <!-- Floating particles around globe -->
+            <div class="particle" style="top: 10%; left: 20%;"></div>
+            <div class="particle" style="top: 30%; left: 80%;"></div>
+            <div class="particle" style="top: 70%; left: 15%;"></div>
+            <div class="particle" style="top: 60%; left: 85%;"></div>
+            <div class="particle" style="top: 20%; left: 60%;"></div>
+            <div class="particle" style="top: 80%; left: 70%;"></div>
+        </div>
+        
+        <h1 class="text-6xl font-black text-white mb-4 text-center">
+            <span class="block">🌍</span>
+            AirWorld
+        </h1>
+        
+        <p class="text-xl text-white/80 mb-12 text-center loading-text">
+            Connectons le monde du développement...
+        </p>
+        
+        <div class="flex flex-col md:flex-row gap-6">
+            <button onclick="showMainContent('client')" class="choice-btn bg-white text-blue-600 px-12 py-6 rounded-2xl text-xl font-bold hover:shadow-2xl ripple">
+                👤 Je suis un Client
+                <div class="text-sm font-normal mt-1 opacity-75">J'ai un projet à réaliser</div>
+            </button>
+            
+            <button onclick="showMainContent('developer')" class="choice-btn bg-yellow-400 text-gray-900 px-12 py-6 rounded-2xl text-xl font-bold hover:shadow-2xl ripple">
+                💻 Je suis Développeur
+                <div class="text-sm font-normal mt-1 opacity-75">Je veux rejoindre la communauté</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+        <!-- Header -->
+        <header class="gradient-bg text-white fixed w-full z-50 backdrop-blur-lg bg-opacity-95">
+            <nav class="container mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center floating">
+                            <span class="text-2xl">🌍</span>
+                        </div>
+                        <span class="text-3xl font-black">AirWorld</span>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Modèle Inversé</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Le client fixe son prix et son besoin. Les développeurs postulent avec leurs meilleures propositions. 
-                        Fini les négociations interminables !
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#features" class="hover:text-yellow-300 transition-colors font-medium">Fonctionnalités</a>
+                        <a href="#pricing" class="hover:text-yellow-300 transition-colors font-medium">Tarifs</a>
+                        <a href="#community" class="hover:text-yellow-300 transition-colors font-medium">Communauté</a>
+                    </div>
+                    <button class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 transition-all hover:scale-105">
+                        Rejoindre
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="gradient-bg text-white py-32 pt-40 relative overflow-hidden">
+            <div class="absolute inset-0">
+                <div class="particle" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
+                <div class="particle" style="top: 20%; left: 90%; animation-delay: 1s;"></div>
+                <div class="particle" style="top: 80%; left: 20%; animation-delay: 2s;"></div>
+                <div class="particle" style="top: 70%; left: 80%; animation-delay: 3s;"></div>
+                <div class="particle" style="top: 40%; left: 5%; animation-delay: 4s;"></div>
+                <div class="particle" style="top: 60%; left: 95%; animation-delay: 5s;"></div>
+            </div>
+            
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <div class="stagger-1 opacity-0 animate-[slideUp_1s_ease-out_forwards]">
+                    <h1 class="text-7xl md:text-8xl font-black mb-8 leading-tight">
+                        La révolution du <br>
+                        <span class="text-yellow-300 floating">développement web</span>
+                    </h1>
+                </div>
+                
+                <div class="stagger-2 opacity-0 animate-[slideUp_1s_ease-out_forwards]">
+                    <p class="text-2xl md:text-3xl mb-12 max-w-4xl mx-auto font-light">
+                        Une plateforme mondiale où les clients fixent leurs prix et les développeurs se surpassent. 
+                        <span class="text-yellow-300 font-semibold">Transparent, équitable, révolutionnaire.</span>
                     </p>
                 </div>
-
-                <!-- Feature 2 -->
-                <div class="bg-white rounded-xl p-8 card-hover">
-                    <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-6">
-                        <span class="text-3xl">🏆</span>
+                
+                <div class="stagger-3 opacity-0 animate-[slideUp_1s_ease-out_forwards]">
+                    <div class="flex flex-col md:flex-row gap-6 justify-center items-center">
+                        <button class="bg-yellow-400 text-gray-900 px-10 py-5 rounded-2xl text-xl font-bold hover:bg-yellow-300 transition-all hover:scale-105 hover:shadow-2xl ripple">
+                            🚀 Lancer mon projet
+                        </button>
+                        <button class="border-3 border-white text-white px-10 py-5 rounded-2xl text-xl font-bold hover:bg-white hover:text-blue-600 transition-all hover:scale-105 hover:shadow-2xl ripple">
+                            💻 Devenir développeur
+                        </button>
                     </div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Ligue des Champions</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Classements mensuels, récompenses de 5000€, challenges trimestriels. 
-                        La gamification qui motive et récompense l'excellence.
-                    </p>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="bg-white rounded-xl p-8 card-hover">
-                    <div class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
-                        <span class="text-3xl">🌍</span>
-                    </div>
-                    <h3 class="text-2xl font-bold mb-4 text-gray-800">Accessible à Tous</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Multilingue, mobile-first, sans barrières. Que vous soyez étudiant ou CEO, 
-                        AirWorld s'adapte à vos besoins.
-                    </p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- How it Works -->
-    <section class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
-                Comment ça marche ?
-            </h2>
-            
-            <div class="max-w-4xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <!-- Client Side -->
-                    <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-blue-600 mb-6">👤 Pour les Clients</h3>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Décrivez votre projet</h4>
-                                <p class="text-gray-600">Besoin, deadline, budget - c'est tout !</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Recevez des propositions</h4>
-                                <p class="text-gray-600">Les développeurs postulent avec portfolio et méthode</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Choisissez et payez</h4>
-                                <p class="text-gray-600">Paiement sécurisé, suivi temps réel</p>
-                            </div>
-                        </div>
+        <!-- Animated Stats Section -->
+        <section class="py-20 bg-white relative">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                    <div class="text-center p-8 card-hover bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl">
+                        <div class="text-6xl font-black gradient-text mb-4" data-target="10">0€</div>
+                        <div class="text-gray-600 font-semibold text-lg">Commission fixe</div>
+                        <div class="text-sm text-gray-500 mt-2">Simple et transparent</div>
                     </div>
                     
-                    <!-- Developer Side -->
-                    <div class="space-y-6">
-                        <h3 class="text-2xl font-bold text-green-600 mb-6">💻 Pour les Développeurs</h3>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">1</div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Explorez les projets</h4>
-                                <p class="text-gray-600">Accès temps réel aux opportunités mondiales</p>
+                    <div class="text-center p-8 card-hover bg-gradient-to-br from-green-50 to-green-100 rounded-3xl">
+                        <div class="text-6xl font-black gradient-text mb-4" data-target="3">0€</div>
+                        <div class="text-gray-600 font-semibold text-lg">Abonnement mensuel</div>
+                        <div class="text-sm text-gray-500 mt-2">Accès illimité</div>
+                    </div>
+                    
+                    <div class="text-center p-8 card-hover bg-gradient-to-br from-purple-50 to-purple-100 rounded-3xl">
+                        <div class="text-6xl font-black gradient-text mb-4" data-target="5000">0€</div>
+                        <div class="text-gray-600 font-semibold text-lg">Récompenses mensuelles</div>
+                        <div class="text-sm text-gray-500 mt-2">Pour les meilleurs</div>
+                    </div>
+                    
+                    <div class="text-center p-8 card-hover bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl">
+                        <div class="text-6xl font-black gradient-text mb-4" data-target="100">0€</div>
+                        <div class="text-gray-600 font-semibold text-lg">Bonus parrainage</div>
+                        <div class="text-sm text-gray-500 mt-2">Croissance virale</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section with Enhanced Animations -->
+        <section id="features" class="py-32 bg-gradient-to-br from-gray-50 to-blue-50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-6xl font-black text-center mb-20 gradient-text">
+                    Pourquoi AirWorld change tout ?
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <!-- Feature 1 -->
+                    <div class="bg-white rounded-3xl p-10 card-hover shadow-lg">
+                        <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center mb-8 floating">
+                            <span class="text-4xl">🔄</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-6 text-gray-800">Modèle Inversé</h3>
+                        <p class="text-gray-600 leading-relaxed text-lg">
+                            Le client fixe son prix et son besoin. Les développeurs postulent avec leurs meilleures propositions. 
+                            <span class="font-semibold text-blue-600">Fini les négociations interminables !</span>
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="bg-white rounded-3xl p-10 card-hover shadow-lg">
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center mb-8 floating" style="animation-delay: 0.5s;">
+                            <span class="text-4xl">🏆</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-6 text-gray-800">Ligue des Champions</h3>
+                        <p class="text-gray-600 leading-relaxed text-lg">
+                            Classements mensuels, récompenses de 5000€, challenges trimestriels. 
+                            <span class="font-semibold text-green-600">La gamification qui motive et récompense l'excellence.</span>
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="bg-white rounded-3xl p-10 card-hover shadow-lg">
+                        <div class="w-20 h-20 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center mb-8 floating" style="animation-delay: 1s;">
+                            <span class="text-4xl">🌍</span>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-6 text-gray-800">Accessible à Tous</h3>
+                        <p class="text-gray-600 leading-relaxed text-lg">
+                            Multilingue, mobile-first, sans barrières. Que vous soyez étudiant ou CEO, 
+                            <span class="font-semibold text-purple-600">AirWorld s'adapte à vos besoins.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced How it Works -->
+        <section class="py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-6xl font-black text-center mb-20 gradient-text">
+                    Comment ça marche ?
+                </h2>
+                
+                <div class="max-w-6xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                        <!-- Client Side -->
+                        <div class="space-y-8">
+                            <h3 class="text-4xl font-bold text-blue-600 mb-10 flex items-center">
+                                <span class="text-5xl mr-4">👤</span> Pour les Clients
+                            </h3>
+                            
+                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-blue-50">
+                                <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating">1</div>
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3">Décrivez votre projet</h4>
+                                    <p class="text-gray-600 text-lg">Besoin, deadline, budget - c'est tout ! Notre interface intuitive vous guide.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-blue-50">
+                                <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 0.5s;">2</div>
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3">Recevez des propositions</h4>
+                                    <p class="text-gray-600 text-lg">Les développeurs postulent avec portfolio et méthode détaillée.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-blue-50">
+                                <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 1s;">3</div>
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3">Choisissez et payez</h4>
+                                    <p class="text-gray-600 text-lg">Paiement sécurisé, suivi temps réel, satisfaction garantie.</p>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="flex items-start space-x-4">
-                            <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">2</div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Proposez votre expertise</h4>
-                                <p class="text-gray-600">Montrez votre portfolio et votre approche</p>
+                        <!-- Developer Side -->
+                        <div class="space-y-8">
+                            <h3 class="text-4xl font-bold text-green-600 mb-10 flex items-center">
+                                <span class="text-5xl mr-4">💻</span> Pour les Développeurs
+                            </h3>
+                            
+                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-green-50">
+                                <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating">1</div>
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3">Explorez les projets</h4>
+                                    <p class="text-gray-600 text-lg">Accès temps réel aux opportunités mondiales, filtres intelligents.</p>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="flex items-start space-x-4">
-                            <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center font-bold">3</div>
-                            <div>
-                                <h4 class="font-semibold mb-2">Gagnez et progressez</h4>
-                                <p class="text-gray-600">Revenus + classements + récompenses</p>
+                            
+                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-green-50">
+                                <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 0.5s;">2</div>
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3">Proposez votre expertise</h4>
+                                    <p class="text-gray-600 text-lg">Montrez votre portfolio et votre approche unique.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-green-50">
+                                <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 1s;">3</div>
+                                <div>
+                                    <h4 class="font-bold text-xl mb-3">Gagnez et progressez</h4>
+                                    <p class="text-gray-600 text-lg">Revenus + classements + récompenses + reconnaissance.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
-                Tarification transparente
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <!-- Client Pricing -->
-                <div class="bg-white rounded-xl p-8 card-hover border-2 border-blue-200">
-                    <div class="text-center mb-6">
-                        <h3 class="text-2xl font-bold text-blue-600 mb-2">Clients</h3>
-                        <div class="text-4xl font-bold text-gray-800 mb-2">10€</div>
-                        <div class="text-gray-600">par projet réalisé</div>
+        <!-- Enhanced Pricing Section -->
+        <section id="pricing" class="py-32 bg-gradient-to-br from-gray-50 to-purple-50">
+            <div class="container mx-auto px-6">
+                <h2 class="text-6xl font-black text-center mb-20 gradient-text">
+                    Tarification transparente
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                    <!-- Client Pricing -->
+                    <div class="bg-white rounded-3xl p-10 card-hover shadow-xl border-4 border-blue-200 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-blue-500 text-white px-6 py-2 rounded-bl-2xl font-bold">
+                            Populaire
+                        </div>
+                        <div class="text-center mb-8">
+                            <div class="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6 floating">
+                                <span class="text-4xl">👤</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-blue-600 mb-4">Clients</h3>
+                            <div class="text-6xl font-black text-gray-800 mb-2">10€</div>
+                            <div class="text-gray-600 text-lg">par projet réalisé</div>
+                        </div>
+                        <ul class="space-y-4 mb-10">
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Inscription gratuite
+                            </li>
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Propositions illimitées
+                            </li>
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Paiement sécurisé
+                            </li>
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Support 24/7
+                            </li>
+                        </ul>
+                        <button class="w-full bg-blue-600 text-white py-4 rounded-2xl text-xl font-bold hover:bg-blue-700 transition-all hover:scale-105 ripple">
+                            Commencer gratuitement
+                        </button>
                     </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Inscription gratuite
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Propositions illimitées
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Paiement sécurisé
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Support 24/7
-                        </li>
-                    </ul>
-                    <button class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                        Commencer gratuitement
+
+                    <!-- Developer Pricing -->
+                    <div class="bg-white rounded-3xl p-10 card-hover shadow-xl border-4 border-green-200 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-green-500 text-white px-6 py-2 rounded-bl-2xl font-bold">
+                            Meilleur choix
+                        </div>
+                        <div class="text-center mb-8">
+                            <div class="w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6 floating" style="animation-delay: 0.5s;">
+                                <span class="text-4xl">💻</span>
+                            </div>
+                            <h3 class="text-3xl font-bold text-green-600 mb-4">Développeurs</h3>
+                            <div class="text-6xl font-black text-gray-800 mb-2">3€</div>
+                            <div class="text-gray-600 text-lg">par mois</div>
+                        </div>
+                        <ul class="space-y-4 mb-10">
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Accès illimité aux projets
+                            </li>
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Participation aux ligues
+                            </li>
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Récompenses mensuelles
+                            </li>
+                            <li class="flex items-center text-lg">
+                                <span class="text-green-500 mr-4 text-2xl">✓</span>
+                                Bonus parrainage 100€
+                            </li>
+                        </ul>
+                        <button class="w-full bg-green-600 text-white py-4 rounded-2xl text-xl font-bold hover:bg-green-700 transition-all hover:scale-105 ripple">
+                            Rejoindre la communauté
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Community Section -->
+        <section id="community" class="py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-6xl font-black text-center mb-20 gradient-text">
+                    Une communauté qui gagne ensemble
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                    <div class="text-center p-10 card-hover bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl">
+                        <div class="w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-8 floating">
+                            <span class="text-5xl">🏆</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-6">Ligues Mensuelles</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Classements, récompenses de 5000€, reconnaissance internationale et badges exclusifs
+                        </p>
+                    </div>
+                    
+                    <div class="text-center p-10 card-hover bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl">
+                        <div class="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-8 floating" style="animation-delay: 0.5s;">
+                            <span class="text-5xl">⚔️</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-6">Battle Devs</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Challenges trimestriels ouverts à tous, cash prizes et visibilité mondiale
+                        </p>
+                    </div>
+                    
+                    <div class="text-center p-10 card-hover bg-gradient-to-br from-green-50 to-teal-50 rounded-3xl">
+                        <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-8 floating" style="animation-delay: 1s;">
+                            <span class="text-5xl">🤝</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-6">Solidarité</h3>
+                        <p class="text-gray-600 text-lg leading-relaxed">
+                            Fonds solidaires pour étudiants et associations, parrainage actif et entraide
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced CTA Section -->
+        <section class="gradient-bg text-white py-32 relative overflow-hidden">
+            <div class="absolute inset-0">
+                <div class="particle" style="top: 15%; left: 15%; animation-delay: 0s;"></div>
+                <div class="particle" style="top: 25%; left: 85%; animation-delay: 1s;"></div>
+                <div class="particle" style="top: 75%; left: 25%; animation-delay: 2s;"></div>
+                <div class="particle" style="top: 65%; left: 75%; animation-delay: 3s;"></div>
+            </div>
+            
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h2 class="text-6xl font-black mb-8">
+                    Prêt à révolutionner votre approche du développement ?
+                </h2>
+                <p class="text-2xl mb-12 opacity-90 max-w-3xl mx-auto">
+                    Rejoignez des milliers de clients et développeurs qui ont déjà choisi l'excellence
+                </p>
+                <div class="flex flex-col md:flex-row gap-6 justify-center">
+                    <button class="bg-yellow-400 text-gray-900 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-yellow-300 transition-all hover:scale-105 hover:shadow-2xl ripple">
+                        🚀 Lancer mon premier projet
+                    </button>
+                    <button class="border-3 border-white text-white px-12 py-6 rounded-2xl text-xl font-bold hover:bg-white hover:text-blue-600 transition-all hover:scale-105 hover:shadow-2xl ripple">
+                        💻 Devenir développeur pro
                     </button>
                 </div>
+            </div>
+        </section>
 
-                <!-- Developer Pricing -->
-                <div class="bg-white rounded-xl p-8 card-hover border-2 border-green-200">
-                    <div class="text-center mb-6">
-                        <h3 class="text-2xl font-bold text-green-600 mb-2">Développeurs</h3>
-                        <div class="text-4xl font-bold text-gray-800 mb-2">3€</div>
-                        <div class="text-gray-600">par mois</div>
+        <!-- Enhanced Footer -->
+        <footer class="bg-gray-900 text-white py-16">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center floating">
+                                <span class="text-2xl">🌍</span>
+                            </div>
+                            <span class="text-2xl font-black">AirWorld</span>
+                        </div>
+                        <p class="text-gray-400 text-lg leading-relaxed">
+                            La plateforme qui révolutionne la mise en relation clients-développeurs
+                        </p>
                     </div>
-                    <ul class="space-y-3 mb-8">
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Accès illimité aux projets
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Participation aux ligues
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Récompenses mensuelles
-                        </li>
-                        <li class="flex items-center">
-                            <span class="text-green-500 mr-3">✓</span>
-                            Bonus parrainage 100€
-                        </li>
-                    </ul>
-                    <button class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-                        Rejoindre la communauté
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section id="community" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">
-                Une communauté qui gagne ensemble
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center p-6">
-                    <div class="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">🏆</span>
+                    
+                    <div>
+                        <h4 class="font-bold mb-6 text-xl">Plateforme</h4>
+                        <ul class="space-y-3 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Comment ça marche</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Tarifs</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Sécurité</a></li>
+                        </ul>
                     </div>
-                    <h3 class="text-xl font-bold mb-4">Ligues Mensuelles</h3>
-                    <p class="text-gray-600">
-                        Classements, récompenses de 5000€, reconnaissance internationale
-                    </p>
+                    
+                    <div>
+                        <h4 class="font-bold mb-6 text-xl">Communauté</h4>
+                        <ul class="space-y-3 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Ligues</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Battle Devs</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Parrainage</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold mb-6 text-xl">Support</h4>
+                        <ul class="space-y-3 text-gray-400">
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Centre d'aide</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">Contact</a></li>
+                            <li><a href="#" class="hover:text-white transition-colors text-lg">RGPD</a></li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <div class="text-center p-6">
-                    <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">⚔️</span>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Battle Devs</h3>
-                    <p class="text-gray-600">
-                        Challenges trimestriels ouverts à tous, cash prizes et visibilité
-                    </p>
-                </div>
-                
-                <div class="text-center p-6">
-                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <span class="text-4xl">🤝</span>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4">Solidarité</h3>
-                    <p class="text-gray-600">
-                        Fonds solidaires pour étudiants et associations, parrainage actif
-                    </p>
+                <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                    <p class="text-lg">&copy; 2024 AirWorld. Tous droits réservés. Révolutionnons ensemble le développement web.</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="gradient-bg text-white py-20">
-        <div class="container mx-auto px-6 text-center">
-            <h2 class="text-4xl font-bold mb-6">
-                Prêt à révolutionner votre approche du développement ?
-            </h2>
-            <p class="text-xl mb-8 opacity-90">
-                Rejoignez des milliers de clients et développeurs qui ont déjà choisi l'excellence
-            </p>
-            <div class="flex flex-col md:flex-row gap-4 justify-center">
-                <button class="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-colors">
-                    🚀 Lancer mon premier projet
-                </button>
-                <button class="border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors">
-                    💻 Devenir développeur pro
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <span class="text-2xl">🌍</span>
-                        <span class="text-xl font-bold">AirWorld</span>
-                    </div>
-                    <p class="text-gray-400">
-                        La plateforme qui révolutionne la mise en relation clients-développeurs
-                    </p>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Plateforme</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Comment ça marche</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Tarifs</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Sécurité</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Communauté</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Ligues</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Battle Devs</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Parrainage</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="font-semibold mb-4">Support</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Centre d'aide</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">RGPD</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 AirWorld. Tous droits réservés. Révolutionnons ensemble le développement web.</p>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+        let userType = null;
+
+        function showMainContent(type) {
+            userType = type;
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Hide welcome screen with animation
+            welcomeScreen.classList.add('hidden');
+            
+            // Show main content after delay
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+                
+                // Start counter animations
+                setTimeout(() => {
+                    animateCounters();
+                }, 500);
+                
+                // Add scroll animations
+                setupScrollAnimations();
+            }, 1000);
+        }
+
+        function animateCounters() {
+            const counters = document.querySelectorAll('[data-target]');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                let current = 0;
+                const increment = target / 100;
+                const suffix = counter.textContent.includes('€') ? '€' : '';
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    counter.textContent = Math.floor(current) + suffix;
+                }, 30);
+            });
+        }
+
+        function setupScrollAnimations() {
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Header scroll effect
+            window.addEventListener('scroll', function() {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.style.backgroundColor = 'rgba(102, 126, 234, 0.95)';
+                    header.style.backdropFilter = 'blur(20px)';
+                } else {
+                    header.style.backgroundColor = '';
+                    header.style.backdropFilter = '';
                 }
             });
-        });
 
-        // Add scroll effect to header
-        window.addEventListener('scroll', function() {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.backgroundColor = 'rgba(102, 126, 234, 0.95)';
-                header.style.backdropFilter = 'blur(10px)';
-            } else {
-                header.style.backgroundColor = '';
-                header.style.backdropFilter = '';
+            // Intersection Observer for animations
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            // Observe elements for scroll animations
+            document.querySelectorAll('.card-hover').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(50px)';
+                el.style.transition = 'all 0.8s ease-out';
+                observer.observe(el);
+            });
+        }
+
+        // Add ripple effect to buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('ripple') || e.target.closest('.ripple')) {
+                const button = e.target.classList.contains('ripple') ? e.target : e.target.closest('.ripple');
+                const rect = button.getBoundingClientRect();
+                const ripple = document.createElement('span');
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.classList.add('ripple-effect');
+                
+                button.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
             }
         });
 
-        // Counter animation for stats
-        function animateCounter(element, target) {
-            let current = 0;
-            const increment = target / 100;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
+        // Add CSS for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple-effect {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
                 }
-                element.textContent = Math.floor(current) + (element.textContent.includes('€') ? '€' : '');
-            }, 20);
-        }
+            }
+        `;
+        document.head.appendChild(style);
 
-        // Trigger counter animation when stats section is visible
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const counters = entry.target.querySelectorAll('.text-4xl');
-                    counters.forEach(counter => {
-                        const target = parseInt(counter.textContent);
-                        if (!isNaN(target)) {
-                            animateCounter(counter, target);
-                        }
-                    });
-                    observer.unobserve(entry.target);
-                }
-            });
-        });
-
-        const statsSection = document.querySelector('.grid.grid-cols-1.md\\:grid-cols-4');
-        if (statsSection) {
-            observer.observe(statsSection);
-        }
+        // Auto-start welcome screen after 5 seconds if no interaction
+        setTimeout(() => {
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            if (!welcomeScreen.classList.contains('hidden')) {
+                showMainContent('client');
+            }
+        }, 8000);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9806e2e400295786',t:'MTc1ODA5NDEwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9806ee4ed56b0cd3',t:'MTc1ODA5NDU2OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
