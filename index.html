@@ -13,17 +13,153 @@
             overflow-x: hidden;
         }
         
-        /* Futuristic Logo Animation */
+        /* Modern Logo Animation */
         .logo-container {
             perspective: 1000px;
             animation: fadeIn 3s ease-out;
         }
         
-        .futuristic-logo {
+        .modern-logo {
             width: 200px;
             height: 200px;
             position: relative;
-            animation: logoFloat 4s ease-in-out infinite;
+            animation: logoFloat 6s ease-in-out infinite, logoRotate 20s linear infinite;
+        }
+        
+        .logo-svg {
+            filter: drop-shadow(0 0 30px rgba(79, 172, 254, 0.4));
+            animation: logoGlow 4s ease-in-out infinite;
+        }
+        
+        /* SVG Element Animations */
+        .glow-circle {
+            animation: pulseGlow 3s ease-in-out infinite;
+            transform-origin: center;
+        }
+        
+        .outer-ring {
+            animation: rotateClockwise 8s linear infinite;
+            transform-origin: center;
+        }
+        
+        .hex-ring {
+            animation: rotateCounterClockwise 12s linear infinite;
+            transform-origin: center;
+        }
+        
+        .letter-a {
+            animation: letterPulse 2s ease-in-out infinite;
+            transform-origin: center;
+        }
+        
+        /* Floating Elements */
+        .float-triangle {
+            animation: floatUp 4s ease-in-out infinite;
+        }
+        
+        .float-diamond {
+            animation: floatDown 3s ease-in-out infinite 0.5s;
+        }
+        
+        .float-circle {
+            animation: floatSide 5s ease-in-out infinite 1s;
+        }
+        
+        .float-square {
+            animation: floatRotate 6s ease-in-out infinite 1.5s;
+        }
+        
+        /* Connection Lines */
+        .connect-line-1 {
+            animation: lineGlow 2s ease-in-out infinite;
+        }
+        
+        .connect-line-2 {
+            animation: lineGlow 2s ease-in-out infinite 0.5s;
+        }
+        
+        .connect-line-3 {
+            animation: lineGlow 2s ease-in-out infinite 1s;
+        }
+        
+        .connect-line-4 {
+            animation: lineGlow 2s ease-in-out infinite 1.5s;
+        }
+        
+        /* Orbiting Dots */
+        .orbit-dot-1 {
+            animation: orbitRotate 8s linear infinite;
+            transform-origin: 100px 100px;
+        }
+        
+        .orbit-dot-2 {
+            animation: orbitRotate 10s linear infinite reverse;
+            transform-origin: 100px 100px;
+        }
+        
+        .orbit-dot-3 {
+            animation: orbitRotate 12s linear infinite;
+            transform-origin: 100px 100px;
+        }
+        
+        .orbit-dot-4 {
+            animation: orbitRotate 14s linear infinite reverse;
+            transform-origin: 100px 100px;
+        }
+        
+        /* Particle System */
+        .particle-system {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .particle-system .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.6);
+        }
+        
+        .p-1 {
+            top: 20%;
+            left: 15%;
+            animation: particleFloat 8s ease-in-out infinite;
+        }
+        
+        .p-2 {
+            top: 80%;
+            right: 20%;
+            animation: particleFloat 6s ease-in-out infinite 1s;
+        }
+        
+        .p-3 {
+            top: 30%;
+            right: 10%;
+            animation: particleFloat 10s ease-in-out infinite 2s;
+        }
+        
+        .p-4 {
+            bottom: 25%;
+            left: 10%;
+            animation: particleFloat 7s ease-in-out infinite 3s;
+        }
+        
+        .p-5 {
+            top: 60%;
+            left: 5%;
+            animation: particleFloat 9s ease-in-out infinite 4s;
+        }
+        
+        .p-6 {
+            top: 10%;
+            left: 50%;
+            animation: particleFloat 5s ease-in-out infinite 5s;
         }
         
         /* Central Core */
@@ -40,6 +176,26 @@
                 0 0 40px rgba(79, 172, 254, 0.8),
                 inset 0 0 20px rgba(255, 255, 255, 0.3);
             animation: corePulse 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .core-text {
+            color: white;
+            font-weight: 900;
+            font-size: 16px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: textGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes textGlow {
+            0%, 100% { 
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            }
+            50% { 
+                text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 30px rgba(79, 172, 254, 0.8);
+            }
         }
         
         /* Rotating Rings */
@@ -148,10 +304,139 @@
         
         @keyframes logoFloat {
             0%, 100% { 
-                transform: translateY(0px) rotateY(0deg); 
+                transform: translateY(0px) rotateZ(0deg); 
             }
             50% { 
-                transform: translateY(-20px) rotateY(180deg); 
+                transform: translateY(-15px) rotateZ(2deg); 
+            }
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 30px rgba(79, 172, 254, 0.4));
+            }
+            50% { 
+                filter: drop-shadow(0 0 50px rgba(79, 172, 254, 0.8));
+            }
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: scale(1.1);
+                opacity: 0.9;
+            }
+        }
+        
+        @keyframes rotateClockwise {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotateCounterClockwise {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-360deg); }
+        }
+        
+        @keyframes letterPulse {
+            0%, 100% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% { 
+                transform: scale(1.05);
+                opacity: 0.9;
+            }
+        }
+        
+        @keyframes floatUp {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-10px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes floatDown {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% { 
+                transform: translateY(8px) rotate(-180deg);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes floatSide {
+            0%, 100% { 
+                transform: translateX(0px) scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translateX(-5px) scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes floatRotate {
+            0%, 100% { 
+                transform: rotate(0deg) scale(1);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: rotate(45deg) scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes lineGlow {
+            0%, 100% { 
+                opacity: 0.3;
+                stroke-width: 2;
+            }
+            50% { 
+                opacity: 1;
+                stroke-width: 3;
+            }
+        }
+        
+        @keyframes orbitRotate {
+            0% { 
+                transform: rotate(0deg) translateX(75px) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% { 
+                transform: rotate(360deg) translateX(75px) rotate(-360deg);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes particleFloat {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) scale(1);
+                opacity: 0.7;
+            }
+            25% { 
+                transform: translateY(-15px) translateX(5px) scale(1.2);
+                opacity: 1;
+            }
+            50% { 
+                transform: translateY(-25px) translateX(-5px) scale(0.8);
+                opacity: 0.8;
+            }
+            75% { 
+                transform: translateY(-10px) translateX(8px) scale(1.1);
+                opacity: 0.9;
             }
         }
         
@@ -201,6 +486,11 @@
             0% { opacity: 0; transform: scale(0.3); }
             60% { opacity: 0.8; transform: scale(1.1); }
             100% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes logoRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         /* Loading progress */
@@ -413,31 +703,542 @@
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
         }
+        
+        /* ULTRA STYLED AUTH PAGE */
+        .auth-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1500;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .auth-page.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        /* Dynamic backgrounds based on user type */
+        .client-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+        
+        .developer-bg {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
+        }
+        
+        /* Floating Orbs for Auth Background */
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            animation: orbFloat 8s ease-in-out infinite;
+            filter: blur(1px);
+        }
+        
+        .client-orbs .floating-orb:nth-child(odd) {
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.4), rgba(147, 51, 234, 0.4));
+        }
+        
+        .client-orbs .floating-orb:nth-child(even) {
+            background: linear-gradient(45deg, rgba(147, 51, 234, 0.3), rgba(236, 72, 153, 0.3));
+        }
+        
+        .developer-orbs .floating-orb:nth-child(odd) {
+            background: linear-gradient(45deg, rgba(79, 172, 254, 0.4), rgba(0, 242, 254, 0.4));
+        }
+        
+        .developer-orbs .floating-orb:nth-child(even) {
+            background: linear-gradient(45deg, rgba(67, 233, 123, 0.3), rgba(79, 172, 254, 0.3));
+        }
+        
+        .orb-1 {
+            width: 120px;
+            height: 120px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 180px;
+            height: 180px;
+            top: 15%;
+            right: 15%;
+            animation-delay: 1s;
+        }
+        
+        .orb-3 {
+            width: 100px;
+            height: 100px;
+            bottom: 25%;
+            left: 20%;
+            animation-delay: 2s;
+        }
+        
+        .orb-4 {
+            width: 150px;
+            height: 150px;
+            bottom: 15%;
+            right: 10%;
+            animation-delay: 3s;
+        }
+        
+        .orb-5 {
+            width: 80px;
+            height: 80px;
+            top: 50%;
+            left: 5%;
+            animation-delay: 4s;
+        }
+        
+        .orb-6 {
+            width: 110px;
+            height: 110px;
+            top: 35%;
+            right: 5%;
+            animation-delay: 5s;
+        }
+        
+        /* Ultra Styled Auth Container */
+        .auth-container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+            animation: authSlideIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            transform: translateY(100px) scale(0.9);
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes authSlideIn {
+            to {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        
+        /* Animated background pattern inside container */
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            animation: patternMove 10s ease-in-out infinite;
+        }
+        
+        @keyframes patternMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(10px, -10px) rotate(1deg); }
+            66% { transform: translate(-10px, 10px) rotate(-1deg); }
+        }
+        
+        /* Enhanced Logo for Auth */
+        .futuristic-logo-small {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            animation: logoFloat 4s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        
+        .logo-core-small {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 
+                0 0 30px rgba(79, 172, 254, 0.8),
+                inset 0 0 15px rgba(255, 255, 255, 0.3);
+            animation: corePulse 2s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .core-text-small {
+            color: white;
+            font-weight: 900;
+            font-size: 10px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+        
+        .logo-ring-small {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .ring-1-small {
+            width: 60px;
+            height: 60px;
+            border-top-color: #4facfe;
+            border-right-color: #4facfe;
+            animation: ringRotate 3s linear infinite;
+        }
+        
+        .ring-2-small {
+            width: 85px;
+            height: 85px;
+            border-bottom-color: #00f2fe;
+            border-left-color: #00f2fe;
+            animation: ringRotate 4s linear infinite reverse;
+        }
+        
+        /* Enhanced Auth Tabs */
+        .auth-tabs {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 6px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .auth-tab {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .auth-tab.active {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1));
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .auth-tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        /* Ultra Enhanced Form Styling */
+        .form-group {
+            animation: formSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        
+        @keyframes formSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Enhanced Input Styling */
+        .auth-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+        
+        .auth-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(79, 172, 254, 0.6);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 0 0 4px rgba(79, 172, 254, 0.2),
+                0 15px 35px rgba(79, 172, 254, 0.15);
+        }
+        
+        .auth-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Ultra Enhanced Buttons */
+        .auth-btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border: none;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.3);
+        }
+        
+        .auth-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(79, 172, 254, 0.4);
+        }
+        
+        .auth-btn:hover::before {
+            left: 100%;
+        }
+        
+        .auth-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
+        /* Client Theme Button */
+        .client-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2) !important;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3) !important;
+        }
+        
+        .client-btn:hover {
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4) !important;
+        }
+        
+        /* Developer Theme Button */
+        .developer-btn {
+            background: linear-gradient(135deg, #4facfe, #00f2fe) !important;
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.3) !important;
+        }
+        
+        .developer-btn:hover {
+            box-shadow: 0 25px 50px rgba(79, 172, 254, 0.4) !important;
+        }
+        
+        /* Enhanced Social Buttons */
+        .social-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .social-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+        
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .social-btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Success Animation */
+        .success-pulse {
+            animation: successPulse 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Loading State */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .auth-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .futuristic-logo-small {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .logo-core-small {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .ring-1-small {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .ring-2-small {
+                width: 65px;
+                height: 65px;
+            }
+            
+            .floating-orb {
+                transform: scale(0.7);
+            }
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
     </style>
 </head>
 <body class="bg-white">
     <!-- Welcome Screen -->
     <div id="welcomeScreen" class="welcome-screen">
         <div class="logo-container mb-8">
-            <div class="futuristic-logo">
-                <!-- Central Core -->
-                <div class="logo-core"></div>
+            <div class="modern-logo">
+                <!-- Main Logo SVG -->
+                <svg class="logo-svg" width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Gradient Definitions -->
+                    <defs>
+                        <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#00f2fe;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#667eea;stop-opacity:1" />
+                        </linearGradient>
+                        
+                        <linearGradient id="secondaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.8" />
+                        </linearGradient>
+                        
+                        <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
+                            <stop offset="70%" style="stop-color:#4facfe;stop-opacity:0.4" />
+                            <stop offset="100%" style="stop-color:#4facfe;stop-opacity:0" />
+                        </radialGradient>
+                        
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                            <feMerge> 
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                        
+                        <filter id="shadow">
+                            <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#4facfe" flood-opacity="0.3"/>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Background Glow Circle -->
+                    <circle cx="100" cy="100" r="90" fill="url(#glowGradient)" opacity="0.6" class="glow-circle"/>
+                    
+                    <!-- Outer Rotating Ring -->
+                    <circle cx="100" cy="100" r="85" fill="none" stroke="url(#primaryGradient)" stroke-width="2" stroke-dasharray="20 10" opacity="0.7" class="outer-ring"/>
+                    
+                    <!-- Middle Hexagon -->
+                    <polygon points="100,35 135,55 135,95 100,115 65,95 65,55" fill="none" stroke="url(#secondaryGradient)" stroke-width="3" opacity="0.8" class="hex-ring"/>
+                    
+                    <!-- Central Modern A -->
+                    <g class="letter-a" filter="url(#glow)">
+                        <!-- A Letter Path -->
+                        <path d="M 75 120 L 85 85 L 100 50 L 115 85 L 125 120 M 88 100 L 112 100" 
+                              stroke="url(#primaryGradient)" 
+                              stroke-width="6" 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round" 
+                              fill="none"/>
+                    </g>
+                    
+                    <!-- Floating Geometric Elements -->
+                    <g class="floating-elements">
+                        <!-- Triangle -->
+                        <polygon points="160,60 170,40 180,60" fill="url(#primaryGradient)" opacity="0.8" class="float-triangle"/>
+                        
+                        <!-- Diamond -->
+                        <polygon points="40,140 50,130 60,140 50,150" fill="url(#secondaryGradient)" opacity="0.7" class="float-diamond"/>
+                        
+                        <!-- Circle -->
+                        <circle cx="170" cy="140" r="8" fill="url(#primaryGradient)" opacity="0.6" class="float-circle"/>
+                        
+                        <!-- Square -->
+                        <rect x="25" y="55" width="12" height="12" fill="url(#secondaryGradient)" opacity="0.8" class="float-square"/>
+                    </g>
+                    
+                    <!-- Connection Lines -->
+                    <g class="connection-lines" opacity="0.5">
+                        <line x1="65" y1="75" x2="45" y2="65" stroke="url(#primaryGradient)" stroke-width="2" class="connect-line-1"/>
+                        <line x1="135" y1="75" x2="165" y2="55" stroke="url(#primaryGradient)" stroke-width="2" class="connect-line-2"/>
+                        <line x1="85" y1="130" x2="55" y2="145" stroke="url(#secondaryGradient)" stroke-width="2" class="connect-line-3"/>
+                        <line x1="115" y1="130" x2="165" y2="135" stroke="url(#secondaryGradient)" stroke-width="2" class="connect-line-4"/>
+                    </g>
+                    
+                    <!-- Orbiting Dots -->
+                    <g class="orbiting-dots">
+                        <circle cx="100" cy="25" r="4" fill="#ffffff" opacity="0.9" class="orbit-dot-1"/>
+                        <circle cx="175" cy="100" r="3" fill="#ffffff" opacity="0.8" class="orbit-dot-2"/>
+                        <circle cx="100" cy="175" r="4" fill="#ffffff" opacity="0.9" class="orbit-dot-3"/>
+                        <circle cx="25" cy="100" r="3" fill="#ffffff" opacity="0.8" class="orbit-dot-4"/>
+                    </g>
+                </svg>
                 
-                <!-- Rotating Rings -->
-                <div class="logo-ring ring-1"></div>
-                <div class="logo-ring ring-2"></div>
-                <div class="logo-ring ring-3"></div>
-                
-                <!-- Floating Orbs -->
-                <div class="logo-orb orb-1"></div>
-                <div class="logo-orb orb-2"></div>
-                <div class="logo-orb orb-3"></div>
-                <div class="logo-orb orb-4"></div>
-                
-                <!-- Energy Lines -->
-                <div class="energy-line line-1"></div>
-                <div class="energy-line line-2"></div>
-                <div class="energy-line line-3"></div>
+                <!-- Floating Particles Around Logo -->
+                <div class="particle-system">
+                    <div class="particle p-1"></div>
+                    <div class="particle p-2"></div>
+                    <div class="particle p-3"></div>
+                    <div class="particle p-4"></div>
+                    <div class="particle p-5"></div>
+                    <div class="particle p-6"></div>
+                </div>
             </div>
         </div>
         
@@ -454,434 +1255,162 @@
         </div>
         
         <div id="choiceButtons" class="flex flex-col md:flex-row gap-4 mt-8" style="opacity: 0; pointer-events: none;">
-            <button onclick="showMainContent('client')" class="choice-btn bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl ripple transition-all">
+            <button onclick="showAuthPage('client')" class="choice-btn bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl ripple transition-all">
                 👤 Je suis Client
                 <div class="text-sm font-normal mt-1 opacity-75">J'ai un projet</div>
             </button>
             
-            <button onclick="showMainContent('developer')" class="choice-btn bg-yellow-400 text-gray-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl ripple transition-all">
+            <button onclick="showAuthPage('developer')" class="choice-btn bg-yellow-400 text-gray-900 px-8 py-4 rounded-xl text-lg font-semibold hover:shadow-xl ripple transition-all">
                 💻 Je suis Développeur
                 <div class="text-sm font-normal mt-1 opacity-75">Je veux coder</div>
             </button>
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div id="mainContent" class="main-content">
-        <!-- Header -->
-        <header class="gradient-bg text-white fixed w-full z-50 backdrop-blur-lg bg-opacity-95">
-            <nav class="container mx-auto px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center floating">
-                            <span class="text-2xl">🌍</span>
-                        </div>
-                        <span class="text-3xl font-black">AirWorld</span>
-                    </div>
-                    <div class="hidden md:flex space-x-8">
-                        <a href="#features" class="hover:text-yellow-300 transition-colors font-medium">Fonctionnalités</a>
-                        <a href="#pricing" class="hover:text-yellow-300 transition-colors font-medium">Tarifs</a>
-                        <a href="#community" class="hover:text-yellow-300 transition-colors font-medium">Communauté</a>
-                    </div>
-                    <button class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-xl font-bold hover:bg-yellow-300 transition-all hover:scale-105">
-                        Rejoindre
-                    </button>
-                </div>
-            </nav>
-        </header>
-
-        <!-- Hero Section -->
-        <section class="gradient-bg text-white py-32 pt-40 relative overflow-hidden">
-            <div class="absolute inset-0">
-                <div class="particle" style="top: 10%; left: 10%; animation-delay: 0s;"></div>
-                <div class="particle" style="top: 20%; left: 90%; animation-delay: 1s;"></div>
-                <div class="particle" style="top: 80%; left: 20%; animation-delay: 2s;"></div>
-                <div class="particle" style="top: 70%; left: 80%; animation-delay: 3s;"></div>
-                <div class="particle" style="top: 40%; left: 5%; animation-delay: 4s;"></div>
-                <div class="particle" style="top: 60%; left: 95%; animation-delay: 5s;"></div>
+    <!-- Ultra Styled Auth Page -->
+    <div id="authPage" class="auth-page">
+        <div class="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+            <!-- Dynamic Animated Background Elements -->
+            <div id="authOrbs" class="absolute inset-0">
+                <div class="floating-orb orb-1"></div>
+                <div class="floating-orb orb-2"></div>
+                <div class="floating-orb orb-3"></div>
+                <div class="floating-orb orb-4"></div>
+                <div class="floating-orb orb-5"></div>
+                <div class="floating-orb orb-6"></div>
             </div>
             
-            <div class="container mx-auto px-6 text-center relative z-10">
-                <div class="stagger-1 opacity-0 animate-[slideUp_1s_ease-out_forwards]">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                        La révolution du <br>
-                        <span class="text-yellow-300 floating">développement web</span>
+            <!-- Ultra Styled Auth Container -->
+            <div class="auth-container rounded-3xl p-8 md:p-12 max-w-md w-full relative z-10">
+                <!-- Enhanced Logo -->
+                <div class="text-center mb-8 relative z-20">
+                    <div class="auth-logo mx-auto mb-6">
+                        <div class="futuristic-logo-small">
+                            <div class="logo-core-small">
+                                <div class="core-text-small">AW</div>
+                            </div>
+                            <div class="logo-ring-small ring-1-small"></div>
+                            <div class="logo-ring-small ring-2-small"></div>
+                        </div>
+                    </div>
+                    <h1 class="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                        AirWorld
                     </h1>
+                    <div id="authSubtitle" class="text-white/80 text-lg leading-relaxed"></div>
                 </div>
                 
-                <div class="stagger-2 opacity-0 animate-[slideUp_1s_ease-out_forwards]">
-                    <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">
-                        Une plateforme mondiale où les clients fixent leurs prix et les développeurs se surpassent. 
-                        <span class="text-yellow-300 font-medium">Transparent, équitable, révolutionnaire.</span>
-                    </p>
-                </div>
-                
-                <div class="stagger-3 opacity-0 animate-[slideUp_1s_ease-out_forwards]">
-                    <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
-                        <button class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-all hover:scale-105 ripple">
-                            🚀 Lancer mon projet
-                        </button>
-                        <button class="border-2 border-white text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all hover:scale-105 ripple">
-                            💻 Devenir développeur
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Animated Stats Section -->
-        <section class="py-20 bg-white relative">
-            <div class="container mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                    <div class="text-center p-6 card-hover bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl">
-                        <div class="text-3xl font-bold gradient-text mb-2" data-target="10">0€</div>
-                        <div class="text-gray-600 font-medium">Commission fixe</div>
-                        <div class="text-xs text-gray-500 mt-1">Simple et transparent</div>
-                    </div>
-                    
-                    <div class="text-center p-6 card-hover bg-gradient-to-br from-green-50 to-green-100 rounded-2xl">
-                        <div class="text-3xl font-bold gradient-text mb-2" data-target="3">0€</div>
-                        <div class="text-gray-600 font-medium">Abonnement mensuel</div>
-                        <div class="text-xs text-gray-500 mt-1">Accès illimité</div>
-                    </div>
-                    
-                    <div class="text-center p-6 card-hover bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl">
-                        <div class="text-3xl font-bold gradient-text mb-2" data-target="5000">0€</div>
-                        <div class="text-gray-600 font-medium">Récompenses mensuelles</div>
-                        <div class="text-xs text-gray-500 mt-1">Pour les meilleurs</div>
-                    </div>
-                    
-                    <div class="text-center p-6 card-hover bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl">
-                        <div class="text-3xl font-bold gradient-text mb-2" data-target="100">0€</div>
-                        <div class="text-gray-600 font-medium">Bonus parrainage</div>
-                        <div class="text-xs text-gray-500 mt-1">Croissance virale</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section with Enhanced Animations -->
-        <section id="features" class="py-32 bg-gradient-to-br from-gray-50 to-blue-50">
-            <div class="container mx-auto px-6">
-                <h2 class="text-3xl font-bold text-center mb-12 gradient-text">
-                    Pourquoi AirWorld change tout ?
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <!-- Feature 1 -->
-                    <div class="bg-white rounded-2xl p-6 card-hover shadow-lg">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mb-4 floating">
-                            <span class="text-2xl">🔄</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-800">Modèle Inversé</h3>
-                        <p class="text-gray-600 leading-relaxed text-sm">
-                            Le client fixe son prix et son besoin. Les développeurs postulent avec leurs meilleures propositions. 
-                            <span class="font-medium text-blue-600">Fini les négociations interminables !</span>
-                        </p>
-                    </div>
-
-                    <!-- Feature 2 -->
-                    <div class="bg-white rounded-2xl p-6 card-hover shadow-lg">
-                        <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mb-4 floating" style="animation-delay: 0.5s;">
-                            <span class="text-2xl">🏆</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-800">Ligue des Champions</h3>
-                        <p class="text-gray-600 leading-relaxed text-sm">
-                            Classements mensuels, récompenses de 5000€, challenges trimestriels. 
-                            <span class="font-medium text-green-600">La gamification qui motive et récompense l'excellence.</span>
-                        </p>
-                    </div>
-
-                    <!-- Feature 3 -->
-                    <div class="bg-white rounded-2xl p-6 card-hover shadow-lg">
-                        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-4 floating" style="animation-delay: 1s;">
-                            <span class="text-2xl">🌍</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-gray-800">Accessible à Tous</h3>
-                        <p class="text-gray-600 leading-relaxed text-sm">
-                            Multilingue, mobile-first, sans barrières. Que vous soyez étudiant ou CEO, 
-                            <span class="font-medium text-purple-600">AirWorld s'adapte à vos besoins.</span>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Enhanced How it Works -->
-        <section class="py-32 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="text-6xl font-black text-center mb-20 gradient-text">
-                    Comment ça marche ?
-                </h2>
-                
-                <div class="max-w-6xl mx-auto">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
-                        <!-- Client Side -->
-                        <div class="space-y-8">
-                            <h3 class="text-4xl font-bold text-blue-600 mb-10 flex items-center">
-                                <span class="text-5xl mr-4">👤</span> Pour les Clients
-                            </h3>
-                            
-                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-blue-50">
-                                <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating">1</div>
-                                <div>
-                                    <h4 class="font-bold text-xl mb-3">Décrivez votre projet</h4>
-                                    <p class="text-gray-600 text-lg">Besoin, deadline, budget - c'est tout ! Notre interface intuitive vous guide.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-blue-50">
-                                <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 0.5s;">2</div>
-                                <div>
-                                    <h4 class="font-bold text-xl mb-3">Recevez des propositions</h4>
-                                    <p class="text-gray-600 text-lg">Les développeurs postulent avec portfolio et méthode détaillée.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-blue-50">
-                                <div class="w-12 h-12 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 1s;">3</div>
-                                <div>
-                                    <h4 class="font-bold text-xl mb-3">Choisissez et payez</h4>
-                                    <p class="text-gray-600 text-lg">Paiement sécurisé, suivi temps réel, satisfaction garantie.</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Developer Side -->
-                        <div class="space-y-8">
-                            <h3 class="text-4xl font-bold text-green-600 mb-10 flex items-center">
-                                <span class="text-5xl mr-4">💻</span> Pour les Développeurs
-                            </h3>
-                            
-                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-green-50">
-                                <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating">1</div>
-                                <div>
-                                    <h4 class="font-bold text-xl mb-3">Explorez les projets</h4>
-                                    <p class="text-gray-600 text-lg">Accès temps réel aux opportunités mondiales, filtres intelligents.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-green-50">
-                                <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 0.5s;">2</div>
-                                <div>
-                                    <h4 class="font-bold text-xl mb-3">Proposez votre expertise</h4>
-                                    <p class="text-gray-600 text-lg">Montrez votre portfolio et votre approche unique.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start space-x-6 card-hover p-6 rounded-2xl bg-green-50">
-                                <div class="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center font-bold text-xl floating" style="animation-delay: 1s;">3</div>
-                                <div>
-                                    <h4 class="font-bold text-xl mb-3">Gagnez et progressez</h4>
-                                    <p class="text-gray-600 text-lg">Revenus + classements + récompenses + reconnaissance.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Enhanced Pricing Section -->
-        <section id="pricing" class="py-32 bg-gradient-to-br from-gray-50 to-purple-50">
-            <div class="container mx-auto px-6">
-                <h2 class="text-6xl font-black text-center mb-20 gradient-text">
-                    Tarification transparente
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
-                    <!-- Client Pricing -->
-                    <div class="bg-white rounded-3xl p-10 card-hover shadow-xl border-4 border-blue-200 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-blue-500 text-white px-6 py-2 rounded-bl-2xl font-bold">
-                            Populaire
-                        </div>
-                        <div class="text-center mb-8">
-                            <div class="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6 floating">
-                                <span class="text-4xl">👤</span>
-                            </div>
-                            <h3 class="text-3xl font-bold text-blue-600 mb-4">Clients</h3>
-                            <div class="text-6xl font-black text-gray-800 mb-2">10€</div>
-                            <div class="text-gray-600 text-lg">par projet réalisé</div>
-                        </div>
-                        <ul class="space-y-4 mb-10">
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Inscription gratuite
-                            </li>
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Propositions illimitées
-                            </li>
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Paiement sécurisé
-                            </li>
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Support 24/7
-                            </li>
-                        </ul>
-                        <button class="w-full bg-blue-600 text-white py-4 rounded-2xl text-xl font-bold hover:bg-blue-700 transition-all hover:scale-105 ripple">
-                            Commencer gratuitement
-                        </button>
-                    </div>
-
-                    <!-- Developer Pricing -->
-                    <div class="bg-white rounded-3xl p-10 card-hover shadow-xl border-4 border-green-200 relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-green-500 text-white px-6 py-2 rounded-bl-2xl font-bold">
-                            Meilleur choix
-                        </div>
-                        <div class="text-center mb-8">
-                            <div class="w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6 floating" style="animation-delay: 0.5s;">
-                                <span class="text-4xl">💻</span>
-                            </div>
-                            <h3 class="text-3xl font-bold text-green-600 mb-4">Développeurs</h3>
-                            <div class="text-6xl font-black text-gray-800 mb-2">3€</div>
-                            <div class="text-gray-600 text-lg">par mois</div>
-                        </div>
-                        <ul class="space-y-4 mb-10">
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Accès illimité aux projets
-                            </li>
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Participation aux ligues
-                            </li>
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Récompenses mensuelles
-                            </li>
-                            <li class="flex items-center text-lg">
-                                <span class="text-green-500 mr-4 text-2xl">✓</span>
-                                Bonus parrainage 100€
-                            </li>
-                        </ul>
-                        <button class="w-full bg-green-600 text-white py-4 rounded-2xl text-xl font-bold hover:bg-green-700 transition-all hover:scale-105 ripple">
-                            Rejoindre la communauté
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Enhanced Community Section -->
-        <section id="community" class="py-32 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="text-6xl font-black text-center mb-20 gradient-text">
-                    Une communauté qui gagne ensemble
-                </h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-                    <div class="text-center p-10 card-hover bg-gradient-to-br from-yellow-50 to-orange-50 rounded-3xl">
-                        <div class="w-24 h-24 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-8 floating">
-                            <span class="text-5xl">🏆</span>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-6">Ligues Mensuelles</h3>
-                        <p class="text-gray-600 text-lg leading-relaxed">
-                            Classements, récompenses de 5000€, reconnaissance internationale et badges exclusifs
-                        </p>
-                    </div>
-                    
-                    <div class="text-center p-10 card-hover bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl">
-                        <div class="w-24 h-24 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-8 floating" style="animation-delay: 0.5s;">
-                            <span class="text-5xl">⚔️</span>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-6">Battle Devs</h3>
-                        <p class="text-gray-600 text-lg leading-relaxed">
-                            Challenges trimestriels ouverts à tous, cash prizes et visibilité mondiale
-                        </p>
-                    </div>
-                    
-                    <div class="text-center p-10 card-hover bg-gradient-to-br from-green-50 to-teal-50 rounded-3xl">
-                        <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-8 floating" style="animation-delay: 1s;">
-                            <span class="text-5xl">🤝</span>
-                        </div>
-                        <h3 class="text-2xl font-bold mb-6">Solidarité</h3>
-                        <p class="text-gray-600 text-lg leading-relaxed">
-                            Fonds solidaires pour étudiants et associations, parrainage actif et entraide
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Enhanced CTA Section -->
-        <section class="gradient-bg text-white py-32 relative overflow-hidden">
-            <div class="absolute inset-0">
-                <div class="particle" style="top: 15%; left: 15%; animation-delay: 0s;"></div>
-                <div class="particle" style="top: 25%; left: 85%; animation-delay: 1s;"></div>
-                <div class="particle" style="top: 75%; left: 25%; animation-delay: 2s;"></div>
-                <div class="particle" style="top: 65%; left: 75%; animation-delay: 3s;"></div>
-            </div>
-            
-            <div class="container mx-auto px-6 text-center relative z-10">
-                <h2 class="text-6xl font-black mb-8">
-                    Prêt à révolutionner votre approche du développement ?
-                </h2>
-                <p class="text-2xl mb-12 opacity-90 max-w-3xl mx-auto">
-                    Rejoignez des milliers de clients et développeurs qui ont déjà choisi l'excellence
-                </p>
-                <div class="flex flex-col md:flex-row gap-6 justify-center">
-                    <button class="bg-yellow-400 text-gray-900 px-12 py-6 rounded-2xl text-xl font-bold hover:bg-yellow-300 transition-all hover:scale-105 hover:shadow-2xl ripple">
-                        🚀 Lancer mon premier projet
+                <!-- Enhanced Auth Tabs -->
+                <div class="auth-tabs flex mb-8">
+                    <button id="loginTab" class="auth-tab flex-1 py-4 px-6 rounded-2xl text-white font-semibold transition-all active">
+                        Connexion
                     </button>
-                    <button class="border-3 border-white text-white px-12 py-6 rounded-2xl text-xl font-bold hover:bg-white hover:text-blue-600 transition-all hover:scale-105 hover:shadow-2xl ripple">
-                        💻 Devenir développeur pro
+                    <button id="signupTab" class="auth-tab flex-1 py-4 px-6 rounded-2xl text-white/70 font-semibold transition-all">
+                        Inscription
                     </button>
                 </div>
-            </div>
-        </section>
-
-        <!-- Enhanced Footer -->
-        <footer class="bg-gray-900 text-white py-16">
-            <div class="container mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
-                    <div>
-                        <div class="flex items-center space-x-3 mb-6">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-purple-600 rounded-xl flex items-center justify-center floating">
-                                <span class="text-2xl">🌍</span>
-                            </div>
-                            <span class="text-2xl font-black">AirWorld</span>
-                        </div>
-                        <p class="text-gray-400 text-lg leading-relaxed">
-                            La plateforme qui révolutionne la mise en relation clients-développeurs
-                        </p>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-bold mb-6 text-xl">Plateforme</h4>
-                        <ul class="space-y-3 text-gray-400">
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Comment ça marche</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Tarifs</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Sécurité</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-bold mb-6 text-xl">Communauté</h4>
-                        <ul class="space-y-3 text-gray-400">
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Ligues</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Battle Devs</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Parrainage</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div>
-                        <h4 class="font-bold mb-6 text-xl">Support</h4>
-                        <ul class="space-y-3 text-gray-400">
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Centre d'aide</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">Contact</a></li>
-                            <li><a href="#" class="hover:text-white transition-colors text-lg">RGPD</a></li>
-                        </ul>
-                    </div>
-                </div>
                 
-                <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                    <p class="text-lg">&copy; 2024 AirWorld. Tous droits réservés. Révolutionnons ensemble le développement web.</p>
+                <!-- Login Form -->
+                <form id="loginForm" class="auth-form space-y-6 relative z-20">
+                    <div class="form-group">
+                        <label class="block text-white/90 text-sm font-semibold mb-3">Email</label>
+                        <input type="email" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-white/90 text-sm font-semibold mb-3">Mot de passe</label>
+                        <input type="password" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="form-group flex items-center justify-between text-sm">
+                        <label class="flex items-center text-white/80 cursor-pointer">
+                            <input type="checkbox" class="mr-3 w-4 h-4 rounded">
+                            Se souvenir de moi
+                        </label>
+                        <a href="#" class="text-blue-300 hover:text-blue-200 transition-colors font-medium">Mot de passe oublié ?</a>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="auth-btn w-full py-4 rounded-2xl font-bold text-lg text-white transition-all">
+                            Se connecter
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Signup Form -->
+                <form id="signupForm" class="auth-form space-y-6 hidden relative z-20">
+                    <div class="form-group">
+                        <label class="block text-white/90 text-sm font-semibold mb-3">Nom complet</label>
+                        <input type="text" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="Jean Dupont" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-white/90 text-sm font-semibold mb-3">Email</label>
+                        <input type="email" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-white/90 text-sm font-semibold mb-3">Mot de passe</label>
+                        <input type="password" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-white/90 text-sm font-semibold mb-3">Confirmer le mot de passe</label>
+                        <input type="password" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="form-group flex items-start">
+                        <input type="checkbox" class="mt-1 mr-3 w-4 h-4 rounded" required>
+                        <label class="text-white/80 text-sm leading-relaxed">
+                            J'accepte les <a href="#" class="text-blue-300 hover:text-blue-200 font-medium">conditions d'utilisation</a> et la <a href="#" class="text-blue-300 hover:text-blue-200 font-medium">politique de confidentialité</a>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="auth-btn w-full py-4 rounded-2xl font-bold text-lg text-white transition-all">
+                            Créer mon compte
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Enhanced Social Login -->
+                <div class="mt-8 relative z-20">
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-white/30"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-6 bg-transparent text-white/80 font-medium">Ou continuer avec</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 grid grid-cols-2 gap-4">
+                        <button class="social-btn flex items-center justify-center px-6 py-4 rounded-2xl text-white font-medium transition-all">
+                            <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                            </svg>
+                            Google
+                        </button>
+                        <button class="social-btn flex items-center justify-center px-6 py-4 rounded-2xl text-white font-medium transition-all">
+                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                            Twitter
+                        </button>
+                    </div>
                 </div>
             </div>
-        </footer>
+        </div>
+    </div>
+
+    <!-- Main Content (placeholder) -->
+    <div id="mainContent" class="main-content min-h-screen bg-gray-100 flex items-center justify-center">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Bienvenue sur AirWorld !</h1>
+            <p class="text-xl text-gray-600">Vous êtes maintenant connecté(e)</p>
+        </div>
     </div>
 
     <script>
@@ -907,225 +1436,194 @@
             choiceButtons.style.pointerEvents = 'auto';
         }, 4500);
 
-        function showMainContent(type) {
+        function showAuthPage(type) {
             if (!loadingComplete) return;
             
             userType = type;
             const welcomeScreen = document.getElementById('welcomeScreen');
-            const mainContent = document.getElementById('mainContent');
+            const authPage = document.getElementById('authPage');
+            const authSubtitle = document.getElementById('authSubtitle');
+            const authOrbs = document.getElementById('authOrbs');
             
-            // Hide welcome screen with animation
+            // Hide welcome screen
             welcomeScreen.classList.add('hidden');
             
-            // Show appropriate content based on user type
+            // Configure auth page based on user type
             setTimeout(() => {
                 if (type === 'client') {
-                    showClientPage();
+                    authPage.className = 'auth-page client-bg visible';
+                    authOrbs.className = 'absolute inset-0 client-orbs';
+                    authSubtitle.innerHTML = '🚀 <strong>Accédez à votre espace client</strong><br><span class="text-sm opacity-75">Lancez vos projets en quelques clics</span>';
+                    
+                    // Update button themes
+                    updateButtonTheme('client');
                 } else {
-                    showDeveloperPage();
+                    authPage.className = 'auth-page developer-bg visible';
+                    authOrbs.className = 'absolute inset-0 developer-orbs';
+                    authSubtitle.innerHTML = '💻 <strong>Rejoignez la communauté des développeurs</strong><br><span class="text-sm opacity-75">Gagnez de l\'argent avec vos compétences</span>';
+                    
+                    // Update button themes
+                    updateButtonTheme('developer');
                 }
                 
+                // Setup auth functionality
+                setupAuthTabs();
+                setupAuthForms();
+            }, 500);
+        }
+        
+        function updateButtonTheme(type) {
+            const authBtns = document.querySelectorAll('.auth-btn');
+            
+            authBtns.forEach(btn => {
+                if (type === 'client') {
+                    btn.classList.add('client-btn');
+                    btn.classList.remove('developer-btn');
+                } else {
+                    btn.classList.add('developer-btn');
+                    btn.classList.remove('client-btn');
+                }
+            });
+        }
+        
+        function setupAuthTabs() {
+            const loginTab = document.getElementById('loginTab');
+            const signupTab = document.getElementById('signupTab');
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            loginTab.addEventListener('click', () => {
+                loginTab.classList.add('active');
+                signupTab.classList.remove('active');
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+                
+                resetFormAnimations(loginForm);
+            });
+            
+            signupTab.addEventListener('click', () => {
+                signupTab.classList.add('active');
+                loginTab.classList.remove('active');
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+                
+                resetFormAnimations(signupForm);
+            });
+        }
+        
+        function resetFormAnimations(form) {
+            const formGroups = form.querySelectorAll('.form-group');
+            formGroups.forEach((group, index) => {
+                group.style.animation = 'none';
+                setTimeout(() => {
+                    group.style.animation = `formSlideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                    group.style.animationDelay = `${(index + 1) * 0.1}s`;
+                }, 10);
+            });
+        }
+        
+        function setupAuthForms() {
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            // Login form submission
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                handleFormSubmission(loginForm, 'Connexion en cours...', '✓ Connecté !');
+            });
+            
+            // Signup form submission
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Validate password confirmation
+                const passwords = signupForm.querySelectorAll('input[type="password"]');
+                if (passwords[0].value !== passwords[1].value) {
+                    showNotification('Les mots de passe ne correspondent pas', 'error');
+                    return;
+                }
+                
+                handleFormSubmission(signupForm, 'Création du compte...', '✓ Compte créé !');
+            });
+            
+            // Social login buttons
+            const socialBtns = document.querySelectorAll('.social-btn');
+            socialBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const provider = btn.textContent.trim();
+                    const originalHTML = btn.innerHTML;
+                    
+                    btn.innerHTML = `<div class="loading-spinner mr-3"></div>Connexion...`;
+                    btn.disabled = true;
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = `✓ Connecté avec ${provider}`;
+                        btn.classList.add('success-pulse');
+                        
+                        setTimeout(() => {
+                            proceedToMainContent();
+                        }, 1000);
+                    }, 2000);
+                });
+            });
+        }
+        
+        function handleFormSubmission(form, loadingText, successText) {
+            const submitBtn = form.querySelector('.auth-btn');
+            const originalText = submitBtn.textContent;
+            
+            // Loading state
+            submitBtn.innerHTML = `<div class="loading-spinner mr-3"></div>${loadingText}`;
+            submitBtn.disabled = true;
+            
+            // Simulate processing
+            setTimeout(() => {
+                // Success state
+                submitBtn.textContent = successText;
+                submitBtn.classList.add('success-pulse');
+                
+                setTimeout(() => {
+                    proceedToMainContent();
+                }, 1500);
+            }, 2500);
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            const bgColor = type === 'error' ? 'bg-red-500' : 'bg-green-500';
+            
+            notification.className = `fixed top-6 right-6 ${bgColor} text-white px-6 py-4 rounded-2xl shadow-2xl z-50 transform translate-x-full transition-all duration-500`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(full)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+        
+        function proceedToMainContent() {
+            const authPage = document.getElementById('authPage');
+            const mainContent = document.getElementById('mainContent');
+            
+            // Hide auth page with animation
+            authPage.style.opacity = '0';
+            authPage.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                authPage.classList.remove('visible');
                 mainContent.classList.add('visible');
                 
-                // Start counter animations
-                setTimeout(() => {
-                    animateCounters();
-                }, 500);
-                
-                // Add scroll animations
-                setupScrollAnimations();
+                // Show success notification
+                showNotification(`Bienvenue ! Vous êtes connecté en tant que ${userType === 'client' ? 'Client' : 'Développeur'}`, 'success');
             }, 1000);
-        }
-
-        function showClientPage() {
-            // Update hero section for clients
-            const heroTitle = document.querySelector('.stagger-1 h1');
-            const heroSubtitle = document.querySelector('.stagger-2 p');
-            const heroButtons = document.querySelector('.stagger-3 .flex');
-            
-            heroTitle.innerHTML = `Trouvez le développeur <br><span class="text-yellow-300 floating">parfait pour votre projet</span>`;
-            heroSubtitle.innerHTML = `Décrivez votre projet, fixez votre budget et recevez des propositions de développeurs qualifiés. <span class="text-yellow-300 font-medium">Simple, rapide, efficace.</span>`;
-            heroButtons.innerHTML = `
-                <button class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-all hover:scale-105 ripple">
-                    🚀 Publier mon projet
-                </button>
-                <button class="border-2 border-white text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all hover:scale-105 ripple">
-                    📋 Voir des exemples
-                </button>
-            `;
-            
-            // Update features section for clients
-            updateFeaturesForClients();
-        }
-
-        function showDeveloperPage() {
-            // Update hero section for developers
-            const heroTitle = document.querySelector('.stagger-1 h1');
-            const heroSubtitle = document.querySelector('.stagger-2 p');
-            const heroButtons = document.querySelector('.stagger-3 .flex');
-            
-            heroTitle.innerHTML = `Transformez votre talent <br><span class="text-yellow-300 floating">en revenus réguliers</span>`;
-            heroSubtitle.innerHTML = `Accédez à des projets exclusifs, participez aux ligues et gagnez jusqu'à 5000€ par mois. <span class="text-yellow-300 font-medium">Votre expertise mérite d'être récompensée.</span>`;
-            heroButtons.innerHTML = `
-                <button class="bg-yellow-400 text-gray-900 px-6 py-3 rounded-lg text-lg font-semibold hover:bg-yellow-300 transition-all hover:scale-105 ripple">
-                    💻 Rejoindre la communauté
-                </button>
-                <button class="border-2 border-white text-white px-6 py-3 rounded-lg text-lg font-semibold hover:bg-white hover:text-blue-600 transition-all hover:scale-105 ripple">
-                    🏆 Voir les ligues
-                </button>
-            `;
-            
-            // Update features section for developers
-            updateFeaturesForDevelopers();
-        }
-
-        function updateFeaturesForClients() {
-            const features = document.querySelectorAll('#features .bg-white');
-            
-            // Feature 1
-            features[0].innerHTML = `
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mb-4 floating">
-                    <span class="text-2xl">💰</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-800">Vous fixez le prix</h3>
-                <p class="text-gray-600 leading-relaxed text-sm">
-                    Définissez votre budget et vos attentes. Les développeurs s'adaptent à vos moyens. 
-                    <span class="font-medium text-blue-600">Transparence totale, aucune surprise.</span>
-                </p>
-            `;
-            
-            // Feature 2
-            features[1].innerHTML = `
-                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mb-4 floating" style="animation-delay: 0.5s;">
-                    <span class="text-2xl">⚡</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-800">Livraison garantie</h3>
-                <p class="text-gray-600 leading-relaxed text-sm">
-                    Paiement sécurisé, suivi en temps réel, satisfaction garantie ou remboursé. 
-                    <span class="font-medium text-green-600">Votre projet sera livré dans les temps.</span>
-                </p>
-            `;
-            
-            // Feature 3
-            features[2].innerHTML = `
-                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-4 floating" style="animation-delay: 1s;">
-                    <span class="text-2xl">🎯</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-800">Développeurs vérifiés</h3>
-                <p class="text-gray-600 leading-relaxed text-sm">
-                    Tous nos développeurs sont testés et notés par la communauté. 
-                    <span class="font-medium text-purple-600">Qualité et professionnalisme assurés.</span>
-                </p>
-            `;
-        }
-
-        function updateFeaturesForDevelopers() {
-            const features = document.querySelectorAll('#features .bg-white');
-            
-            // Feature 1
-            features[0].innerHTML = `
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center mb-4 floating">
-                    <span class="text-2xl">💎</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-800">Projets premium</h3>
-                <p class="text-gray-600 leading-relaxed text-sm">
-                    Accédez à des projets exclusifs avec des budgets attractifs. 
-                    <span class="font-medium text-blue-600">Clients sérieux, projets valorisants.</span>
-                </p>
-            `;
-            
-            // Feature 2
-            features[1].innerHTML = `
-                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center mb-4 floating" style="animation-delay: 0.5s;">
-                    <span class="text-2xl">🏆</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-800">Récompenses mensuelles</h3>
-                <p class="text-gray-600 leading-relaxed text-sm">
-                    Gagnez jusqu'à 5000€ par mois grâce aux ligues et challenges. 
-                    <span class="font-medium text-green-600">Votre talent récompensé à sa juste valeur.</span>
-                </p>
-            `;
-            
-            // Feature 3
-            features[2].innerHTML = `
-                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-xl flex items-center justify-center mb-4 floating" style="animation-delay: 1s;">
-                    <span class="text-2xl">🚀</span>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-gray-800">Croissance accélérée</h3>
-                <p class="text-gray-600 leading-relaxed text-sm">
-                    Construisez votre réputation, développez votre réseau et augmentez vos revenus. 
-                    <span class="font-medium text-purple-600">Une carrière qui décolle vraiment.</span>
-                </p>
-            `;
-        }
-
-        function animateCounters() {
-            const counters = document.querySelectorAll('[data-target]');
-            
-            counters.forEach(counter => {
-                const target = parseInt(counter.getAttribute('data-target'));
-                let current = 0;
-                const increment = target / 100;
-                const suffix = counter.textContent.includes('€') ? '€' : '';
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
-                    counter.textContent = Math.floor(current) + suffix;
-                }, 30);
-            });
-        }
-
-        function setupScrollAnimations() {
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
-                });
-            });
-
-            // Header scroll effect
-            window.addEventListener('scroll', function() {
-                const header = document.querySelector('header');
-                if (window.scrollY > 100) {
-                    header.style.backgroundColor = 'rgba(102, 126, 234, 0.95)';
-                    header.style.backdropFilter = 'blur(20px)';
-                } else {
-                    header.style.backgroundColor = '';
-                    header.style.backdropFilter = '';
-                }
-            });
-
-            // Intersection Observer for animations
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                    }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-
-            // Observe elements for scroll animations
-            document.querySelectorAll('.card-hover').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(50px)';
-                el.style.transition = 'all 0.8s ease-out';
-                observer.observe(el);
-            });
         }
 
         // Add ripple effect to buttons
@@ -1171,8 +1669,6 @@
             }
         `;
         document.head.appendChild(style);
-
-        // No auto-start - user must choose
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980784691048d140',t:'MTc1ODEwMDcxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9807bfe744f97a6e',t:'MTc1ODEwMzE1My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
