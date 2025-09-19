@@ -840,6 +840,8 @@
             overflow: hidden;
             margin: 0 !important;
             z-index: 1000;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         
         @keyframes authFloat {
@@ -1349,9 +1351,9 @@
         </div>
         
         <!-- Ultra Styled Auth Container -->
-        <div class="auth-container rounded-3xl p-6 md:p-8 w-full max-w-sm relative z-10">
+        <div class="auth-container rounded-3xl p-6 md:p-8 w-full max-w-md relative z-10">
                 <!-- Enhanced Logo -->
-                <div class="text-center mb-6 relative z-20">
+                <div class="text-center mb-8 relative z-20">
                     <div class="auth-logo mx-auto mb-4">
                         <div class="w-20 h-20 mx-auto relative">
                             <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
@@ -1402,10 +1404,10 @@
                 
                 <!-- Enhanced Auth Tabs -->
                 <div class="auth-tabs flex mb-6">
-                    <button id="loginTab" class="auth-tab flex-1 py-3 px-4 rounded-xl text-white font-semibold transition-all active">
+                    <button id="loginTab" class="auth-tab flex-1 py-3 px-4 rounded-lg text-white text-base font-semibold transition-all active">
                         Connexion
                     </button>
-                    <button id="signupTab" class="auth-tab flex-1 py-3 px-4 rounded-xl text-white/70 font-semibold transition-all">
+                    <button id="signupTab" class="auth-tab flex-1 py-3 px-4 rounded-lg text-white/70 text-base font-semibold transition-all">
                         Inscription
                     </button>
                 </div>
@@ -1414,24 +1416,24 @@
                 <form id="loginForm" class="auth-form space-y-4 relative z-20">
                     <div class="form-group">
                         <label class="block text-white/90 text-sm font-semibold mb-2">Email</label>
-                        <input type="email" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
+                        <input type="email" class="auth-input w-full px-4 py-3 rounded-lg text-white text-base placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
                     </div>
                     
                     <div class="form-group">
                         <label class="block text-white/90 text-sm font-semibold mb-2">Mot de passe</label>
-                        <input type="password" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                        <input type="password" class="auth-input w-full px-4 py-3 rounded-lg text-white text-base placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
                     </div>
                     
                     <div class="form-group flex items-center justify-between text-sm">
                         <label class="flex items-center text-white/80 cursor-pointer">
-                            <input type="checkbox" class="mr-3 w-4 h-4 rounded">
-                            Se souvenir de moi
+                            <input type="checkbox" class="mr-2 w-4 h-4 rounded">
+                            Se souvenir
                         </label>
                         <a href="#" class="text-blue-300 hover:text-blue-200 transition-colors font-medium">Mot de passe oublié ?</a>
                     </div>
                     
                     <div class="form-group">
-                        <button type="submit" class="auth-btn w-full py-3 rounded-xl font-bold text-base text-white transition-all">
+                        <button type="submit" class="auth-btn w-full py-3 rounded-lg font-bold text-base text-white transition-all">
                             Se connecter
                         </button>
                     </div>
@@ -1441,33 +1443,33 @@
                 <form id="signupForm" class="auth-form space-y-4 hidden relative z-20">
                     <div class="form-group">
                         <label class="block text-white/90 text-sm font-semibold mb-2">Nom complet</label>
-                        <input type="text" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="Jean Dupont" required>
+                        <input type="text" class="auth-input w-full px-4 py-3 rounded-lg text-white text-base placeholder-white/60 focus:outline-none transition-all" placeholder="Jean Dupont" required>
                     </div>
                     
                     <div class="form-group">
                         <label class="block text-white/90 text-sm font-semibold mb-2">Email</label>
-                        <input type="email" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
+                        <input type="email" class="auth-input w-full px-4 py-3 rounded-lg text-white text-base placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
                     </div>
                     
                     <div class="form-group">
                         <label class="block text-white/90 text-sm font-semibold mb-2">Mot de passe</label>
-                        <input type="password" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                        <input type="password" class="auth-input w-full px-4 py-3 rounded-lg text-white text-base placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="block text-white/90 text-sm font-semibold mb-2">Confirmer le mot de passe</label>
-                        <input type="password" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                        <label class="block text-white/90 text-sm font-semibold mb-2">Confirmer</label>
+                        <input type="password" class="auth-input w-full px-4 py-3 rounded-lg text-white text-base placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
                     </div>
                     
                     <div class="form-group flex items-start">
                         <input type="checkbox" class="mt-1 mr-3 w-4 h-4 rounded" required>
                         <label class="text-white/80 text-sm leading-relaxed">
-                            J'accepte les <a href="#" class="text-blue-300 hover:text-blue-200 font-medium">conditions d'utilisation</a> et la <a href="#" class="text-blue-300 hover:text-blue-200 font-medium">politique de confidentialité</a>
+                            J'accepte les <a href="#" class="text-blue-300 hover:text-blue-200 font-medium">conditions</a> et la <a href="#" class="text-blue-300 hover:text-blue-200 font-medium">politique</a>
                         </label>
                     </div>
                     
                     <div class="form-group">
-                        <button type="submit" class="auth-btn w-full py-3 rounded-xl font-bold text-base text-white transition-all">
+                        <button type="submit" class="auth-btn w-full py-3 rounded-lg font-bold text-base text-white transition-all">
                             Créer mon compte
                         </button>
                     </div>
@@ -1485,8 +1487,8 @@
                     </div>
                     
                     <div class="mt-4 grid grid-cols-2 gap-3">
-                        <button class="social-btn flex items-center justify-center px-4 py-3 rounded-xl text-white font-medium transition-all">
-                            <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
+                        <button class="social-btn flex items-center justify-center px-4 py-3 rounded-lg text-white text-sm font-medium transition-all">
+                            <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -1494,8 +1496,8 @@
                             </svg>
                             Google
                         </button>
-                        <button class="social-btn flex items-center justify-center px-4 py-3 rounded-xl text-white font-medium transition-all">
-                            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                        <button class="social-btn flex items-center justify-center px-4 py-3 rounded-lg text-white text-sm font-medium transition-all">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                             </svg>
                             Twitter
@@ -1771,5 +1773,5 @@
         `;
         document.head.appendChild(style);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9816b08754c09ec5',t:'MTc1ODI1OTgxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9816cc63229e11ff',t:'MTc1ODI2MDk1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
