@@ -482,6 +482,17 @@
             }
         }
         
+        @keyframes orbPulse {
+            0%, 100% { 
+                opacity: 0.7;
+                box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+            }
+            50% { 
+                opacity: 1;
+                box-shadow: 0 0 40px rgba(79, 172, 254, 0.6);
+            }
+        }
+        
         @keyframes fadeIn {
             0% { opacity: 0; transform: scale(0.3); }
             60% { opacity: 0.8; transform: scale(1.1); }
@@ -738,8 +749,15 @@
         .floating-orb {
             position: absolute;
             border-radius: 50%;
-            animation: orbFloat 8s ease-in-out infinite;
+            animation: orbFloat 8s ease-in-out infinite, orbPulse 4s ease-in-out infinite;
             filter: blur(1px);
+            transition: all 0.3s ease;
+        }
+        
+        .floating-orb:hover {
+            animation-play-state: paused;
+            transform: scale(1.3) !important;
+            filter: blur(0px);
         }
         
         .client-orbs .floating-orb:nth-child(odd) {
@@ -814,16 +832,38 @@
             box-shadow: 
                 0 25px 50px rgba(0, 0, 0, 0.25),
                 inset 0 1px 0 rgba(255, 255, 255, 0.4);
-            animation: authSlideIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-            transform: translateY(100px) scale(0.9);
-            opacity: 0;
-            position: relative;
+            animation: authSlideIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards, authFloat 6s ease-in-out infinite 1.5s;
+            position: fixed !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
             overflow: hidden;
+            margin: 0 !important;
+            z-index: 1000;
+        }
+        
+        @keyframes authFloat {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1) rotate(0deg) !important; 
+            }
+            25% { 
+                transform: translate(-50%, -50%) scale(1.01) rotate(0.5deg) !important; 
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.02) rotate(0deg) !important; 
+            }
+            75% { 
+                transform: translate(-50%, -50%) scale(1.01) rotate(-0.5deg) !important; 
+            }
         }
         
         @keyframes authSlideIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8) !important;
+                opacity: 0;
+            }
             to {
-                transform: translateY(0) scale(1);
+                transform: translate(-50%, -50%) scale(1) !important;
                 opacity: 1;
             }
         }
@@ -962,6 +1002,7 @@
             backdrop-filter: blur(10px);
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
+            animation: inputGlow 3s ease-in-out infinite;
         }
         
         .auth-input:focus {
@@ -971,6 +1012,31 @@
             box-shadow: 
                 0 0 0 4px rgba(79, 172, 254, 0.2),
                 0 15px 35px rgba(79, 172, 254, 0.15);
+            animation: inputFocusGlow 1s ease-in-out infinite;
+        }
+        
+        @keyframes inputGlow {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(79, 172, 254, 0.2);
+            }
+        }
+        
+        @keyframes inputFocusGlow {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 0 4px rgba(79, 172, 254, 0.2),
+                    0 15px 35px rgba(79, 172, 254, 0.15),
+                    0 0 30px rgba(79, 172, 254, 0.3);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 0 6px rgba(79, 172, 254, 0.3),
+                    0 20px 40px rgba(79, 172, 254, 0.25),
+                    0 0 50px rgba(79, 172, 254, 0.5);
+            }
         }
         
         .auth-input::placeholder {
@@ -1283,10 +1349,10 @@
         </div>
         
         <!-- Ultra Styled Auth Container -->
-        <div class="auth-container rounded-3xl p-8 md:p-12 w-full max-w-md relative z-10">
+        <div class="auth-container rounded-3xl p-6 md:p-8 w-full max-w-sm relative z-10">
                 <!-- Enhanced Logo -->
-                <div class="text-center mb-8 relative z-20">
-                    <div class="auth-logo mx-auto mb-6">
+                <div class="text-center mb-6 relative z-20">
+                    <div class="auth-logo mx-auto mb-4">
                         <div class="w-20 h-20 mx-auto relative">
                             <svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
@@ -1328,32 +1394,32 @@
                             </svg>
                         </div>
                     </div>
-                    <h1 class="text-4xl font-bold text-white mb-4 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                    <h1 class="text-3xl font-bold text-white mb-3 bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
                         AirWorld
                     </h1>
-                    <div id="authSubtitle" class="text-white/80 text-lg leading-relaxed"></div>
+                    <div id="authSubtitle" class="text-white/80 text-sm leading-relaxed"></div>
                 </div>
                 
                 <!-- Enhanced Auth Tabs -->
-                <div class="auth-tabs flex mb-8">
-                    <button id="loginTab" class="auth-tab flex-1 py-4 px-6 rounded-2xl text-white font-semibold transition-all active">
+                <div class="auth-tabs flex mb-6">
+                    <button id="loginTab" class="auth-tab flex-1 py-3 px-4 rounded-xl text-white font-semibold transition-all active">
                         Connexion
                     </button>
-                    <button id="signupTab" class="auth-tab flex-1 py-4 px-6 rounded-2xl text-white/70 font-semibold transition-all">
+                    <button id="signupTab" class="auth-tab flex-1 py-3 px-4 rounded-xl text-white/70 font-semibold transition-all">
                         Inscription
                     </button>
                 </div>
                 
                 <!-- Login Form -->
-                <form id="loginForm" class="auth-form space-y-6 relative z-20">
+                <form id="loginForm" class="auth-form space-y-4 relative z-20">
                     <div class="form-group">
-                        <label class="block text-white/90 text-sm font-semibold mb-3">Email</label>
-                        <input type="email" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
+                        <label class="block text-white/90 text-sm font-semibold mb-2">Email</label>
+                        <input type="email" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="block text-white/90 text-sm font-semibold mb-3">Mot de passe</label>
-                        <input type="password" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                        <label class="block text-white/90 text-sm font-semibold mb-2">Mot de passe</label>
+                        <input type="password" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
                     </div>
                     
                     <div class="form-group flex items-center justify-between text-sm">
@@ -1365,32 +1431,32 @@
                     </div>
                     
                     <div class="form-group">
-                        <button type="submit" class="auth-btn w-full py-4 rounded-2xl font-bold text-lg text-white transition-all">
+                        <button type="submit" class="auth-btn w-full py-3 rounded-xl font-bold text-base text-white transition-all">
                             Se connecter
                         </button>
                     </div>
                 </form>
                 
                 <!-- Signup Form -->
-                <form id="signupForm" class="auth-form space-y-6 hidden relative z-20">
+                <form id="signupForm" class="auth-form space-y-4 hidden relative z-20">
                     <div class="form-group">
-                        <label class="block text-white/90 text-sm font-semibold mb-3">Nom complet</label>
-                        <input type="text" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="Jean Dupont" required>
+                        <label class="block text-white/90 text-sm font-semibold mb-2">Nom complet</label>
+                        <input type="text" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="Jean Dupont" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="block text-white/90 text-sm font-semibold mb-3">Email</label>
-                        <input type="email" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
+                        <label class="block text-white/90 text-sm font-semibold mb-2">Email</label>
+                        <input type="email" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="votre@email.com" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="block text-white/90 text-sm font-semibold mb-3">Mot de passe</label>
-                        <input type="password" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                        <label class="block text-white/90 text-sm font-semibold mb-2">Mot de passe</label>
+                        <input type="password" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
                     </div>
                     
                     <div class="form-group">
-                        <label class="block text-white/90 text-sm font-semibold mb-3">Confirmer le mot de passe</label>
-                        <input type="password" class="auth-input w-full px-6 py-4 rounded-2xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
+                        <label class="block text-white/90 text-sm font-semibold mb-2">Confirmer le mot de passe</label>
+                        <input type="password" class="auth-input w-full px-4 py-3 rounded-xl text-white placeholder-white/60 focus:outline-none transition-all" placeholder="••••••••" required>
                     </div>
                     
                     <div class="form-group flex items-start">
@@ -1401,25 +1467,25 @@
                     </div>
                     
                     <div class="form-group">
-                        <button type="submit" class="auth-btn w-full py-4 rounded-2xl font-bold text-lg text-white transition-all">
+                        <button type="submit" class="auth-btn w-full py-3 rounded-xl font-bold text-base text-white transition-all">
                             Créer mon compte
                         </button>
                     </div>
                 </form>
                 
                 <!-- Enhanced Social Login -->
-                <div class="mt-8 relative z-20">
+                <div class="mt-6 relative z-20">
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-white/30"></div>
                         </div>
                         <div class="relative flex justify-center text-sm">
-                            <span class="px-6 bg-transparent text-white/80 font-medium">Ou continuer avec</span>
+                            <span class="px-4 bg-transparent text-white/80 font-medium">Ou continuer avec</span>
                         </div>
                     </div>
                     
-                    <div class="mt-6 grid grid-cols-2 gap-4">
-                        <button class="social-btn flex items-center justify-center px-6 py-4 rounded-2xl text-white font-medium transition-all">
+                    <div class="mt-4 grid grid-cols-2 gap-3">
+                        <button class="social-btn flex items-center justify-center px-4 py-3 rounded-xl text-white font-medium transition-all">
                             <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -1428,7 +1494,7 @@
                             </svg>
                             Google
                         </button>
-                        <button class="social-btn flex items-center justify-center px-6 py-4 rounded-2xl text-white font-medium transition-all">
+                        <button class="social-btn flex items-center justify-center px-4 py-3 rounded-xl text-white font-medium transition-all">
                             <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
                             </svg>
@@ -1705,5 +1771,5 @@
         `;
         document.head.appendChild(style);
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9807cd1206f241da',t:'MTc1ODEwMzY5My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9816b08754c09ec5',t:'MTc1ODI1OTgxMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
