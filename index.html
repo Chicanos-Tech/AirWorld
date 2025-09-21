@@ -1,300 +1,616 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AirWorld - Location de voitures de luxe</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AirWorld — Location de voitures de luxe</title>
+<meta name="description" content="AirWorld : trouvez et louez des véhicules de luxe partout en France.">
 <style>
-/* ===== Reset & Base ===== */
-*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,"Helvetica Neue",Arial,sans-serif}
-body{background:#fff;color:#111;line-height:1.5}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;border:none;font:inherit;transition:.3s all}
+/* ============ Design System ============ */
+:root{
+  --bg:#ffffff;--bg-2:#f6f7f9;--glass:rgba(255,255,255,.72);
+  --text:#111217;--muted:#6B7078;--line:#E7E9EF;
+  --primary:#0B1325;--primary-2:#001a3a;--silver:#B7BFCE;
+  --shadow:0 10px 30px rgba(14,18,33,.08);
+  --radius:16px;--radius-lg:22px;--radius-sm:12px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;cursor:pointer}
 .hidden{display:none!important}
 
-/* ===== Header ===== */
-header{display:flex;justify-content:space-between;align-items:center;padding:20px 40px;position:sticky;top:0;background:#fff;z-index:50;box-shadow:0 2px 6px rgba(0,0,0,.05)}
-header .logo{font-weight:800;font-size:22px;color:#111}
-header nav{display:flex;gap:12px}
-header nav a{padding:8px 16px;border-radius:20px;background:#f3f3f3;font-weight:600;color:#333}
+/* ============ Header ============ */
+.header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
+.header .row{max-width:1180px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
+.logo{width:36px;height:36px;border-radius:10px;background:#000;display:grid;place-items:center;box-shadow:var(--shadow)}
+.logo svg{width:22px;height:22px}
+.nav{display:flex;align-items:center;gap:8px}
+.nav a,.nav button{padding:.6rem 1rem;border-radius:999px;border:1px solid var(--line);background:#fff}
+.nav a:hover{background:var(--bg-2)}
+.btn-primary{background:var(--primary);color:#fff;border:1px solid transparent}
+.btn-primary:hover{background:var(--primary-2);transform:translateY(-1px)}
 
-/* ===== Hero ===== */
-.hero{height:90vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px;background:linear-gradient(to bottom right,#f9f9f9,#eaeaea)}
-.hero h1{font-size:44px;font-weight:800;margin-bottom:10px;color:#111}
-.hero p{font-size:20px;color:#666;margin-bottom:30px}
-.hero .actions{display:flex;gap:14px}
-.hero .actions button{padding:16px 26px;border-radius:30px;font-weight:700;font-size:16px}
-.hero .actions .primary{background:#111;color:#fff}
-.hero .actions .secondary{background:#f3f3f3;color:#111}
+/* ============ Hero ============ */
+.hero{min-height:72vh;display:grid;place-items:center;background:linear-gradient(180deg,#f9fafc, #ffffff)}
+.hero-inner{max-width:1180px;width:100%;padding:24px 18px;text-align:left}
+.hero h1{font-size:clamp(28px,4.6vw,56px);line-height:1.05;letter-spacing:-.5px;margin:0 0 12px;font-weight:800}
+.hero p{color:#8b8f98;font-size:clamp(16px,2.1vw,20px);margin:0 0 22px}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap}
+.cta{padding:14px 22px;border-radius:999px;font-weight:700;border:1px solid var(--line);background:#fff}
+.cta.primary{background:#000;color:#fff;border-color:#000}
 
-/* ===== Modal Auth ===== */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;justify-content:center;align-items:center;z-index:1000}
-.modal.open{display:flex}
-.modal-content{background:#fff;border-radius:20px;width:90%;max-width:420px;padding:24px;box-shadow:0 8px 24px rgba(0,0,0,.2);animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.modal header{display:flex;justify-content:space-between;margin-bottom:20px}
-.modal header h2{font-size:20px;font-weight:700}
-.tabs{display:flex;margin-bottom:20px}
-.tabs button{flex:1;padding:12px;border-radius:10px;font-weight:600;background:#f3f3f3;color:#333}
-.tabs button.active{background:#111;color:#fff}
-form{display:grid;gap:14px}
-form input{padding:12px;border:1px solid #ddd;border-radius:10px}
-form .btn{padding:14px;border-radius:25px;font-weight:700;font-size:16px}
-form .btn.primary{background:#111;color:#fff}
-.close{cursor:pointer;font-size:18px}
+/* ============ Auth Modal ============ */
+.modal{position:fixed;inset:0;background:rgba(9,12,20,.55);display:none;place-items:center;z-index:60}
+.modal.open{display:grid}
+.sheet{width:min(440px,92vw);background:#fff;border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 60px rgba(9,12,20,.3);overflow:hidden}
+.sheet header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+.tabs{display:flex;margin:10px;gap:8px}
+.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700}
+.tabs button.active{background:#111;color:#fff;border-color:#111}
+.form{padding:12px 16px 18px;display:grid;gap:12px}
+.form input{padding:12px;border:1px solid var(--line);border-radius:12px}
+.form .btn{padding:12px;border-radius:12px;font-weight:800}
 
-/* ===== Sections ===== */
-section{padding:40px;display:none}
-section.active{display:block}
+/* ============ CLIENT PAGE ============ */
+.section{display:none}
+.section.active{display:block}
+.container{max-width:1180px;margin:0 auto;padding:22px 18px}
 
-/* ===== Client Section ===== */
-#client{background:#fafafa}
-#client h2{margin-bottom:20px;font-size:26px;font-weight:700}
+/* Search Bar (glass) */
+.search-card{
+  position:sticky;top:76px;z-index:20;
+  display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr auto;align-items:center;
+  background:var(--glass);backdrop-filter:blur(10px);border:1px solid rgba(183,191,206,.45);
+  padding:10px;border-radius:20px;box-shadow:var(--shadow)
+}
+.search-field{background:#fff;border:1px solid var(--line);border-radius:12px;padding:.6rem .8rem}
+.search-field .label{font-size:.78rem;color:var(--muted)}
+.search-field input,.search-field select{border:0;outline:0;width:100%;background:transparent}
+@media(max-width:860px){.search-card{grid-template-columns:1fr}}
 
-/* Search bar */
-.search-bar{background:rgba(255,255,255,.8);backdrop-filter:blur(8px);padding:20px;border-radius:18px;box-shadow:0 6px 20px rgba(0,0,0,.08);display:grid;gap:12px;margin-bottom:20px;position:sticky;top:80px;z-index:20}
-.search-bar form{display:flex;flex-wrap:wrap;gap:12px}
-.search-bar input,.search-bar select{flex:1;min-width:160px;padding:12px;border:1px solid #ddd;border-radius:12px}
-.search-bar button{padding:14px 24px;border-radius:12px;background:#111;color:#fff;font-weight:700}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.chip{padding:.55rem .85rem;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:700}
+.chip[aria-pressed="true"],.chip:hover{background:var(--primary);color:#fff;border-color:transparent}
 
-/* Layout Results */
-.results{display:grid;grid-template-columns:2fr 1fr;gap:20px}
-@media(max-width:900px){.results{grid-template-columns:1fr}}
+/* Client layout like mockup */
+.client-grid{display:grid;grid-template-columns: 1.4fr 1fr;gap:22px}
+@media(max-width:980px){.client-grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+.card.padded{padding:16px}
 
-/* Filters */
-.filters{background:#fff;padding:20px;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.08);margin-bottom:20px}
-.filters h3{font-size:18px;margin-bottom:12px}
-.filters label{display:block;margin-bottom:8px;font-size:14px;color:#444}
+/* Featured car (left big card) */
+.featured{overflow:hidden}
+.featured .media{height:240px;background:linear-gradient(180deg,#f0f2f7,#e9ecf5);display:grid;place-items:center}
+.featured .media img{height:88%;filter:drop-shadow(0 18px 20px rgba(0,0,0,.18))}
+.featured .body{padding:14px 16px}
+.featured .title{font-weight:800;font-size:1.2rem;margin-bottom:6px}
+.specs{display:flex;gap:8px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem .7rem;border-radius:999px;background:var(--bg-2);color:#545861;font-weight:700;font-size:.82rem}
 
-/* Cars list */
-.cars{display:grid;gap:20px}
-.car{background:#fff;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.08);overflow:hidden;transition:.3s all}
-.car:hover{transform:translateY(-4px)}
-.car img{width:100%;height:200px;object-fit:cover}
-.car-info{padding:18px}
-.car-info h3{font-size:20px;margin-bottom:6px}
-.car-info p{color:#666;font-size:14px;margin-bottom:10px}
-.car-info .price{font-weight:700;margin-bottom:12px;font-size:16px}
-.car-info button{padding:12px;border-radius:10px;background:#001f3f;color:#fff;font-weight:600;width:100%;transition:.3s}
-.car-info button:hover{background:#004080}
+/* Right column: results list (small stacked) */
+.side-list .item{display:grid;grid-template-columns:80px 1fr auto;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.side-list .item img{width:80px;height:56px;object-fit:cover;border-radius:10px}
+.side-list .name{font-weight:700}
+.side-list .price{font-weight:800}
 
-/* Map */
-.map-card{background:#fff;border-radius:16px;box-shadow:0 4px 14px rgba(0,0,0,.08);overflow:hidden}
-.map-card img{width:100%;height:100%;object-fit:cover;border-radius:16px}
+/* Headline sections below */
+.headline{font-size:1.4rem;font-weight:800;margin:12px 0 8px}
+.lead{color:var(--muted);margin-bottom:10px}
 
-/* Vehicle modal */
-#vehicleModal .modal-content{max-width:700px}
-.vehicle-gallery{display:flex;gap:10px;overflow-x:auto}
-.vehicle-gallery img{height:180px;border-radius:10px;object-fit:cover}
-.vehicle-details{margin-top:15px;font-size:15px;color:#333}
-.vehicle-details h3{margin-bottom:8px}
-.vehicle-details p{margin-bottom:6px}
-.vehicle-details .price{font-weight:700;font-size:18px;margin:12px 0}
+/* CTA buttons in cards */
+.btn{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);background:#fff;border-radius:12px;padding:.6rem .9rem;font-weight:800}
+.btn.cta{background:var(--primary);color:#fff;border-color:transparent}
+.btn:hover{transform:translateY(-1px)}
+
+/* ============ LOUEUR PAGE ============ */
+.subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.subnav button{padding:.7rem 1rem;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:800}
+.subnav button.active{background:#111;color:#fff;border-color:#111}
+
+/* Loueur grids */
+.dashboard{display:grid;grid-template-columns:1.2fr 1fr;gap:22px}
+@media(max-width:1080px){.dashboard{grid-template-columns:1fr}}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kpi{padding:16px;border-radius:16px;background:#fafbfe;border:1px solid var(--line)}
+.kpi h3{font-size:1.6rem;margin:4px 0}
+.kpi .hint{color:var(--muted);font-size:.9rem}
+
+/* Charts (SVG mini) */
+.chart{height:180px;border:1px solid var(--line);border-radius:16px;padding:10px}
+.progress{height:10px;background:#e9edf6;border-radius:999px;overflow:hidden}
+.progress > span{display:block;height:100%;background:linear-gradient(90deg,#0b1325,#2b5aa3)}
+
+/* KYC / Uploads */
+.form-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:860px){.form-cols{grid-template-columns:1fr}}
+.drop{border:2px dashed #cdd3e3;border-radius:14px;padding:18px;text-align:center;color:#667}
+.drop.drag{background:#f6f8ff}
+.preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.preview img{width:84px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+
+/* Catalog table */
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+.table-actions button{margin-right:6px}
+
+/* Reservations */
+.res-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.status{padding:.3rem .6rem;border-radius:999px;font-weight:700;font-size:.8rem;border:1px solid var(--line);background:#fff}
+.status[data-s="pending"]{background:#fff7e6;border-color:#ffd37d}
+.status[data-s="confirmed"]{background:#e8fff1;border-color:#9de2b5}
+.status[data-s="cancelled"]{background:#ffe8e8;border-color:#ffb3b3}
+
+/* Footer */
+footer{border-top:1px solid var(--line);color:var(--muted);padding:34px 18px;margin-top:30px}
 </style>
 </head>
 <body>
 
-<!-- ===== Header ===== -->
-<header>
-  <div class="logo">AirWorld</div>
-  <nav>
-    <a href="#">Accueil</a>
-    <a href="#">Recherche</a>
-    <a href="#">Favoris</a>
-    <a href="#">Mon compte</a>
-    <a href="#" id="btn-login">Connexion</a>
-  </nav>
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="row">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M2 15 L8 6 L14 15 Z M10 15 L16 6 L22 15 Z" fill="#fff"/></svg>
+      </span>
+      AirWorld
+    </div>
+    <nav class="nav">
+      <a href="#home">Accueil</a>
+      <a href="#" id="openAuth">Rechercher</a>
+      <a href="#" id="openAuthL">Devenir loueur</a>
+      <button class="btn-primary" id="btnLogin">Connexion</button>
+    </nav>
+  </div>
 </header>
 
-<!-- ===== Hero ===== -->
+<!-- ================= HERO ================= -->
 <section class="hero" id="home">
-  <h1>AirWorld. Le luxe, mobile.</h1>
-  <p>Location premium, partout en France avec confiance.</p>
-  <div class="actions">
-    <button class="primary" id="btn-client">Rechercher une voiture</button>
-    <button class="secondary" id="btn-loueur">Devenir loueur</button>
+  <div class="hero-inner">
+    <h1>Trouvez et louez<br>la voiture idéale</h1>
+    <p>Découvrez une sélection exclusive de voitures haut de gamme disponibles partout en France, avec un parcours simple et sécurisé.</p>
+    <div class="actions">
+      <button class="cta primary" id="btnClient">Rechercher une voiture</button>
+      <button class="cta" id="btnLoueur">Devenir loueur</button>
+    </div>
   </div>
 </section>
 
-<!-- ===== Modal Auth ===== -->
-<div class="modal" id="authModal">
-  <div class="modal-content">
+<!-- ================= AUTH MODAL ================= -->
+<div class="modal" id="authModal" aria-modal="true" role="dialog">
+  <div class="sheet">
     <header>
-      <h2 id="modal-title">Connexion</h2>
-      <span class="close" id="closeModal">✖</span>
+      <strong id="authTitle">Connexion</strong>
+      <button id="closeAuth" class="cta">Fermer</button>
     </header>
     <div class="tabs">
-      <button id="tab-login" class="active">Connexion</button>
-      <button id="tab-signup">Inscription</button>
+      <button id="tabLogin" class="active">Connexion</button>
+      <button id="tabSignup">Inscription</button>
     </div>
-    <form id="authForm">
-      <input type="text" id="nameField" placeholder="Nom complet" class="hidden">
-      <input type="email" id="emailField" placeholder="Email" required>
-      <input type="password" id="passField" placeholder="Mot de passe" required>
-      <input type="password" id="confirmField" placeholder="Confirmer le mot de passe" class="hidden">
-      <button type="submit" class="btn primary">Valider</button>
+    <form class="form" id="authForm">
+      <input class="hidden" id="fullName" placeholder="Nom complet">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="pass" placeholder="Mot de passe" required>
+      <input class="hidden" type="password" id="pass2" placeholder="Confirmer le mot de passe">
+      <button class="btn btn-primary" type="submit">Valider</button>
     </form>
   </div>
 </div>
 
-<!-- ===== Modal Vehicle ===== -->
-<div class="modal" id="vehicleModal">
-  <div class="modal-content">
-    <header>
-      <h2>Détails du véhicule</h2>
-      <span class="close" id="closeVehicle">✖</span>
-    </header>
-    <div class="vehicle-gallery">
-      <img src="https://via.placeholder.com/400x200" alt="photo">
-      <img src="https://via.placeholder.com/400x200" alt="photo">
-      <img src="https://via.placeholder.com/400x200" alt="photo">
-    </div>
-    <div class="vehicle-details">
-      <h3>Mercedes Classe S</h3>
-      <p>Berline Luxe – Chauffeur inclus</p>
-      <p>Moteur V8 – Automatique – 5 places</p>
-      <div class="price">210 € / jour</div>
-      <button class="btn primary">Réserver maintenant</button>
-    </div>
-  </div>
-</div>
-
-<!-- ===== Client Section ===== -->
-<section id="client">
-  <h2>Trouvez votre voiture idéale</h2>
-  <!-- Barre recherche -->
-  <div class="search-bar">
-    <form id="searchForm">
-      <input type="text" placeholder="Lieu de départ" required>
-      <input type="date" required>
-      <input type="date" required>
-      <select required>
-        <option>Catégorie</option>
-        <option>Berline</option>
-        <option>SUV</option>
-        <option>Sportive</option>
-        <option>Électrique</option>
-      </select>
-      <button type="submit">Rechercher</button>
-    </form>
-  </div>
-  <div class="results">
-    <!-- Résultats -->
-    <div>
-      <div class="filters">
-        <h3>Filtres</h3>
-        <label><input type="checkbox"> Prix &lt; 100€</label>
-        <label><input type="checkbox"> SUV</label>
-        <label><input type="checkbox"> Électrique</label>
-        <label><input type="checkbox"> Avec chauffeur</label>
+<!-- ================= CLIENT PAGE ================= -->
+<section id="client" class="section">
+  <div class="container">
+    <!-- Search (glass) -->
+    <form class="search-card" id="clientSearch" aria-label="Recherche de véhicules">
+      <div class="search-field">
+        <div class="label">Lieu de départ</div>
+        <input placeholder="Paris, Nice, Lyon…" />
       </div>
-      <div class="cars">
-        <div class="car">
-          <img src="https://via.placeholder.com/400x200" alt="Tesla Model 3">
-          <div class="car-info">
-            <h3>Tesla Model 3</h3>
-            <p>Électrique – 5 places – Automatique</p>
-            <div class="price">129 € / jour</div>
-            <button class="btn-reserve">Voir détails</button>
+      <div class="search-field">
+        <div class="label">Dates</div>
+        <input type="text" placeholder="Début — Fin" />
+      </div>
+      <div class="search-field">
+        <div class="label">Type de véhicule</div>
+        <select>
+          <option>Tous</option><option>Citadine</option><option>Berline</option><option>SUV</option><option>Sport</option><option>Électrique</option><option>Luxe</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" type="submit">Rechercher</button>
+    </form>
+
+    <!-- Explore categories -->
+    <div class="chips" role="tablist" aria-label="Explorer des véhicules">
+      <button class="chip" aria-pressed="true">Citadine</button>
+      <button class="chip">SUV</button>
+      <button class="chip">Utilitaire</button>
+      <button class="chip">Sport</button>
+      <button class="chip">Électrique</button>
+      <button class="chip">Luxe</button>
+    </div>
+
+    <div class="client-grid">
+      <!-- Left big featured -->
+      <article class="card featured">
+        <div class="media">
+          <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop" alt="Tesla Model 3">
+        </div>
+        <div class="body">
+          <div class="title">Tesla Model 3</div>
+          <div class="specs" style="margin-bottom:8px">
+            <span class="badge">Électrique</span>
+            <span class="badge">5 places</span>
+            <span class="badge">Auto</span>
+            <span class="badge">RWD 283ch</span>
+            <span class="badge">★ 4.8 (211)</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>129 €</strong> / jour</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn" id="btnMoreTesla">Détails</button>
+              <button class="btn cta" id="btnBookTesla">Réserver</button>
+            </div>
           </div>
         </div>
-        <div class="car">
-          <img src="https://via.placeholder.com/400x200" alt="Audi Q5">
-          <div class="car-info">
-            <h3>Audi Q5</h3>
-            <p>SUV – Essence – 5 places</p>
+      </article>
+
+      <!-- Right stacked list -->
+      <aside class="card padded">
+        <h3 style="margin:0 0 8px">Results liste</h3>
+        <div class="side-list grid" style="display:grid;gap:10px">
+          <div class="item">
+            <img src="https://images.unsplash.com/photo-1605559424843-f3b3fbb01403?q=80&w=800&auto=format&fit=crop" alt="Peugeot 208">
+            <div><div class="name">Peugeot 208</div><small class="muted">2022</small></div>
+            <div class="price">45 € / jour</div>
+          </div>
+          <div class="item">
+            <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1b?q=80&w=800&auto=format&fit=crop" alt="Audi Q5">
+            <div><div class="name">Audi Q5</div><small class="muted">2019</small></div>
             <div class="price">85 € / jour</div>
-            <button class="btn-reserve">Voir détails</button>
           </div>
-        </div>
-        <div class="car">
-          <img src="https://via.placeholder.com/400x200" alt="Mercedes Classe S">
-          <div class="car-info">
-            <h3>Mercedes Classe S</h3>
-            <p>Berline Luxe – Chauffeur inclus</p>
+          <div class="item">
+            <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop" alt="Mercedes-Benz S Class">
+            <div><div class="name">Mercedes-Benz S-Class</div><small class="muted">2021</small></div>
             <div class="price">210 € / jour</div>
-            <button class="btn-reserve">Voir détails</button>
           </div>
         </div>
-      </div>
+      </aside>
     </div>
-    <!-- Carte -->
-    <div class="map-card">
-      <img src="https://via.placeholder.com/500x600?text=Carte+interactive" alt="map">
-    </div>
+
+    <h3 class="headline">Location de voitures haut de gamme</h3>
+    <p class="lead">Découvrez une sélection exclusive de véhicules disponibles à la location, avec une expérience de réservation simplifiée.</p>
   </div>
 </section>
 
-<!-- ===== Loueur Section ===== -->
-<section id="loueur">
-  <h2>Espace Loueur – Tableau de bord</h2>
-  <div class="dashboard">
-    <div class="stats">
-      <div class="stat"><h3 id="statCars">1</h3><p>Voitures disponibles</p></div>
-      <div class="stat"><h3 id="statBookings">12</h3><p>Réservations</p></div>
-      <div class="stat"><h3 id="statRevenue">3 450 €</h3><p>Revenus estimés</p></div>
-    </div>
-    <div class="table-card">
-      <h3 style="margin-bottom:10px">Mes annonces</h3>
-      <table class="table" id="carsTable">
-        <thead><tr><th>Nom</th><th>Type</th><th>Prix</th></tr></thead>
-        <tbody><tr><td>Tesla Model 3</td><td>Électrique</td><td>129 €</td></tr></tbody>
-      </table>
-      <form class="add-form" id="addCarForm">
-        <input type="text" id="carName" placeholder="Nom de la voiture" required>
-        <input type="text" id="carType" placeholder="Type" required>
-        <input type="text" id="carPrice" placeholder="Prix" required>
-        <button type="submit">Ajouter</button>
-      </form>
+<!-- ===== Vehicle Detail Modal (client) ===== -->
+<div class="modal" id="vehicleModal">
+  <div class="sheet">
+    <header>
+      <strong>Fiche véhicule</strong>
+      <button class="btn" id="closeVehicle">Fermer</button>
+    </header>
+    <div class="padded" style="padding:12px 16px">
+      <div class="chips" style="margin-top:0">
+        <span class="badge">Tesla Model 3</span>
+        <span class="badge">Électrique</span>
+        <span class="badge">Auto</span>
+        <span class="badge">5 places</span>
+      </div>
+      <div class="preview" style="margin:10px 0 6px">
+        <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop" alt="">
+        <img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?q=80&w=1200&auto=format&fit=crop" alt="">
+        <img src="https://images.unsplash.com/photo-1593941707874-ef25b8b4a92c?q=80&w=1200&auto=format&fit=crop" alt="">
+      </div>
+      <p class="lead" style="margin:0 0 6px">La berline électrique de référence : design minimaliste, performances instantanées et confort silencieux.</p>
+      <div class="badge">✅ AirWorld Verified – Élite Cars Paris</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <div><strong style="font-size:1.2rem">129 €</strong> / jour</div>
+        <button class="btn btn-primary" id="confirmBook">Réserver</button>
+      </div>
     </div>
   </div>
+</div>
+
+<!-- ================= LOUEUR PAGE ================= -->
+<section id="loueur" class="section">
+  <div class="container">
+    <div class="subnav">
+      <button class="active" data-tab="dash">Dashboard</button>
+      <button data-tab="kyc">Vérification KYC</button>
+      <button data-tab="profil">Profil</button>
+      <button data-tab="catalogue">Catalogue véhicules</button>
+      <button data-tab="reservations">Réservations</button>
+      <button data-tab="marketing">Marketing</button>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="tab-dash">
+      <div class="dashboard">
+        <div class="card padded">
+          <h3 style="margin-top:0">Vue d’ensemble</h3>
+          <div class="kpis" style="margin-top:10px">
+            <div class="kpi"><div class="hint">Voitures actives</div><h3 id="kpiCars">3</h3><div class="progress" style="margin-top:8px"><span style="width:70%"></span></div></div>
+            <div class="kpi"><div class="hint">Réservations (30j)</div><h3>27</h3><div class="progress" style="margin-top:8px"><span style="width:54%"></span></div></div>
+            <div class="kpi"><div class="hint">Revenus estimés</div><h3>8 450 €</h3><div class="progress" style="margin-top:8px"><span style="width:62%"></span></div></div>
+          </div>
+          <div class="chart" style="margin-top:12px">
+            <!-- simple SVG line chart -->
+            <svg viewBox="0 0 600 180" width="100%" height="100%" aria-label="Revenus">
+              <polyline fill="none" stroke="#274f9b" stroke-width="3"
+                points="10,150 60,120 110,135 160,90 210,110 260,70 310,85 360,60 410,78 460,55 510,62 590,40"/>
+              <line x1="10" y1="150" x2="590" y2="150" stroke="#e1e4ef"/>
+            </svg>
+            <div class="hint">Revenus par semaine</div>
+          </div>
+        </div>
+        <aside class="card padded">
+          <h3 style="margin-top:0">Actions urgentes</h3>
+          <ul>
+            <li>3 demandes en attente d’acceptation</li>
+            <li>1 document KYC à renouveler</li>
+            <li>2 messages non lus</li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+
+    <!-- KYC -->
+    <div id="tab-kyc" class="hidden">
+      <div class="card padded">
+        <h3 style="margin-top:0">Vérification du loueur</h3>
+        <div class="form-cols" style="margin-top:10px">
+          <input placeholder="Nom de l’entreprise / Nom complet">
+          <input placeholder="SIRET">
+          <input placeholder="Adresse">
+          <input placeholder="Téléphone">
+          <input placeholder="Email professionnel">
+          <input placeholder="Site / Réseaux (optionnel)">
+        </div>
+        <textarea style="margin-top:10px;width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px" placeholder="Description de l’activité"></textarea>
+        <h4 style="margin:14px 0 6px">Documents (CNI, assurance, justificatif pro)</h4>
+        <div class="drop" id="dropKYC">Glissez/déposez vos documents ici ou cliquez</div>
+        <input id="inputKYC" type="file" class="hidden" multiple>
+        <div class="preview" id="kycPrev"></div>
+        <div style="margin-top:12px"><button class="btn btn-primary">Envoyer pour vérification</button> <span class="badge">Badge “AirWorld Verified” après validation</span></div>
+      </div>
+    </div>
+
+    <!-- PROFIL -->
+    <div id="tab-profil" class="hidden">
+      <div class="card padded">
+        <h3 style="margin-top:0">Mon profil</h3>
+        <div class="form-cols" style="margin-top:10px">
+          <input placeholder="Nom public / Société">
+          <input placeholder="Logo (URL) / à venir">
+          <input placeholder="Horaires (ex: 9h-19h)">
+          <input placeholder="Zones de service (ex: PACA, Île-de-France)">
+        </div>
+        <textarea style="margin-top:10px;width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px" placeholder="Présentation"></textarea>
+        <div style="margin-top:12px"><button class="btn btn-primary">Enregistrer</button></div>
+      </div>
+    </div>
+
+    <!-- CATALOGUE -->
+    <div id="tab-catalogue" class="hidden">
+      <div class="card padded">
+        <h3 style="margin-top:0">Catalogue véhicules</h3>
+        <table class="table" id="carsTable">
+          <thead><tr><th>Nom</th><th>Année</th><th>Motorisation</th><th>Prix/jour</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Tesla Model 3</td><td>2023</td><td>Électrique</td><td>129 €</td><td class="table-actions"><button class="btn">Modifier</button><button class="btn">Supprimer</button></td></tr>
+            <tr><td>Audi Q5</td><td>2019</td><td>Essence</td><td>85 €</td><td class="table-actions"><button class="btn">Modifier</button><button class="btn">Supprimer</button></td></tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin:16px 0 8px">Ajouter un véhicule</h4>
+        <div class="form-cols">
+          <input id="vName" placeholder="Marque & modèle">
+          <input id="vYear" placeholder="Année">
+          <input id="vMotor" placeholder="Motorisation">
+          <input id="vPrice" placeholder="Prix / jour (ex: 150 €)">
+        </div>
+        <div class="form-cols" style="margin-top:10px">
+          <input id="vOptions" placeholder="Options luxe (GPS, Chauffeur, Assurance...)">
+          <input id="vType" placeholder="Type (SUV, Berline, Sport...)">
+        </div>
+        <h4 style="margin:14px 0 6px">Photos</h4>
+        <div class="drop" id="dropCar">Glissez vos photos ici (drag & drop)</div>
+        <input id="inputCar" type="file" class="hidden" multiple accept="image/*">
+        <div class="preview" id="carPrev"></div>
+
+        <h4 style="margin:14px 0 6px">Disponibilités (calendrier simplifié)</h4>
+        <div class="card padded" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+          <!-- simple 14 days -->
+          <script>
+            // (injected later in JS to keep markup clean)
+          </script>
+        </div>
+
+        <div style="margin-top:12px"><button id="addCar" class="btn btn-primary">Ajouter au catalogue</button></div>
+      </div>
+    </div>
+
+    <!-- RESERVATIONS -->
+    <div id="tab-reservations" class="hidden">
+      <div class="card padded">
+        <div class="res-head">
+          <h3 style="margin:0">Réservations</h3>
+          <select id="filterStatus" style="padding:.5rem .7rem;border:1px solid var(--line);border-radius:10px">
+            <option value="all">Tous statuts</option>
+            <option value="pending">En attente</option>
+            <option value="confirmed">Confirmée</option>
+            <option value="cancelled">Annulée</option>
+          </select>
+        </div>
+        <table class="table" id="resTable">
+          <thead><tr><th>Client</th><th>Véhicule</th><th>Dates</th><th>Statut</th><th>Actions</th></tr></thead>
+          <tbody>
+            <tr><td>R. Martin</td><td>Tesla Model 3</td><td>12–15 Oct.</td><td><span class="status" data-s="pending">En attente</span></td><td><button class="btn">Accepter</button><button class="btn">Refuser</button><button class="btn">Message</button></td></tr>
+            <tr><td>S. Dubois</td><td>Audi Q5</td><td>22–24 Oct.</td><td><span class="status" data-s="confirmed">Confirmée</span></td><td><button class="btn">Détails</button><button class="btn">Message</button></td></tr>
+            <tr><td>L. Cohen</td><td>Mercedes S</td><td>02–05 Nov.</td><td><span class="status" data-s="cancelled">Annulée</span></td><td><button class="btn">Détails</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- MARKETING -->
+    <div id="tab-marketing" class="hidden">
+      <div class="card padded">
+        <h3 style="margin-top:0">Mise en avant & Campagnes</h3>
+        <div class="form-cols" style="margin-top:10px">
+          <select><option>Choisir une annonce à promouvoir</option><option>Tesla Model 3</option><option>Audi Q5</option></select>
+          <select><option>Durée</option><option>7 jours</option><option>14 jours</option><option>30 jours</option></select>
+        </div>
+        <div class="form-cols" style="margin-top:10px">
+          <select><option>Positionnement</option><option>Top liste</option><option>Badge “Sponsorisé”</option><option>Page d’accueil</option></select>
+          <input placeholder="Budget (ex: 250 €)">
+        </div>
+        <div class="chart" style="margin-top:12px">
+          <svg viewBox="0 0 600 180" width="100%" height="100%">
+            <rect x="40" y="60" width="40" height="90" fill="#2a4f96"/>
+            <rect x="120" y="30" width="40" height="120" fill="#2a4f96"/>
+            <rect x="200" y="80" width="40" height="70" fill="#2a4f96"/>
+            <rect x="280" y="45" width="40" height="105" fill="#2a4f96"/>
+            <rect x="360" y="70" width="40" height="80" fill="#2a4f96"/>
+            <rect x="440" y="35" width="40" height="115" fill="#2a4f96"/>
+          </svg>
+          <div class="hint">Prévision de visibilité (impressions)</div>
+        </div>
+        <div style="margin-top:12px"><button class="btn btn-primary">Lancer la campagne</button></div>
+      </div>
+    </div>
+
+  </div>
 </section>
+
+<footer class="container">
+  © AirWorld — Expérience premium, sécurisée et transparente.
+</footer>
 
 <script>
-// ===== Auth modal =====
-const modal=document.getElementById("authModal");
-const closeBtn=document.getElementById("closeModal");
-const tabLogin=document.getElementById("tab-login");
-const tabSignup=document.getElementById("tab-signup");
-const nameField=document.getElementById("nameField");
-const confirmField=document.getElementById("confirmField");
-const modalTitle=document.getElementById("modal-title");
-let userRole="client";
+/* ================== STATE ================== */
+let role = "client"; // client or loueur
 
-document.getElementById("btn-client").onclick=()=>{userRole="client";modal.classList.add("open");};
-document.getElementById("btn-loueur").onclick=()=>{userRole="loueur";modal.classList.add("open");};
-closeBtn.onclick=()=>modal.classList.remove("open");
-tabLogin.onclick=()=>{tabLogin.classList.add("active");tabSignup.classList.remove("active");nameField.classList.add("hidden");confirmField.classList.add("hidden");modalTitle.textContent="Connexion";};
-tabSignup.onclick=()=>{tabSignup.classList.add("active");tabLogin.classList.remove("active");nameField.classList.remove("hidden");confirmField.classList.remove("hidden");modalTitle.textContent="Inscription";};
+/* ================== AUTH MODAL ================== */
+const modal = document.getElementById('authModal');
+const openAuths = [document.getElementById('btnClient'), document.getElementById('openAuth')];
+const openAuthL = [document.getElementById('btnLoueur'), document.getElementById('openAuthL')];
+const closeAuth = document.getElementById('closeAuth');
+const tabLogin = document.getElementById('tabLogin');
+const tabSignup = document.getElementById('tabSignup');
+const authTitle = document.getElementById('authTitle');
+const fullName = document.getElementById('fullName');
+const pass2 = document.getElementById('pass2');
+const authForm = document.getElementById('authForm');
 
-document.getElementById("authForm").onsubmit=(e)=>{
-  e.preventDefault();modal.classList.remove("open");
-  document.getElementById("home").classList.add("hidden");
-  if(userRole==="client"){document.getElementById("client").classList.add("active");}
-  else{document.getElementById("loueur").classList.add("active");}
-};
+openAuths.forEach(b=> b.onclick = ()=>{ role="client"; modal.classList.add('open'); });
+openAuthL.forEach(b=> b.onclick = ()=>{ role="loueur"; modal.classList.add('open'); });
+closeAuth.onclick = ()=> modal.classList.remove('open');
 
-// ===== Vehicle modal =====
-const vehicleModal=document.getElementById("vehicleModal");
-const closeVehicle=document.getElementById("closeVehicle");
-document.querySelectorAll(".btn-reserve").forEach(btn=>{
-  btn.onclick=()=>vehicleModal.classList.add("open");
-});
-closeVehicle.onclick=()=>vehicleModal.classList.remove("open");
+tabLogin.onclick = ()=>{ tabLogin.classList.add('active'); tabSignup.classList.remove('active'); authTitle.textContent="Connexion"; fullName.classList.add('hidden'); pass2.classList.add('hidden'); };
+tabSignup.onclick = ()=>{ tabSignup.classList.add('active'); tabLogin.classList.remove('active'); authTitle.textContent="Inscription"; fullName.classList.remove('hidden'); pass2.classList.remove('hidden'); };
 
-// ===== Loueur add car =====
-document.getElementById("addCarForm").onsubmit=(e)=>{
+authForm.onsubmit = (e)=>{
   e.preventDefault();
-  const name=document.getElementById("carName").value;
-  const type=document.getElementById("carType").value;
-  const price=document.getElementById("carPrice").value;
-  const row=document.createElement("tr");
-  row.innerHTML=`<td>${name}</td><td>${type}</td><td>${price}</td>`;
-  document.querySelector("#carsTable tbody").appendChild(row);
-  document.getElementById("statCars").textContent=document.querySelectorAll("#carsTable tbody tr").length;
-  e.target.reset();
+  modal.classList.remove('open');
+  document.getElementById('home').classList.add('hidden');
+  document.getElementById(role==='client'?'client':'loueur').classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
 };
-</script>
 
+/* ================== CLIENT interactions ================== */
+document.getElementById('btnMoreTesla').onclick = ()=> document.getElementById('vehicleModal').classList.add('open');
+document.getElementById('btnBookTesla').onclick = ()=> document.getElementById('vehicleModal').classList.add('open');
+document.getElementById('closeVehicle').onclick = ()=> document.getElementById('vehicleModal').classList.remove('open');
+document.getElementById('confirmBook').onclick = ()=> { alert('Réservation confirmée (démo) – un email sera envoyé.'); document.getElementById('vehicleModal').classList.remove('open'); };
+
+/* ================== LOUEUR tabs ================== */
+const tabs = document.querySelectorAll('.subnav button');
+const sections = {
+  dash: document.getElementById('tab-dash'),
+  kyc: document.getElementById('tab-kyc'),
+  profil: document.getElementById('tab-profil'),
+  catalogue: document.getElementById('tab-catalogue'),
+  reservations: document.getElementById('tab-reservations'),
+  marketing: document.getElementById('tab-marketing'),
+};
+tabs.forEach(btn=>{
+  btn.onclick = ()=>{
+    tabs.forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+    Object.values(sections).forEach(s=> s.classList.add('hidden'));
+    sections[btn.dataset.tab].classList.remove('hidden');
+  };
+});
+
+/* ================== Drag & Drop (KYC & Car photos) ================== */
+function setupDrop(zoneId,inputId,previewId){
+  const zone = document.getElementById(zoneId);
+  const input = document.getElementById(inputId);
+  const prev = document.getElementById(previewId);
+  const selectFiles = ()=> input.click();
+  zone.onclick = selectFiles;
+  ['dragenter','dragover'].forEach(ev=> zone.addEventListener(ev, e=>{e.preventDefault(); zone.classList.add('drag');}));
+  ['dragleave','drop'].forEach(ev=> zone.addEventListener(ev, e=>{e.preventDefault(); zone.classList.remove('drag');}));
+  zone.addEventListener('drop', e=> handleFiles(e.dataTransfer.files));
+  input.addEventListener('change', ()=> handleFiles(input.files));
+  function handleFiles(files){
+    [...files].forEach(f=>{
+      const reader = new FileReader();
+      reader.onload = e=>{
+        const img = new Image(); img.src = e.target.result; prev.appendChild(img);
+      };
+      reader.readAsDataURL(f);
+    });
+  }
+}
+setupDrop('dropKYC','inputKYC','kycPrev');
+setupDrop('dropCar','inputCar','carPrev');
+
+/* ================== Add Car ================== */
+document.getElementById('addCar').onclick = ()=>{
+  const name = document.getElementById('vName').value.trim() || 'Nouveau modèle';
+  const year = document.getElementById('vYear').value.trim() || '—';
+  const motor = document.getElementById('vMotor').value.trim() || '—';
+  const price = document.getElementById('vPrice').value.trim() || '—';
+  const row = document.createElement('tr');
+  row.innerHTML = `<td>${name}</td><td>${year}</td><td>${motor}</td><td>${price}</td><td class="table-actions"><button class="btn">Modifier</button><button class="btn">Supprimer</button></td>`;
+  document.querySelector('#carsTable tbody').appendChild(row);
+  // update KPI
+  const kpi = document.getElementById('kpiCars'); kpi.textContent = document.querySelectorAll('#carsTable tbody tr').length;
+  // reset minimal
+  ['vName','vYear','vMotor','vPrice','vOptions','vType'].forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
+  document.getElementById('carPrev').innerHTML="";
+  alert('Véhicule ajouté (démo).');
+};
+
+/* ================== Reservations filter ================== */
+document.getElementById('filterStatus').onchange = (e)=>{
+  const val = e.target.value;
+  document.querySelectorAll('#resTable tbody tr').forEach(tr=>{
+    if(val==='all'){ tr.style.display=''; return; }
+    const st = tr.querySelector('.status').dataset.s;
+    tr.style.display = (st===val)?'':'none';
+  });
+};
+
+/* ================== Tiny calendar (catalogue hint) ================== */
+(function renderCalendar(){
+  const holder = document.querySelector('#tab-catalogue .card.padded + h4 + .drop + input + .preview + h4 + .card.padded');
+  const today = new Date();
+  for(let i=0;i<14;i++){
+    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate()+i);
+    const cell = document.createElement('button');
+    cell.textContent = String(d.getDate()).padStart(2,'0');
+    cell.title = d.toLocaleDateString('fr-FR');
+    cell.style.cssText = 'padding:.6rem;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:700';
+    cell.onclick = ()=> { cell.style.background = cell.style.background==='' || cell.style.background==='rgb(255, 255, 255)' ? '#e8fff1' : '#fff'; };
+    holder.appendChild(cell);
+  }
+})();
+</script>
 </body>
 </html>
