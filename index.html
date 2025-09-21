@@ -270,35 +270,29 @@
                     <h1 class="text-xl font-semibold text-gray-900 mb-4">Trouvez votre véhicule</h1>
                     
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                        <input type="text" placeholder="Où ?" class="p-3 border border-gray-300 rounded-lg">
-                        <input type="date" class="p-3 border border-gray-300 rounded-lg">
-                        <input type="date" class="p-3 border border-gray-300 rounded-lg">
-                        <button onclick="searchVehicles()" class="bg-gray-900 text-white py-3 px-6 rounded-lg font-medium">Rechercher</button>
+                        <div class="relative">
+                            <input type="text" id="citySearch" placeholder="Où ? (ex: Paris, Lyon...)" 
+                                   class="w-full p-3 border border-gray-300 rounded-lg" 
+                                   oninput="showCitySuggestions(this.value)"
+                                   onblur="setTimeout(hideCitySuggestions, 200)">
+                            <div id="citySuggestions" class="hidden absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg mt-1 max-h-48 overflow-y-auto z-10 shadow-lg">
+                                <!-- City suggestions will appear here -->
+                            </div>
+                        </div>
+                        <input type="date" id="startDate" class="p-3 border border-gray-300 rounded-lg">
+                        <input type="date" id="endDate" class="p-3 border border-gray-300 rounded-lg">
+                        <button onclick="searchVehicles()" class="bg-gray-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-gray-800 transition-colors">Rechercher</button>
                     </div>
                 </div>
 
                 <!-- Results -->
                 <div id="vehicleResults" class="hidden">
-                    <h2 class="text-lg font-semibold mb-4">Véhicules disponibles</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-white rounded-lg border border-gray-200 p-4">
-                            <div class="w-full h-32 bg-gray-200 rounded-lg mb-3"></div>
-                            <h3 class="font-medium mb-1">Mercedes Classe S</h3>
-                            <p class="text-sm text-gray-600 mb-2">280€/jour • ⭐ 4.8</p>
-                            <button onclick="reserveVehicle('Mercedes Classe S')" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm">Réserver</button>
-                        </div>
-                        <div class="bg-white rounded-lg border border-gray-200 p-4">
-                            <div class="w-full h-32 bg-gray-200 rounded-lg mb-3"></div>
-                            <h3 class="font-medium mb-1">BMW X5</h3>
-                            <p class="text-sm text-gray-600 mb-2">220€/jour • ⭐ 4.6</p>
-                            <button onclick="reserveVehicle('BMW X5')" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm">Réserver</button>
-                        </div>
-                        <div class="bg-white rounded-lg border border-gray-200 p-4">
-                            <div class="w-full h-32 bg-gray-200 rounded-lg mb-3"></div>
-                            <h3 class="font-medium mb-1">Porsche 911</h3>
-                            <p class="text-sm text-gray-600 mb-2">450€/jour • ⭐ 4.9</p>
-                            <button onclick="reserveVehicle('Porsche 911')" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm">Réserver</button>
-                        </div>
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold">Véhicules disponibles</h2>
+                        <p id="resultsCount" class="text-sm text-gray-600"></p>
+                    </div>
+                    <div id="vehicleGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Vehicle results will be populated here -->
                     </div>
                 </div>
             </section>
@@ -348,13 +342,14 @@
                         <span class="text-xl font-semibold text-gray-900">AirWorld Pro</span>
                     </div>
                     
-                    <nav class="hidden md:flex items-center space-x-8 absolute left-1/2 transform -translate-x-1/2">
-                        <button onclick="showOwnerSection('dashboard')" class="text-gray-900 font-medium">Dashboard</button>
-                        <button onclick="showOwnerSection('vehicles')" class="text-gray-600 hover:text-gray-900">Véhicules</button>
-                        <button onclick="showOwnerSection('bookings')" class="text-gray-600 hover:text-gray-900">Réservations</button>
-                    </nav>
-                    
-                    <button onclick="logout()" class="text-gray-600 hover:text-gray-900 text-sm">Déconnexion</button>
+                    <div class="flex items-center space-x-8">
+                        <nav class="hidden md:flex items-center space-x-6">
+                            <button onclick="showOwnerSection('dashboard')" class="text-gray-900 font-medium">Dashboard</button>
+                            <button onclick="showOwnerSection('vehicles')" class="text-gray-600 hover:text-gray-900">Véhicules</button>
+                            <button onclick="showOwnerSection('bookings')" class="text-gray-600 hover:text-gray-900">Réservations</button>
+                        </nav>
+                        <button onclick="logout()" class="text-gray-600 hover:text-gray-900 text-sm">Déconnexion</button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -645,6 +640,12 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Marque</label>
                             <input type="text" name="brand" class="w-full p-3 border border-gray-300 rounded-lg">
                         </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ville *</label>
+                            <select name="city" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner une ville</option>
+                            </select>
+                        </div>
                     </div>
                     
                     <div>
@@ -712,6 +713,158 @@
         </div>
     </div>
 
+    <!-- Edit Vehicle Modal -->
+    <div id="editVehicleModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">Modifier le véhicule</h2>
+                    <button onclick="closeEditVehicleModal()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="editVehicleForm" class="space-y-4">
+                    <input type="hidden" id="editVehicleId" name="vehicleId">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom du véhicule *</label>
+                            <input type="text" id="editName" name="name" required class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type *</label>
+                            <select id="editType" name="type" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="Berline">Berline</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Sportive">Sportive</option>
+                                <option value="Électrique">Électrique</option>
+                                <option value="Cabriolet">Cabriolet</option>
+                                <option value="Utilitaire">Utilitaire</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Prix par jour (€) *</label>
+                            <input type="number" id="editPrice" name="price" required min="1" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Année *</label>
+                            <input type="number" id="editYear" name="year" required min="1990" max="2024" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Carburant *</label>
+                            <select id="editFuel" name="fuel" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="Essence">Essence</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Électrique">Électrique</option>
+                                <option value="Hybride">Hybride</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Transmission *</label>
+                            <select id="editTransmission" name="transmission" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="Manuelle">Manuelle</option>
+                                <option value="Automatique">Automatique</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de places *</label>
+                            <select id="editSeats" name="seats" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="2">2 places</option>
+                                <option value="4">4 places</option>
+                                <option value="5">5 places</option>
+                                <option value="7">7 places</option>
+                                <option value="9">9 places</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Marque</label>
+                            <input type="text" id="editBrand" name="brand" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Ville *</label>
+                            <select id="editCity" name="city" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner une ville</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea id="editDescription" name="description" rows="3" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Photos actuelles</label>
+                        <div id="currentImages" class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                            <!-- Current images will be displayed here -->
+                        </div>
+                        
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ajouter de nouvelles photos</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <input type="file" id="editVehicleImages" name="images" multiple accept="image/*" class="hidden" onchange="handleEditImageUpload(event)">
+                            <div id="editImageUploadArea" class="cursor-pointer" onclick="document.getElementById('editVehicleImages').click()">
+                                <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-gray-600 mb-2">Cliquez pour ajouter des photos</p>
+                                <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB chacune</p>
+                            </div>
+                            <div id="editImagePreview" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 hidden">
+                                <!-- New image previews will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Équipements</label>
+                        <div id="editEquipmentContainer" class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="GPS" class="mr-2">
+                                <span class="text-sm">GPS</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Climatisation" class="mr-2">
+                                <span class="text-sm">Climatisation</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Bluetooth" class="mr-2">
+                                <span class="text-sm">Bluetooth</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Caméra de recul" class="mr-2">
+                                <span class="text-sm">Caméra de recul</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Sièges chauffants" class="mr-2">
+                                <span class="text-sm">Sièges chauffants</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Toit ouvrant" class="mr-2">
+                                <span class="text-sm">Toit ouvrant</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" onclick="closeEditVehicleModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                            Annuler
+                        </button>
+                        <button type="submit" class="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">
+                            Sauvegarder les modifications
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Booking Detail Modal -->
     <div id="bookingDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-xl max-w-lg w-full">
@@ -744,6 +897,15 @@
         let selectedType = '';
 
         // Data storage
+        // Liste des villes françaises disponibles
+        const frenchCities = [
+            'Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice', 'Nantes', 'Montpellier', 'Strasbourg',
+            'Bordeaux', 'Lille', 'Rennes', 'Reims', 'Saint-Étienne', 'Toulon', 'Le Havre', 'Grenoble',
+            'Dijon', 'Angers', 'Nîmes', 'Villeurbanne', 'Clermont-Ferrand', 'Aix-en-Provence', 'Brest',
+            'Tours', 'Amiens', 'Limoges', 'Annecy', 'Perpignan', 'Boulogne-Billancourt', 'Orléans',
+            'Mulhouse', 'Rouen', 'Caen', 'Nancy', 'Saint-Denis', 'Argenteuil', 'Montreuil', 'Roubaix'
+        ];
+
         let vehicles = [
             {
                 id: 1,
@@ -754,6 +916,7 @@
                 transmission: 'Automatique',
                 seats: 4,
                 year: 2023,
+                city: 'Paris',
                 available: true,
                 images: [
                     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik01MCA5MEM1MCA4NS41ODE3IDUzLjU4MTcgODIgNTggODJIMjQyQzI0Ni40MTggODIgMjUwIDg1LjU4MTcgMjUwIDkwVjE0MEMyNTAgMTQ0LjQxOCAyNDYuNDE4IDE0OCAyNDIgMTQ4SDU4QzUzLjU4MTcgMTQ4IDUwIDE0NC40MTggNTAgMTQwVjkwWiIgZmlsbD0iIzM3NDE1MSIvPgo8Y2lyY2xlIGN4PSI4NSIgY3k9IjE0OCIgcj0iMTgiIGZpbGw9IiMxZjI5MzciLz4KPGNpcmNsZSBjeD0iMjE1IiBjeT0iMTQ4IiByPSIxOCIgZmlsbD0iIzFmMjkzNyIvPgo8cGF0aCBkPSJNNzAgOTBIMTMwTDE0MCA3MEgyMzBMMjQwIDkwSDI1MFYxMDBINTBWOTBINzBaIiBmaWxsPSIjNDc0ZjU5Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzM3NDE1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWVyY2VkZXMgQ2xhc3NlIFM8L3RleHQ+Cjwvc3ZnPg=='
@@ -768,10 +931,50 @@
                 transmission: 'Automatique',
                 seats: 5,
                 year: 2022,
+                city: 'Lyon',
                 available: true,
                 images: [
                     'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik00MCA4NUg0NUw2MCA3MEgyNDBMMjU1IDg1SDI2MFYxNDBIMjQ1VjE1MEgyMTVWMTQwSDg1VjE1MEg1NVYxNDBINDBWODVaIiBmaWxsPSIjMzc0MTUxIi8+CjxjaXJjbGUgY3g9IjgwIiBjeT0iMTUwIiByPSIyMCIgZmlsbD0iIzFmMjkzNyIvPgo8Y2lyY2xlIGN4PSIyMjAiIGN5PSIxNTAiIHI9IjIwIiBmaWxsPSIjMWYyOTM3Ii8+CjxwYXRoIGQ9Ik02MCA4NUgxMDBMMTIwIDcwSDIwMEwyMjAgODVIMjYwVjEwMEg0MFY4NUg2MFoiIGZpbGw9IiM0NzRmNTkiLz4KPHN2ZyB4PSIxMzAiIHk9IjkwIiB3aWR0aD0iNDAiIGhlaWdodD0iMjAiPgo8cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iMjAiIGZpbGw9IiM2Mzc0OGYiLz4KPC9zdmc+Cjx0ZXh0IHg9IjE1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzM3NDE1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Qk1XIFg1PC90ZXh0Pgo8L3N2Zz4='
                 ]
+            },
+            {
+                id: 3,
+                name: 'Porsche 911',
+                type: 'Sportive',
+                price: 450,
+                fuel: 'Essence',
+                transmission: 'Manuelle',
+                seats: 2,
+                year: 2023,
+                city: 'Nice',
+                available: true,
+                images: []
+            },
+            {
+                id: 4,
+                name: 'Audi A4',
+                type: 'Berline',
+                price: 180,
+                fuel: 'Diesel',
+                transmission: 'Automatique',
+                seats: 5,
+                year: 2021,
+                city: 'Marseille',
+                available: true,
+                images: []
+            },
+            {
+                id: 5,
+                name: 'Tesla Model 3',
+                type: 'Électrique',
+                price: 200,
+                fuel: 'Électrique',
+                transmission: 'Automatique',
+                seats: 5,
+                year: 2022,
+                city: 'Toulouse',
+                available: true,
+                images: []
             }
         ];
 
@@ -814,7 +1017,7 @@
             }
         ];
 
-        let nextVehicleId = 3;
+        let nextVehicleId = 6;
         let nextBookingId = 4;
 
         // Handle choice selection
@@ -925,8 +1128,119 @@
             }
         }
 
+        // City search functions
+        function showCitySuggestions(query) {
+            const suggestions = document.getElementById('citySuggestions');
+            
+            if (!query.trim()) {
+                suggestions.classList.add('hidden');
+                return;
+            }
+            
+            const filteredCities = frenchCities.filter(city => 
+                city.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 8); // Limit to 8 suggestions
+            
+            if (filteredCities.length === 0) {
+                suggestions.classList.add('hidden');
+                return;
+            }
+            
+            suggestions.innerHTML = '';
+            filteredCities.forEach(city => {
+                const suggestion = document.createElement('div');
+                suggestion.className = 'p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0';
+                suggestion.textContent = city;
+                suggestion.onclick = () => selectCity(city);
+                suggestions.appendChild(suggestion);
+            });
+            
+            suggestions.classList.remove('hidden');
+        }
+        
+        function selectCity(city) {
+            document.getElementById('citySearch').value = city;
+            hideCitySuggestions();
+        }
+        
+        function hideCitySuggestions() {
+            document.getElementById('citySuggestions').classList.add('hidden');
+        }
+
         function searchVehicles() {
-            document.getElementById('vehicleResults').classList.remove('hidden');
+            const cityQuery = document.getElementById('citySearch').value.trim();
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            let filteredVehicles = vehicles.filter(vehicle => vehicle.available);
+            
+            // Filter by city if specified
+            if (cityQuery) {
+                filteredVehicles = filteredVehicles.filter(vehicle => 
+                    vehicle.city.toLowerCase().includes(cityQuery.toLowerCase())
+                );
+            }
+            
+            // Display results
+            displaySearchResults(filteredVehicles, cityQuery);
+        }
+        
+        function displaySearchResults(filteredVehicles, cityQuery) {
+            const vehicleResults = document.getElementById('vehicleResults');
+            const vehicleGrid = document.getElementById('vehicleGrid');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            // Update results count
+            const cityText = cityQuery ? ` à ${cityQuery}` : '';
+            resultsCount.textContent = `${filteredVehicles.length} véhicule${filteredVehicles.length > 1 ? 's' : ''} trouvé${filteredVehicles.length > 1 ? 's' : ''}${cityText}`;
+            
+            // Clear previous results
+            vehicleGrid.innerHTML = '';
+            
+            if (filteredVehicles.length === 0) {
+                vehicleGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 font-medium">Aucun véhicule trouvé</p>
+                        <p class="text-sm text-gray-400 mt-1">Essayez avec une autre ville ou modifiez vos critères</p>
+                    </div>
+                `;
+            } else {
+                filteredVehicles.forEach(vehicle => {
+                    const vehicleCard = document.createElement('div');
+                    vehicleCard.className = 'bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow';
+                    
+                    const imageHtml = vehicle.images && vehicle.images.length > 0 
+                        ? `<img src="${vehicle.images[0]}" alt="${vehicle.name}" class="w-full h-32 object-cover rounded-lg mb-3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                           <div class="w-full h-32 bg-gray-200 rounded-lg mb-3 hidden items-center justify-center">
+                               <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                               </svg>
+                           </div>`
+                        : `<div class="w-full h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+                               <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                               </svg>
+                           </div>`;
+                    
+                    vehicleCard.innerHTML = `
+                        ${imageHtml}
+                        <h3 class="font-medium mb-1">${vehicle.name}</h3>
+                        <p class="text-sm text-gray-600 mb-1">${vehicle.price}€/jour • ⭐ ${(Math.random() * 1 + 4).toFixed(1)}</p>
+                        <p class="text-xs text-gray-500 mb-1">${vehicle.type} • ${vehicle.fuel} • ${vehicle.seats} places</p>
+                        <p class="text-xs text-blue-600 mb-3">📍 ${vehicle.city}</p>
+                        <button onclick="reserveVehicle('${vehicle.name}')" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm hover:bg-gray-800 transition-colors">Réserver</button>
+                    `;
+                    
+                    vehicleGrid.appendChild(vehicleCard);
+                });
+            }
+            
+            vehicleResults.classList.remove('hidden');
         }
 
         function reserveVehicle(vehicleName) {
@@ -1052,6 +1366,17 @@
         }
 
         function showAddVehicleModal() {
+            // Populate city dropdown
+            const citySelect = document.querySelector('select[name="city"]');
+            citySelect.innerHTML = '<option value="">Sélectionner une ville</option>';
+            
+            frenchCities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+            
             document.getElementById('addVehicleModal').classList.remove('hidden');
         }
 
@@ -1129,8 +1454,9 @@
                 vehicleElement.innerHTML = `
                     ${imageHtml}
                     <h3 class="font-medium mb-1">${vehicle.name}</h3>
-                    <p class="text-sm text-gray-600 mb-2">${vehicle.price}€/jour • ${vehicle.available ? 'Disponible' : 'Indisponible'}</p>
-                    <p class="text-xs text-gray-500 mb-3">${vehicle.type} • ${vehicle.fuel} • ${vehicle.seats} places</p>
+                    <p class="text-sm text-gray-600 mb-1">${vehicle.price}€/jour • ${vehicle.available ? 'Disponible' : 'Indisponible'}</p>
+                    <p class="text-xs text-gray-500 mb-1">${vehicle.type} • ${vehicle.fuel} • ${vehicle.seats} places</p>
+                    <p class="text-xs text-blue-600 mb-3">📍 ${vehicle.city}</p>
                     <div class="flex space-x-2">
                         <button onclick="editVehicle(${vehicle.id})" class="flex-1 bg-gray-100 text-gray-700 py-1 rounded text-xs hover:bg-gray-200">Modifier</button>
                         <button onclick="toggleVehicleAvailability(${vehicle.id})" class="flex-1 ${vehicle.available ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'} py-1 rounded text-xs">
@@ -1242,7 +1568,95 @@
         }
 
         function editVehicle(vehicleId) {
-            alert(`Modification du véhicule ${vehicleId} (à implémenter)`);
+            const vehicle = vehicles.find(v => v.id === vehicleId);
+            if (!vehicle) return;
+            
+            // Populate city dropdown
+            const citySelect = document.getElementById('editCity');
+            citySelect.innerHTML = '<option value="">Sélectionner une ville</option>';
+            frenchCities.forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                if (city === vehicle.city) option.selected = true;
+                citySelect.appendChild(option);
+            });
+            
+            // Fill form with current vehicle data
+            document.getElementById('editVehicleId').value = vehicle.id;
+            document.getElementById('editName').value = vehicle.name;
+            document.getElementById('editType').value = vehicle.type;
+            document.getElementById('editPrice').value = vehicle.price;
+            document.getElementById('editYear').value = vehicle.year;
+            document.getElementById('editFuel').value = vehicle.fuel;
+            document.getElementById('editTransmission').value = vehicle.transmission;
+            document.getElementById('editSeats').value = vehicle.seats;
+            document.getElementById('editBrand').value = vehicle.brand || '';
+            document.getElementById('editDescription').value = vehicle.description || '';
+            
+            // Handle equipment checkboxes
+            const equipmentCheckboxes = document.querySelectorAll('#editEquipmentContainer input[type="checkbox"]');
+            equipmentCheckboxes.forEach(checkbox => {
+                checkbox.checked = vehicle.equipment && vehicle.equipment.includes(checkbox.value);
+            });
+            
+            // Display current images
+            const currentImagesContainer = document.getElementById('currentImages');
+            currentImagesContainer.innerHTML = '';
+            
+            if (vehicle.images && vehicle.images.length > 0) {
+                vehicle.images.forEach((imageSrc, index) => {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'relative group';
+                    imageContainer.innerHTML = `
+                        <img src="${imageSrc}" alt="Photo ${index + 1}" class="w-full h-24 object-cover rounded-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="w-full h-24 bg-gray-200 rounded-lg hidden items-center justify-center">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <button type="button" onclick="removeCurrentImage(${vehicle.id}, ${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                            ×
+                        </button>
+                    `;
+                    currentImagesContainer.appendChild(imageContainer);
+                });
+            } else {
+                currentImagesContainer.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-gray-500">
+                        <svg class="w-12 h-12 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z"></path>
+                        </svg>
+                        <p class="text-sm">Aucune photo actuelle</p>
+                    </div>
+                `;
+            }
+            
+            // Reset new image upload area
+            editUploadedImages = [];
+            document.getElementById('editImagePreview').classList.add('hidden');
+            document.getElementById('editImageUploadArea').style.display = 'block';
+            document.getElementById('editVehicleImages').value = '';
+            
+            // Show modal
+            document.getElementById('editVehicleModal').classList.remove('hidden');
+        }
+
+        function closeEditVehicleModal() {
+            document.getElementById('editVehicleModal').classList.add('hidden');
+            document.getElementById('editVehicleForm').reset();
+            editUploadedImages = [];
+        }
+
+        function removeCurrentImage(vehicleId, imageIndex) {
+            const vehicle = vehicles.find(v => v.id === vehicleId);
+            if (vehicle && vehicle.images) {
+                vehicle.images.splice(imageIndex, 1);
+                // Refresh the edit modal if it's open
+                if (!document.getElementById('editVehicleModal').classList.contains('hidden')) {
+                    editVehicle(vehicleId);
+                }
+            }
         }
 
         function toggleVehicleAvailability(vehicleId) {
@@ -1278,8 +1692,9 @@
             }
         }
 
-        // Global variable to store uploaded images
+        // Global variables to store uploaded images
         let uploadedImages = [];
+        let editUploadedImages = [];
 
         // Handle image upload
         function handleImageUpload(event) {
@@ -1319,6 +1734,71 @@
             }
         }
 
+        // Handle image upload for edit modal
+        function handleEditImageUpload(event) {
+            const files = Array.from(event.target.files);
+            const imagePreview = document.getElementById('editImagePreview');
+            const imageUploadArea = document.getElementById('editImageUploadArea');
+            
+            editUploadedImages = []; // Reset uploaded images
+            imagePreview.innerHTML = '';
+            
+            if (files.length > 0) {
+                imagePreview.classList.remove('hidden');
+                imageUploadArea.style.display = 'none';
+                
+                files.forEach((file, index) => {
+                    if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) { // 5MB limit
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            editUploadedImages.push(e.target.result);
+                            
+                            const imageContainer = document.createElement('div');
+                            imageContainer.className = 'relative group';
+                            imageContainer.innerHTML = `
+                                <img src="${e.target.result}" alt="Preview" class="w-full h-24 object-cover rounded-lg">
+                                <button type="button" onclick="removeEditImage(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                    ×
+                                </button>
+                            `;
+                            imagePreview.appendChild(imageContainer);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                imagePreview.classList.add('hidden');
+                imageUploadArea.style.display = 'block';
+            }
+        }
+
+        // Remove new image from edit preview
+        function removeEditImage(index) {
+            editUploadedImages.splice(index, 1);
+            const imagePreview = document.getElementById('editImagePreview');
+            const imageUploadArea = document.getElementById('editImageUploadArea');
+            
+            if (editUploadedImages.length === 0) {
+                imagePreview.classList.add('hidden');
+                imageUploadArea.style.display = 'block';
+                document.getElementById('editVehicleImages').value = '';
+            } else {
+                // Rebuild preview
+                imagePreview.innerHTML = '';
+                editUploadedImages.forEach((imageSrc, newIndex) => {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'relative group';
+                    imageContainer.innerHTML = `
+                        <img src="${imageSrc}" alt="Preview" class="w-full h-24 object-cover rounded-lg">
+                        <button type="button" onclick="removeEditImage(${newIndex})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                            ×
+                        </button>
+                    `;
+                    imagePreview.appendChild(imageContainer);
+                });
+            }
+        }
+
         // Remove image from preview
         function removeImage(index) {
             uploadedImages.splice(index, 1);
@@ -1346,6 +1826,51 @@
             }
         }
 
+        // Edit vehicle form submission
+        document.getElementById('editVehicleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const vehicleId = parseInt(formData.get('vehicleId'));
+            const vehicle = vehicles.find(v => v.id === vehicleId);
+            
+            if (!vehicle) {
+                alert('Véhicule non trouvé');
+                return;
+            }
+            
+            const equipmentCheckboxes = this.querySelectorAll('input[name="equipment"]:checked');
+            const equipment = Array.from(equipmentCheckboxes).map(cb => cb.value);
+            
+            // Update vehicle data
+            vehicle.name = formData.get('name');
+            vehicle.type = formData.get('type');
+            vehicle.price = parseInt(formData.get('price'));
+            vehicle.fuel = formData.get('fuel');
+            vehicle.transmission = formData.get('transmission');
+            vehicle.seats = parseInt(formData.get('seats'));
+            vehicle.year = parseInt(formData.get('year'));
+            vehicle.brand = formData.get('brand') || '';
+            vehicle.city = formData.get('city');
+            vehicle.description = formData.get('description') || '';
+            vehicle.equipment = equipment;
+            
+            // Add new images to existing ones
+            if (editUploadedImages.length > 0) {
+                if (!vehicle.images) vehicle.images = [];
+                vehicle.images.push(...editUploadedImages);
+            }
+            
+            loadVehicles();
+            updateStats();
+            closeEditVehicleModal();
+            
+            // Reset edit images
+            editUploadedImages = [];
+            
+            alert(`Véhicule "${vehicle.name}" modifié avec succès !`);
+        });
+
         // Add vehicle form submission
         document.getElementById('addVehicleForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1364,6 +1889,7 @@
                 seats: parseInt(formData.get('seats')),
                 year: parseInt(formData.get('year')),
                 brand: formData.get('brand') || '',
+                city: formData.get('city'),
                 description: formData.get('description') || '',
                 equipment: equipment,
                 images: [...uploadedImages], // Copy uploaded images
@@ -1426,5 +1952,5 @@
             }
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982d5ef6f3d29e66',t:'MTc1ODQ5NzY0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982d690555696cb2',t:'MTc1ODQ5ODA1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
