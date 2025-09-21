@@ -1,616 +1,1430 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AirWorld — Location de voitures de luxe</title>
-<meta name="description" content="AirWorld : trouvez et louez des véhicules de luxe partout en France.">
-<style>
-/* ============ Design System ============ */
-:root{
-  --bg:#ffffff;--bg-2:#f6f7f9;--glass:rgba(255,255,255,.72);
-  --text:#111217;--muted:#6B7078;--line:#E7E9EF;
-  --primary:#0B1325;--primary-2:#001a3a;--silver:#B7BFCE;
-  --shadow:0 10px 30px rgba(14,18,33,.08);
-  --radius:16px;--radius-lg:22px;--radius-sm:12px;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,"SF Pro Text","Helvetica Neue",Arial,sans-serif}
-img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
-button{font:inherit;cursor:pointer}
-.hidden{display:none!important}
-
-/* ============ Header ============ */
-.header{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
-.header .row{max-width:1180px;margin:0 auto;padding:14px 18px;display:flex;align-items:center;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:.7rem;font-weight:800}
-.logo{width:36px;height:36px;border-radius:10px;background:#000;display:grid;place-items:center;box-shadow:var(--shadow)}
-.logo svg{width:22px;height:22px}
-.nav{display:flex;align-items:center;gap:8px}
-.nav a,.nav button{padding:.6rem 1rem;border-radius:999px;border:1px solid var(--line);background:#fff}
-.nav a:hover{background:var(--bg-2)}
-.btn-primary{background:var(--primary);color:#fff;border:1px solid transparent}
-.btn-primary:hover{background:var(--primary-2);transform:translateY(-1px)}
-
-/* ============ Hero ============ */
-.hero{min-height:72vh;display:grid;place-items:center;background:linear-gradient(180deg,#f9fafc, #ffffff)}
-.hero-inner{max-width:1180px;width:100%;padding:24px 18px;text-align:left}
-.hero h1{font-size:clamp(28px,4.6vw,56px);line-height:1.05;letter-spacing:-.5px;margin:0 0 12px;font-weight:800}
-.hero p{color:#8b8f98;font-size:clamp(16px,2.1vw,20px);margin:0 0 22px}
-.hero .actions{display:flex;gap:12px;flex-wrap:wrap}
-.cta{padding:14px 22px;border-radius:999px;font-weight:700;border:1px solid var(--line);background:#fff}
-.cta.primary{background:#000;color:#fff;border-color:#000}
-
-/* ============ Auth Modal ============ */
-.modal{position:fixed;inset:0;background:rgba(9,12,20,.55);display:none;place-items:center;z-index:60}
-.modal.open{display:grid}
-.sheet{width:min(440px,92vw);background:#fff;border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 60px rgba(9,12,20,.3);overflow:hidden}
-.sheet header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
-.tabs{display:flex;margin:10px;gap:8px}
-.tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:#fff;font-weight:700}
-.tabs button.active{background:#111;color:#fff;border-color:#111}
-.form{padding:12px 16px 18px;display:grid;gap:12px}
-.form input{padding:12px;border:1px solid var(--line);border-radius:12px}
-.form .btn{padding:12px;border-radius:12px;font-weight:800}
-
-/* ============ CLIENT PAGE ============ */
-.section{display:none}
-.section.active{display:block}
-.container{max-width:1180px;margin:0 auto;padding:22px 18px}
-
-/* Search Bar (glass) */
-.search-card{
-  position:sticky;top:76px;z-index:20;
-  display:grid;gap:10px;grid-template-columns:1fr 1fr 1fr auto;align-items:center;
-  background:var(--glass);backdrop-filter:blur(10px);border:1px solid rgba(183,191,206,.45);
-  padding:10px;border-radius:20px;box-shadow:var(--shadow)
-}
-.search-field{background:#fff;border:1px solid var(--line);border-radius:12px;padding:.6rem .8rem}
-.search-field .label{font-size:.78rem;color:var(--muted)}
-.search-field input,.search-field select{border:0;outline:0;width:100%;background:transparent}
-@media(max-width:860px){.search-card{grid-template-columns:1fr}}
-
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
-.chip{padding:.55rem .85rem;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:700}
-.chip[aria-pressed="true"],.chip:hover{background:var(--primary);color:#fff;border-color:transparent}
-
-/* Client layout like mockup */
-.client-grid{display:grid;grid-template-columns: 1.4fr 1fr;gap:22px}
-@media(max-width:980px){.client-grid{grid-template-columns:1fr}}
-.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
-.card.padded{padding:16px}
-
-/* Featured car (left big card) */
-.featured{overflow:hidden}
-.featured .media{height:240px;background:linear-gradient(180deg,#f0f2f7,#e9ecf5);display:grid;place-items:center}
-.featured .media img{height:88%;filter:drop-shadow(0 18px 20px rgba(0,0,0,.18))}
-.featured .body{padding:14px 16px}
-.featured .title{font-weight:800;font-size:1.2rem;margin-bottom:6px}
-.specs{display:flex;gap:8px;flex-wrap:wrap}
-.badge{display:inline-flex;align-items:center;gap:.35rem;padding:.4rem .7rem;border-radius:999px;background:var(--bg-2);color:#545861;font-weight:700;font-size:.82rem}
-
-/* Right column: results list (small stacked) */
-.side-list .item{display:grid;grid-template-columns:80px 1fr auto;gap:12px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:12px;background:#fff}
-.side-list .item img{width:80px;height:56px;object-fit:cover;border-radius:10px}
-.side-list .name{font-weight:700}
-.side-list .price{font-weight:800}
-
-/* Headline sections below */
-.headline{font-size:1.4rem;font-weight:800;margin:12px 0 8px}
-.lead{color:var(--muted);margin-bottom:10px}
-
-/* CTA buttons in cards */
-.btn{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);background:#fff;border-radius:12px;padding:.6rem .9rem;font-weight:800}
-.btn.cta{background:var(--primary);color:#fff;border-color:transparent}
-.btn:hover{transform:translateY(-1px)}
-
-/* ============ LOUEUR PAGE ============ */
-.subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.subnav button{padding:.7rem 1rem;border:1px solid var(--line);border-radius:12px;background:#fff;font-weight:800}
-.subnav button.active{background:#111;color:#fff;border-color:#111}
-
-/* Loueur grids */
-.dashboard{display:grid;grid-template-columns:1.2fr 1fr;gap:22px}
-@media(max-width:1080px){.dashboard{grid-template-columns:1fr}}
-.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.kpi{padding:16px;border-radius:16px;background:#fafbfe;border:1px solid var(--line)}
-.kpi h3{font-size:1.6rem;margin:4px 0}
-.kpi .hint{color:var(--muted);font-size:.9rem}
-
-/* Charts (SVG mini) */
-.chart{height:180px;border:1px solid var(--line);border-radius:16px;padding:10px}
-.progress{height:10px;background:#e9edf6;border-radius:999px;overflow:hidden}
-.progress > span{display:block;height:100%;background:linear-gradient(90deg,#0b1325,#2b5aa3)}
-
-/* KYC / Uploads */
-.form-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:860px){.form-cols{grid-template-columns:1fr}}
-.drop{border:2px dashed #cdd3e3;border-radius:14px;padding:18px;text-align:center;color:#667}
-.drop.drag{background:#f6f8ff}
-.preview{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-.preview img{width:84px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
-
-/* Catalog table */
-.table{width:100%;border-collapse:collapse}
-.table th,.table td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
-.table-actions button{margin-right:6px}
-
-/* Reservations */
-.res-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-.status{padding:.3rem .6rem;border-radius:999px;font-weight:700;font-size:.8rem;border:1px solid var(--line);background:#fff}
-.status[data-s="pending"]{background:#fff7e6;border-color:#ffd37d}
-.status[data-s="confirmed"]{background:#e8fff1;border-color:#9de2b5}
-.status[data-s="cancelled"]{background:#ffe8e8;border-color:#ffb3b3}
-
-/* Footer */
-footer{border-top:1px solid var(--line);color:var(--muted);padding:34px 18px;margin-top:30px}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirWorld - Connexion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'midnight-blue': '#1e293b',
+                        'silver-accent': '#94a3b8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(-45deg, #1e293b, #334155, #475569, #1e293b);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .floating-particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .floating-particle:nth-child(2) {
+            width: 60px;
+            height: 60px;
+            top: 70%;
+            right: 10%;
+            animation-delay: -2s;
+        }
+        
+        .floating-particle:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            top: 40%;
+            left: 80%;
+            animation-delay: -4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(10px) rotate(240deg); }
+        }
+        
+        .choice-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .choice-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .choice-card.selected {
+            transform: translateY(-8px) scale(1.02);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .form-slide-in {
+            animation: slideInUp 0.6s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1), 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #ffffff, #f1f5f9);
+            color: #1e293b;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
-<body>
-
-<!-- ================= HEADER ================= -->
-<header class="header">
-  <div class="row">
-    <div class="brand">
-      <span class="logo" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M2 15 L8 6 L14 15 Z M10 15 L16 6 L22 15 Z" fill="#fff"/></svg>
-      </span>
-      AirWorld
-    </div>
-    <nav class="nav">
-      <a href="#home">Accueil</a>
-      <a href="#" id="openAuth">Rechercher</a>
-      <a href="#" id="openAuthL">Devenir loueur</a>
-      <button class="btn-primary" id="btnLogin">Connexion</button>
-    </nav>
-  </div>
-</header>
-
-<!-- ================= HERO ================= -->
-<section class="hero" id="home">
-  <div class="hero-inner">
-    <h1>Trouvez et louez<br>la voiture idéale</h1>
-    <p>Découvrez une sélection exclusive de voitures haut de gamme disponibles partout en France, avec un parcours simple et sécurisé.</p>
-    <div class="actions">
-      <button class="cta primary" id="btnClient">Rechercher une voiture</button>
-      <button class="cta" id="btnLoueur">Devenir loueur</button>
-    </div>
-  </div>
-</section>
-
-<!-- ================= AUTH MODAL ================= -->
-<div class="modal" id="authModal" aria-modal="true" role="dialog">
-  <div class="sheet">
-    <header>
-      <strong id="authTitle">Connexion</strong>
-      <button id="closeAuth" class="cta">Fermer</button>
-    </header>
-    <div class="tabs">
-      <button id="tabLogin" class="active">Connexion</button>
-      <button id="tabSignup">Inscription</button>
-    </div>
-    <form class="form" id="authForm">
-      <input class="hidden" id="fullName" placeholder="Nom complet">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="pass" placeholder="Mot de passe" required>
-      <input class="hidden" type="password" id="pass2" placeholder="Confirmer le mot de passe">
-      <button class="btn btn-primary" type="submit">Valider</button>
-    </form>
-  </div>
-</div>
-
-<!-- ================= CLIENT PAGE ================= -->
-<section id="client" class="section">
-  <div class="container">
-    <!-- Search (glass) -->
-    <form class="search-card" id="clientSearch" aria-label="Recherche de véhicules">
-      <div class="search-field">
-        <div class="label">Lieu de départ</div>
-        <input placeholder="Paris, Nice, Lyon…" />
-      </div>
-      <div class="search-field">
-        <div class="label">Dates</div>
-        <input type="text" placeholder="Début — Fin" />
-      </div>
-      <div class="search-field">
-        <div class="label">Type de véhicule</div>
-        <select>
-          <option>Tous</option><option>Citadine</option><option>Berline</option><option>SUV</option><option>Sport</option><option>Électrique</option><option>Luxe</option>
-        </select>
-      </div>
-      <button class="btn btn-primary" type="submit">Rechercher</button>
-    </form>
-
-    <!-- Explore categories -->
-    <div class="chips" role="tablist" aria-label="Explorer des véhicules">
-      <button class="chip" aria-pressed="true">Citadine</button>
-      <button class="chip">SUV</button>
-      <button class="chip">Utilitaire</button>
-      <button class="chip">Sport</button>
-      <button class="chip">Électrique</button>
-      <button class="chip">Luxe</button>
-    </div>
-
-    <div class="client-grid">
-      <!-- Left big featured -->
-      <article class="card featured">
-        <div class="media">
-          <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop" alt="Tesla Model 3">
-        </div>
-        <div class="body">
-          <div class="title">Tesla Model 3</div>
-          <div class="specs" style="margin-bottom:8px">
-            <span class="badge">Électrique</span>
-            <span class="badge">5 places</span>
-            <span class="badge">Auto</span>
-            <span class="badge">RWD 283ch</span>
-            <span class="badge">★ 4.8 (211)</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div><strong>129 €</strong> / jour</div>
-            <div style="display:flex;gap:8px">
-              <button class="btn" id="btnMoreTesla">Détails</button>
-              <button class="btn cta" id="btnBookTesla">Réserver</button>
+<body class="gradient-bg min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+    <!-- Floating Particles -->
+    <div class="floating-particle"></div>
+    <div class="floating-particle"></div>
+    <div class="floating-particle"></div>
+    
+    <!-- Login Page -->
+    <div id="loginPage" class="w-full max-w-md mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center space-x-2 mb-4">
+                <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                    <span class="text-midnight-blue font-semibold text-sm">A</span>
+                </div>
+                <span class="text-xl font-semibold text-white">AirWorld</span>
             </div>
-          </div>
+            <h1 class="text-lg font-medium text-white mb-2">
+                Connexion
+            </h1>
+            <p class="text-sm text-gray-400">
+                Choisissez votre profil
+            </p>
         </div>
-      </article>
 
-      <!-- Right stacked list -->
-      <aside class="card padded">
-        <h3 style="margin:0 0 8px">Results liste</h3>
-        <div class="side-list grid" style="display:grid;gap:10px">
-          <div class="item">
-            <img src="https://images.unsplash.com/photo-1605559424843-f3b3fbb01403?q=80&w=800&auto=format&fit=crop" alt="Peugeot 208">
-            <div><div class="name">Peugeot 208</div><small class="muted">2022</small></div>
-            <div class="price">45 € / jour</div>
-          </div>
-          <div class="item">
-            <img src="https://images.unsplash.com/photo-1619767886558-efdc259cde1b?q=80&w=800&auto=format&fit=crop" alt="Audi Q5">
-            <div><div class="name">Audi Q5</div><small class="muted">2019</small></div>
-            <div class="price">85 € / jour</div>
-          </div>
-          <div class="item">
-            <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop" alt="Mercedes-Benz S Class">
-            <div><div class="name">Mercedes-Benz S-Class</div><small class="muted">2021</small></div>
-            <div class="price">210 € / jour</div>
-          </div>
+        <!-- Choice Cards -->
+        <div id="choiceSection" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-lg mx-auto">
+            <!-- Louer Card -->
+            <div class="choice-card glass-card rounded-xl p-4 text-center" data-type="louer">
+                <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-medium text-white mb-2">Propriétaire</h3>
+                <p class="text-xs text-gray-400">
+                    Mettre en location
+                </p>
+            </div>
+
+            <!-- Client Card -->
+            <div class="choice-card glass-card rounded-xl p-4 text-center" data-type="client">
+                <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-sm font-medium text-white mb-2">Client</h3>
+                <p class="text-xs text-gray-400">
+                    Louer un véhicule
+                </p>
+            </div>
         </div>
-      </aside>
+
+        <!-- Login Form -->
+        <div id="loginForm" class="hidden">
+            <div class="glass-card rounded-xl p-6 max-w-sm mx-auto form-slide-in">
+                <div class="text-center mb-6">
+                    <h2 id="formTitle" class="text-base font-medium text-white mb-1"></h2>
+                    <p id="formSubtitle" class="text-xs text-gray-400"></p>
+                </div>
+
+                <form id="authForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Email</label>
+                        <input type="email" 
+                               required
+                               class="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none input-glow transition-all"
+                               placeholder="votre@email.com">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-gray-400 mb-1">Mot de passe</label>
+                        <input type="password" 
+                               required
+                               class="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white text-sm placeholder-gray-500 focus:outline-none input-glow transition-all"
+                               placeholder="••••••••">
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs">
+                        <label class="flex items-center text-gray-400">
+                            <input type="checkbox" class="mr-1 rounded">
+                            Se souvenir
+                        </label>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            Mot de passe oublié ?
+                        </a>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full btn-gradient py-3 px-4 rounded-lg font-medium text-sm shadow-lg">
+                        Se connecter
+                    </button>
+
+                    <div class="text-center">
+                        <p class="text-xs text-gray-400">
+                            Pas de compte ? 
+                            <a href="#" class="text-white font-medium hover:text-gray-300 transition-colors">
+                                S'inscrire
+                            </a>
+                        </p>
+                    </div>
+                </form>
+
+                <button id="backBtn" 
+                        class="mt-4 w-full py-2 px-4 border border-white/20 rounded-lg text-white text-sm hover:bg-white/10 transition-all">
+                    ← Retour
+                </button>
+            </div>
+        </div>
     </div>
 
-    <h3 class="headline">Location de voitures haut de gamme</h3>
-    <p class="lead">Découvrez une sélection exclusive de véhicules disponibles à la location, avec une expérience de réservation simplifiée.</p>
-  </div>
-</section>
+    <!-- Client Dashboard -->
+    <div id="clientPage" class="hidden w-full min-h-screen bg-gray-50">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-midnight-blue rounded-lg flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm">A</span>
+                        </div>
+                        <span class="text-xl font-semibold text-gray-900">AirWorld</span>
+                    </div>
+                    
+                    <nav class="hidden md:flex items-center space-x-6">
+                        <button onclick="showClientSection('search')" class="text-gray-900 font-medium">Recherche</button>
+                        <button onclick="showClientSection('reservations')" class="text-gray-600 hover:text-gray-900">Réservations</button>
+                        <button onclick="showClientSection('favorites')" class="text-gray-600 hover:text-gray-900">Favoris</button>
+                    </nav>
+                    
+                    <button onclick="logout()" class="text-gray-600 hover:text-gray-900 text-sm">Déconnexion</button>
+                </div>
+            </div>
+        </header>
 
-<!-- ===== Vehicle Detail Modal (client) ===== -->
-<div class="modal" id="vehicleModal">
-  <div class="sheet">
-    <header>
-      <strong>Fiche véhicule</strong>
-      <button class="btn" id="closeVehicle">Fermer</button>
-    </header>
-    <div class="padded" style="padding:12px 16px">
-      <div class="chips" style="margin-top:0">
-        <span class="badge">Tesla Model 3</span>
-        <span class="badge">Électrique</span>
-        <span class="badge">Auto</span>
-        <span class="badge">5 places</span>
-      </div>
-      <div class="preview" style="margin:10px 0 6px">
-        <img src="https://images.unsplash.com/photo-1549924231-f129b911e442?q=80&w=1200&auto=format&fit=crop" alt="">
-        <img src="https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?q=80&w=1200&auto=format&fit=crop" alt="">
-        <img src="https://images.unsplash.com/photo-1593941707874-ef25b8b4a92c?q=80&w=1200&auto=format&fit=crop" alt="">
-      </div>
-      <p class="lead" style="margin:0 0 6px">La berline électrique de référence : design minimaliste, performances instantanées et confort silencieux.</p>
-      <div class="badge">✅ AirWorld Verified – Élite Cars Paris</div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
-        <div><strong style="font-size:1.2rem">129 €</strong> / jour</div>
-        <button class="btn btn-primary" id="confirmBook">Réserver</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Search Section -->
+            <section id="clientSearchSection">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                    <h1 class="text-xl font-semibold text-gray-900 mb-4">Trouvez votre véhicule</h1>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                        <input type="text" placeholder="Où ?" class="p-3 border border-gray-300 rounded-lg">
+                        <input type="date" class="p-3 border border-gray-300 rounded-lg">
+                        <input type="date" class="p-3 border border-gray-300 rounded-lg">
+                        <button onclick="searchVehicles()" class="bg-gray-900 text-white py-3 px-6 rounded-lg font-medium">Rechercher</button>
+                    </div>
+                </div>
 
-<!-- ================= LOUEUR PAGE ================= -->
-<section id="loueur" class="section">
-  <div class="container">
-    <div class="subnav">
-      <button class="active" data-tab="dash">Dashboard</button>
-      <button data-tab="kyc">Vérification KYC</button>
-      <button data-tab="profil">Profil</button>
-      <button data-tab="catalogue">Catalogue véhicules</button>
-      <button data-tab="reservations">Réservations</button>
-      <button data-tab="marketing">Marketing</button>
-    </div>
+                <!-- Results -->
+                <div id="vehicleResults" class="hidden">
+                    <h2 class="text-lg font-semibold mb-4">Véhicules disponibles</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="bg-white rounded-lg border border-gray-200 p-4">
+                            <div class="w-full h-32 bg-gray-200 rounded-lg mb-3"></div>
+                            <h3 class="font-medium mb-1">Mercedes Classe S</h3>
+                            <p class="text-sm text-gray-600 mb-2">280€/jour • ⭐ 4.8</p>
+                            <button onclick="reserveVehicle('Mercedes Classe S')" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm">Réserver</button>
+                        </div>
+                        <div class="bg-white rounded-lg border border-gray-200 p-4">
+                            <div class="w-full h-32 bg-gray-200 rounded-lg mb-3"></div>
+                            <h3 class="font-medium mb-1">BMW X5</h3>
+                            <p class="text-sm text-gray-600 mb-2">220€/jour • ⭐ 4.6</p>
+                            <button onclick="reserveVehicle('BMW X5')" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm">Réserver</button>
+                        </div>
+                        <div class="bg-white rounded-lg border border-gray-200 p-4">
+                            <div class="w-full h-32 bg-gray-200 rounded-lg mb-3"></div>
+                            <h3 class="font-medium mb-1">Porsche 911</h3>
+                            <p class="text-sm text-gray-600 mb-2">450€/jour • ⭐ 4.9</p>
+                            <button onclick="reserveVehicle('Porsche 911')" class="w-full bg-gray-900 text-white py-2 rounded-lg text-sm">Réserver</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- DASHBOARD -->
-    <div id="tab-dash">
-      <div class="dashboard">
-        <div class="card padded">
-          <h3 style="margin-top:0">Vue d’ensemble</h3>
-          <div class="kpis" style="margin-top:10px">
-            <div class="kpi"><div class="hint">Voitures actives</div><h3 id="kpiCars">3</h3><div class="progress" style="margin-top:8px"><span style="width:70%"></span></div></div>
-            <div class="kpi"><div class="hint">Réservations (30j)</div><h3>27</h3><div class="progress" style="margin-top:8px"><span style="width:54%"></span></div></div>
-            <div class="kpi"><div class="hint">Revenus estimés</div><h3>8 450 €</h3><div class="progress" style="margin-top:8px"><span style="width:62%"></span></div></div>
-          </div>
-          <div class="chart" style="margin-top:12px">
-            <!-- simple SVG line chart -->
-            <svg viewBox="0 0 600 180" width="100%" height="100%" aria-label="Revenus">
-              <polyline fill="none" stroke="#274f9b" stroke-width="3"
-                points="10,150 60,120 110,135 160,90 210,110 260,70 310,85 360,60 410,78 460,55 510,62 590,40"/>
-              <line x1="10" y1="150" x2="590" y2="150" stroke="#e1e4ef"/>
-            </svg>
-            <div class="hint">Revenus par semaine</div>
-          </div>
-        </div>
-        <aside class="card padded">
-          <h3 style="margin-top:0">Actions urgentes</h3>
-          <ul>
-            <li>3 demandes en attente d’acceptation</li>
-            <li>1 document KYC à renouveler</li>
-            <li>2 messages non lus</li>
-          </ul>
-        </aside>
-      </div>
-    </div>
+            <!-- Reservations Section -->
+            <section id="clientReservationsSection" class="hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold mb-4">Mes réservations</h2>
+                    <div class="space-y-3">
+                        <div class="border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-medium">Mercedes Classe S</h3>
+                                <p class="text-sm text-gray-600">15-17 Déc 2024</p>
+                            </div>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Confirmée</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- KYC -->
-    <div id="tab-kyc" class="hidden">
-      <div class="card padded">
-        <h3 style="margin-top:0">Vérification du loueur</h3>
-        <div class="form-cols" style="margin-top:10px">
-          <input placeholder="Nom de l’entreprise / Nom complet">
-          <input placeholder="SIRET">
-          <input placeholder="Adresse">
-          <input placeholder="Téléphone">
-          <input placeholder="Email professionnel">
-          <input placeholder="Site / Réseaux (optionnel)">
-        </div>
-        <textarea style="margin-top:10px;width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px" placeholder="Description de l’activité"></textarea>
-        <h4 style="margin:14px 0 6px">Documents (CNI, assurance, justificatif pro)</h4>
-        <div class="drop" id="dropKYC">Glissez/déposez vos documents ici ou cliquez</div>
-        <input id="inputKYC" type="file" class="hidden" multiple>
-        <div class="preview" id="kycPrev"></div>
-        <div style="margin-top:12px"><button class="btn btn-primary">Envoyer pour vérification</button> <span class="badge">Badge “AirWorld Verified” après validation</span></div>
-      </div>
-    </div>
-
-    <!-- PROFIL -->
-    <div id="tab-profil" class="hidden">
-      <div class="card padded">
-        <h3 style="margin-top:0">Mon profil</h3>
-        <div class="form-cols" style="margin-top:10px">
-          <input placeholder="Nom public / Société">
-          <input placeholder="Logo (URL) / à venir">
-          <input placeholder="Horaires (ex: 9h-19h)">
-          <input placeholder="Zones de service (ex: PACA, Île-de-France)">
-        </div>
-        <textarea style="margin-top:10px;width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px" placeholder="Présentation"></textarea>
-        <div style="margin-top:12px"><button class="btn btn-primary">Enregistrer</button></div>
-      </div>
+            <!-- Favorites Section -->
+            <section id="clientFavoritesSection" class="hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold mb-4">Mes favoris</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="w-full h-24 bg-gray-200 rounded-lg mb-3"></div>
+                            <h3 class="font-medium">Porsche 911</h3>
+                            <p class="text-sm text-gray-600">À partir de 450€/jour</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <!-- CATALOGUE -->
-    <div id="tab-catalogue" class="hidden">
-      <div class="card padded">
-        <h3 style="margin-top:0">Catalogue véhicules</h3>
-        <table class="table" id="carsTable">
-          <thead><tr><th>Nom</th><th>Année</th><th>Motorisation</th><th>Prix/jour</th><th></th></tr></thead>
-          <tbody>
-            <tr><td>Tesla Model 3</td><td>2023</td><td>Électrique</td><td>129 €</td><td class="table-actions"><button class="btn">Modifier</button><button class="btn">Supprimer</button></td></tr>
-            <tr><td>Audi Q5</td><td>2019</td><td>Essence</td><td>85 €</td><td class="table-actions"><button class="btn">Modifier</button><button class="btn">Supprimer</button></td></tr>
-          </tbody>
-        </table>
+    <!-- Owner Dashboard -->
+    <div id="ownerPage" class="hidden w-full min-h-screen bg-gray-50">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-semibold text-sm">A</span>
+                        </div>
+                        <span class="text-xl font-semibold text-gray-900">AirWorld Pro</span>
+                    </div>
+                    
+                    <nav class="hidden md:flex items-center space-x-6">
+                        <button onclick="showOwnerSection('dashboard')" class="text-gray-900 font-medium">Dashboard</button>
+                        <button onclick="showOwnerSection('vehicles')" class="text-gray-600 hover:text-gray-900">Véhicules</button>
+                        <button onclick="showOwnerSection('bookings')" class="text-gray-600 hover:text-gray-900">Réservations</button>
+                    </nav>
+                    
+                    <button onclick="logout()" class="text-gray-600 hover:text-gray-900 text-sm">Déconnexion</button>
+                </div>
+            </div>
+        </header>
 
-        <h4 style="margin:16px 0 8px">Ajouter un véhicule</h4>
-        <div class="form-cols">
-          <input id="vName" placeholder="Marque & modèle">
-          <input id="vYear" placeholder="Année">
-          <input id="vMotor" placeholder="Motorisation">
-          <input id="vPrice" placeholder="Prix / jour (ex: 150 €)">
-        </div>
-        <div class="form-cols" style="margin-top:10px">
-          <input id="vOptions" placeholder="Options luxe (GPS, Chauffeur, Assurance...)">
-          <input id="vType" placeholder="Type (SUV, Berline, Sport...)">
-        </div>
-        <h4 style="margin:14px 0 6px">Photos</h4>
-        <div class="drop" id="dropCar">Glissez vos photos ici (drag & drop)</div>
-        <input id="inputCar" type="file" class="hidden" multiple accept="image/*">
-        <div class="preview" id="carPrev"></div>
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <!-- Dashboard Section -->
+            <section id="ownerDashboardSection">
+                <!-- Welcome Header -->
+                <div class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-3xl p-8 mb-8 text-white relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
+                    <div class="relative z-10">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h1 class="text-3xl font-bold mb-2">Bienvenue sur votre tableau de bord</h1>
+                                <p class="text-gray-300 text-lg">Gérez votre flotte et maximisez vos revenus</p>
+                            </div>
+                            <div class="hidden md:block">
+                                <div class="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-green-600 bg-green-100 px-2 py-1 rounded-full">+12%</span>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-600 mb-1">Revenus ce mois</h3>
+                        <p id="monthlyRevenue" class="text-2xl font-bold text-gray-900">2,450€</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <span id="pendingBadge" class="text-xs font-medium text-yellow-600 bg-yellow-100 px-2 py-1 rounded-full">3 en attente</span>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-600 mb-1">Réservations</h3>
+                        <p id="totalBookings" class="text-2xl font-bold text-gray-900">18</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <div class="w-8 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div id="occupancyBar" class="h-full bg-purple-600 rounded-full" style="width: 78%"></div>
+                            </div>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-600 mb-1">Taux d'occupation</h3>
+                        <p id="occupancyRate" class="text-2xl font-bold text-gray-900">78%</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-1 rounded-full">Actifs</span>
+                        </div>
+                        <h3 class="text-sm font-medium text-gray-600 mb-1">Véhicules</h3>
+                        <p id="totalVehicles" class="text-2xl font-bold text-gray-900">5</p>
+                    </div>
+                </div>
 
-        <h4 style="margin:14px 0 6px">Disponibilités (calendrier simplifié)</h4>
-        <div class="card padded" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
-          <!-- simple 14 days -->
-          <script>
-            // (injected later in JS to keep markup clean)
-          </script>
-        </div>
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <div class="lg:col-span-2">
+                        <!-- Recent Bookings -->
+                        <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                            <div class="flex items-center justify-between mb-6">
+                                <h2 class="text-xl font-semibold text-gray-900">Réservations en attente</h2>
+                                <button onclick="showOwnerSection('bookings')" class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                                    Voir tout →
+                                </button>
+                            </div>
+                            <div id="recentBookings" class="space-y-4">
+                                <!-- Bookings will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- Performance Card -->
+                        <div class="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-100">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">Performance</h3>
+                            <p class="text-sm text-gray-600 mb-4">Vos revenus sont en hausse ce mois !</p>
+                            <div class="flex items-center space-x-2">
+                                <div class="flex-1 bg-white rounded-full h-2 overflow-hidden">
+                                    <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" style="width: 75%"></div>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">75%</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Objectif mensuel: 3,000€</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <div style="margin-top:12px"><button id="addCar" class="btn btn-primary">Ajouter au catalogue</button></div>
-      </div>
+            <!-- Vehicles Section -->
+            <section id="ownerVehiclesSection" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg font-semibold">Mes véhicules</h2>
+                    <button onclick="showAddVehicleModal()" class="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm">Ajouter un véhicule</button>
+                </div>
+                
+                <div id="vehiclesList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Vehicles will be loaded here -->
+                </div>
+            </section>
+
+            <!-- Bookings Section -->
+            <section id="ownerBookingsSection" class="hidden">
+                <!-- Header with filters -->
+                <div class="bg-gradient-to-r from-gray-900 to-gray-700 rounded-2xl p-6 mb-6 text-white">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold mb-2">Gestion des Réservations</h2>
+                            <p class="text-gray-300">Gérez vos réservations et consultez votre agenda</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <select id="bookingFilter" onchange="filterBookings()" class="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm backdrop-blur-sm">
+                                <option value="all">Toutes les réservations</option>
+                                <option value="pending">En attente</option>
+                                <option value="confirmed">Confirmées</option>
+                                <option value="rejected">Refusées</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bookings List -->
+                <div id="bookingsListView" class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-semibold text-gray-900">Liste des réservations</h3>
+                        <div class="flex items-center space-x-2 text-sm text-gray-500">
+                            <span id="bookingsCount">0 réservations</span>
+                        </div>
+                    </div>
+                    <div id="allBookings" class="space-y-4">
+                        <!-- All bookings will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Calendar View -->
+                <div id="calendarView" class="hidden">
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                        <!-- Calendar Header -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-4">
+                                <h3 class="text-xl font-semibold text-gray-900">Agenda des Réservations</h3>
+                                <div class="flex items-center space-x-2">
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                        <span class="text-xs text-gray-600">Confirmées</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                        <span class="text-xs text-gray-600">En attente</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button onclick="previousMonth()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="text-lg font-semibold text-gray-900 min-w-[200px] text-center">
+                                    <span id="currentMonthYear"></span>
+                                </div>
+                                <button onclick="nextMonth()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Calendar Grid -->
+                        <div id="bookingCalendar" class="grid grid-cols-7 gap-1">
+                            <!-- Calendar will be generated here -->
+                        </div>
+                        
+                        <!-- Calendar Legend -->
+                        <div class="mt-6 p-4 bg-gray-50 rounded-xl">
+                            <h4 class="font-medium text-gray-900 mb-3">Réservations du mois</h4>
+                            <div id="monthlyBookingsSummary" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <!-- Monthly summary will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <!-- RESERVATIONS -->
-    <div id="tab-reservations" class="hidden">
-      <div class="card padded">
-        <div class="res-head">
-          <h3 style="margin:0">Réservations</h3>
-          <select id="filterStatus" style="padding:.5rem .7rem;border:1px solid var(--line);border-radius:10px">
-            <option value="all">Tous statuts</option>
-            <option value="pending">En attente</option>
-            <option value="confirmed">Confirmée</option>
-            <option value="cancelled">Annulée</option>
-          </select>
+    <!-- Add Vehicle Modal -->
+    <div id="addVehicleModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">Ajouter un véhicule</h2>
+                    <button onclick="closeAddVehicleModal()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <form id="addVehicleForm" class="space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nom du véhicule *</label>
+                            <input type="text" name="name" required class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Type *</label>
+                            <select name="type" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="Berline">Berline</option>
+                                <option value="SUV">SUV</option>
+                                <option value="Sportive">Sportive</option>
+                                <option value="Électrique">Électrique</option>
+                                <option value="Cabriolet">Cabriolet</option>
+                                <option value="Utilitaire">Utilitaire</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Prix par jour (€) *</label>
+                            <input type="number" name="price" required min="1" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Année *</label>
+                            <input type="number" name="year" required min="1990" max="2024" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Carburant *</label>
+                            <select name="fuel" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="Essence">Essence</option>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Électrique">Électrique</option>
+                                <option value="Hybride">Hybride</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Transmission *</label>
+                            <select name="transmission" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="Manuelle">Manuelle</option>
+                                <option value="Automatique">Automatique</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre de places *</label>
+                            <select name="seats" required class="w-full p-3 border border-gray-300 rounded-lg">
+                                <option value="">Sélectionner</option>
+                                <option value="2">2 places</option>
+                                <option value="4">4 places</option>
+                                <option value="5">5 places</option>
+                                <option value="7">7 places</option>
+                                <option value="9">9 places</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Marque</label>
+                            <input type="text" name="brand" class="w-full p-3 border border-gray-300 rounded-lg">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea name="description" rows="3" class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Photos du véhicule</label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                            <input type="file" id="vehicleImages" name="images" multiple accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+                            <div id="imageUploadArea" class="cursor-pointer" onclick="document.getElementById('vehicleImages').click()">
+                                <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                                <p class="text-gray-600 mb-2">Cliquez pour ajouter des photos</p>
+                                <p class="text-xs text-gray-500">PNG, JPG jusqu'à 5MB chacune</p>
+                            </div>
+                            <div id="imagePreview" class="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4 hidden">
+                                <!-- Image previews will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Équipements</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="GPS" class="mr-2">
+                                <span class="text-sm">GPS</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Climatisation" class="mr-2">
+                                <span class="text-sm">Climatisation</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Bluetooth" class="mr-2">
+                                <span class="text-sm">Bluetooth</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Caméra de recul" class="mr-2">
+                                <span class="text-sm">Caméra de recul</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Sièges chauffants" class="mr-2">
+                                <span class="text-sm">Sièges chauffants</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="equipment" value="Toit ouvrant" class="mr-2">
+                                <span class="text-sm">Toit ouvrant</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" onclick="closeAddVehicleModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                            Annuler
+                        </button>
+                        <button type="submit" class="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800">
+                            Ajouter le véhicule
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <table class="table" id="resTable">
-          <thead><tr><th>Client</th><th>Véhicule</th><th>Dates</th><th>Statut</th><th>Actions</th></tr></thead>
-          <tbody>
-            <tr><td>R. Martin</td><td>Tesla Model 3</td><td>12–15 Oct.</td><td><span class="status" data-s="pending">En attente</span></td><td><button class="btn">Accepter</button><button class="btn">Refuser</button><button class="btn">Message</button></td></tr>
-            <tr><td>S. Dubois</td><td>Audi Q5</td><td>22–24 Oct.</td><td><span class="status" data-s="confirmed">Confirmée</span></td><td><button class="btn">Détails</button><button class="btn">Message</button></td></tr>
-            <tr><td>L. Cohen</td><td>Mercedes S</td><td>02–05 Nov.</td><td><span class="status" data-s="cancelled">Annulée</span></td><td><button class="btn">Détails</button></td></tr>
-          </tbody>
-        </table>
-      </div>
     </div>
 
-    <!-- MARKETING -->
-    <div id="tab-marketing" class="hidden">
-      <div class="card padded">
-        <h3 style="margin-top:0">Mise en avant & Campagnes</h3>
-        <div class="form-cols" style="margin-top:10px">
-          <select><option>Choisir une annonce à promouvoir</option><option>Tesla Model 3</option><option>Audi Q5</option></select>
-          <select><option>Durée</option><option>7 jours</option><option>14 jours</option><option>30 jours</option></select>
+    <!-- Booking Detail Modal -->
+    <div id="bookingDetailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-lg w-full">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">Détails de la réservation</h2>
+                    <button onclick="closeBookingDetailModal()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div id="bookingDetailContent">
+                    <!-- Booking details will be loaded here -->
+                </div>
+            </div>
         </div>
-        <div class="form-cols" style="margin-top:10px">
-          <select><option>Positionnement</option><option>Top liste</option><option>Badge “Sponsorisé”</option><option>Page d’accueil</option></select>
-          <input placeholder="Budget (ex: 250 €)">
-        </div>
-        <div class="chart" style="margin-top:12px">
-          <svg viewBox="0 0 600 180" width="100%" height="100%">
-            <rect x="40" y="60" width="40" height="90" fill="#2a4f96"/>
-            <rect x="120" y="30" width="40" height="120" fill="#2a4f96"/>
-            <rect x="200" y="80" width="40" height="70" fill="#2a4f96"/>
-            <rect x="280" y="45" width="40" height="105" fill="#2a4f96"/>
-            <rect x="360" y="70" width="40" height="80" fill="#2a4f96"/>
-            <rect x="440" y="35" width="40" height="115" fill="#2a4f96"/>
-          </svg>
-          <div class="hint">Prévision de visibilité (impressions)</div>
-        </div>
-        <div style="margin-top:12px"><button class="btn btn-primary">Lancer la campagne</button></div>
-      </div>
     </div>
 
-  </div>
-</section>
+    <script>
+        const choiceCards = document.querySelectorAll('.choice-card');
+        const choiceSection = document.getElementById('choiceSection');
+        const loginForm = document.getElementById('loginForm');
+        const formTitle = document.getElementById('formTitle');
+        const formSubtitle = document.getElementById('formSubtitle');
+        const authForm = document.getElementById('authForm');
+        const backBtn = document.getElementById('backBtn');
 
-<footer class="container">
-  © AirWorld — Expérience premium, sécurisée et transparente.
-</footer>
+        let selectedType = '';
 
-<script>
-/* ================== STATE ================== */
-let role = "client"; // client or loueur
+        // Data storage
+        let vehicles = [
+            {
+                id: 1,
+                name: 'Mercedes Classe S',
+                type: 'Berline',
+                price: 280,
+                fuel: 'Essence',
+                transmission: 'Automatique',
+                seats: 4,
+                year: 2023,
+                available: true,
+                images: [
+                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik01MCA5MEM1MCA4NS41ODE3IDUzLjU4MTcgODIgNTggODJIMjQyQzI0Ni40MTggODIgMjUwIDg1LjU4MTcgMjUwIDkwVjE0MEMyNTAgMTQ0LjQxOCAyNDYuNDE4IDE0OCAyNDIgMTQ4SDU4QzUzLjU4MTcgMTQ4IDUwIDE0NC40MTggNTAgMTQwVjkwWiIgZmlsbD0iIzM3NDE1MSIvPgo8Y2lyY2xlIGN4PSI4NSIgY3k9IjE0OCIgcj0iMTgiIGZpbGw9IiMxZjI5MzciLz4KPGNpcmNsZSBjeD0iMjE1IiBjeT0iMTQ4IiByPSIxOCIgZmlsbD0iIzFmMjkzNyIvPgo8cGF0aCBkPSJNNzAgOTBIMTMwTDE0MCA3MEgyMzBMMjQwIDkwSDI1MFYxMDBINTBWOTBINzBaIiBmaWxsPSIjNDc0ZjU5Ii8+Cjx0ZXh0IHg9IjE1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzM3NDE1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TWVyY2VkZXMgQ2xhc3NlIFM8L3RleHQ+Cjwvc3ZnPg=='
+                ]
+            },
+            {
+                id: 2,
+                name: 'BMW X5',
+                type: 'SUV',
+                price: 220,
+                fuel: 'Diesel',
+                transmission: 'Automatique',
+                seats: 5,
+                year: 2022,
+                available: true,
+                images: [
+                    'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Ik00MCA4NUg0NUw2MCA3MEgyNDBMMjU1IDg1SDI2MFYxNDBIMjQ1VjE1MEgyMTVWMTQwSDg1VjE1MEg1NVYxNDBINDBWODVaIiBmaWxsPSIjMzc0MTUxIi8+CjxjaXJjbGUgY3g9IjgwIiBjeT0iMTUwIiByPSIyMCIgZmlsbD0iIzFmMjkzNyIvPgo8Y2lyY2xlIGN4PSIyMjAiIGN5PSIxNTAiIHI9IjIwIiBmaWxsPSIjMWYyOTM3Ii8+CjxwYXRoIGQ9Ik02MCA4NUgxMDBMMTIwIDcwSDIwMEwyMjAgODVIMjYwVjEwMEg0MFY4NUg2MFoiIGZpbGw9IiM0NzRmNTkiLz4KPHN2ZyB4PSIxMzAiIHk9IjkwIiB3aWR0aD0iNDAiIGhlaWdodD0iMjAiPgo8cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iMjAiIGZpbGw9IiM2Mzc0OGYiLz4KPC9zdmc+Cjx0ZXh0IHg9IjE1MCIgeT0iNDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzM3NDE1MSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+Qk1XIFg1PC90ZXh0Pgo8L3N2Zz4='
+                ]
+            }
+        ];
 
-/* ================== AUTH MODAL ================== */
-const modal = document.getElementById('authModal');
-const openAuths = [document.getElementById('btnClient'), document.getElementById('openAuth')];
-const openAuthL = [document.getElementById('btnLoueur'), document.getElementById('openAuthL')];
-const closeAuth = document.getElementById('closeAuth');
-const tabLogin = document.getElementById('tabLogin');
-const tabSignup = document.getElementById('tabSignup');
-const authTitle = document.getElementById('authTitle');
-const fullName = document.getElementById('fullName');
-const pass2 = document.getElementById('pass2');
-const authForm = document.getElementById('authForm');
+        let bookings = [
+            {
+                id: 1,
+                vehicleId: 1,
+                vehicleName: 'Mercedes Classe S',
+                clientName: 'Jean Dupont',
+                clientEmail: 'jean.dupont@email.com',
+                clientPhone: '06 12 34 56 78',
+                startDate: '2024-12-15',
+                endDate: '2024-12-17',
+                totalPrice: 560,
+                status: 'pending'
+            },
+            {
+                id: 2,
+                vehicleId: 2,
+                vehicleName: 'BMW X5',
+                clientName: 'Marie Martin',
+                clientEmail: 'marie.martin@email.com',
+                clientPhone: '06 98 76 54 32',
+                startDate: '2024-12-20',
+                endDate: '2024-12-22',
+                totalPrice: 440,
+                status: 'confirmed'
+            },
+            {
+                id: 3,
+                vehicleId: 1,
+                vehicleName: 'Mercedes Classe S',
+                clientName: 'Pierre Durand',
+                clientEmail: 'pierre.durand@email.com',
+                clientPhone: '06 11 22 33 44',
+                startDate: '2024-12-25',
+                endDate: '2024-12-27',
+                totalPrice: 560,
+                status: 'confirmed'
+            }
+        ];
 
-openAuths.forEach(b=> b.onclick = ()=>{ role="client"; modal.classList.add('open'); });
-openAuthL.forEach(b=> b.onclick = ()=>{ role="loueur"; modal.classList.add('open'); });
-closeAuth.onclick = ()=> modal.classList.remove('open');
+        let nextVehicleId = 3;
+        let nextBookingId = 4;
 
-tabLogin.onclick = ()=>{ tabLogin.classList.add('active'); tabSignup.classList.remove('active'); authTitle.textContent="Connexion"; fullName.classList.add('hidden'); pass2.classList.add('hidden'); };
-tabSignup.onclick = ()=>{ tabSignup.classList.add('active'); tabLogin.classList.remove('active'); authTitle.textContent="Inscription"; fullName.classList.remove('hidden'); pass2.classList.remove('hidden'); };
+        // Handle choice selection
+        choiceCards.forEach(card => {
+            card.addEventListener('click', function() {
+                selectedType = this.dataset.type;
+                
+                // Remove selected class from all cards
+                choiceCards.forEach(c => c.classList.remove('selected'));
+                
+                // Add selected class to clicked card
+                this.classList.add('selected');
+                
+                // Wait for animation then show form
+                setTimeout(() => {
+                    showLoginForm();
+                }, 300);
+            });
+        });
 
-authForm.onsubmit = (e)=>{
-  e.preventDefault();
-  modal.classList.remove('open');
-  document.getElementById('home').classList.add('hidden');
-  document.getElementById(role==='client'?'client':'loueur').classList.add('active');
-  window.scrollTo({top:0, behavior:'smooth'});
-};
+        function showLoginForm() {
+            choiceSection.style.display = 'none';
+            loginForm.classList.remove('hidden');
+            
+            if (selectedType === 'louer') {
+                formTitle.textContent = 'Connexion Propriétaire';
+                formSubtitle.textContent = 'Accédez à votre espace de gestion';
+            } else {
+                formTitle.textContent = 'Connexion Client';
+                formSubtitle.textContent = 'Accédez à votre espace personnel';
+            }
+        }
 
-/* ================== CLIENT interactions ================== */
-document.getElementById('btnMoreTesla').onclick = ()=> document.getElementById('vehicleModal').classList.add('open');
-document.getElementById('btnBookTesla').onclick = ()=> document.getElementById('vehicleModal').classList.add('open');
-document.getElementById('closeVehicle').onclick = ()=> document.getElementById('vehicleModal').classList.remove('open');
-document.getElementById('confirmBook').onclick = ()=> { alert('Réservation confirmée (démo) – un email sera envoyé.'); document.getElementById('vehicleModal').classList.remove('open'); };
+        // Handle back button
+        backBtn.addEventListener('click', function() {
+            loginForm.classList.add('hidden');
+            choiceSection.style.display = 'grid';
+            choiceCards.forEach(c => c.classList.remove('selected'));
+            selectedType = '';
+        });
 
-/* ================== LOUEUR tabs ================== */
-const tabs = document.querySelectorAll('.subnav button');
-const sections = {
-  dash: document.getElementById('tab-dash'),
-  kyc: document.getElementById('tab-kyc'),
-  profil: document.getElementById('tab-profil'),
-  catalogue: document.getElementById('tab-catalogue'),
-  reservations: document.getElementById('tab-reservations'),
-  marketing: document.getElementById('tab-marketing'),
-};
-tabs.forEach(btn=>{
-  btn.onclick = ()=>{
-    tabs.forEach(b=>b.classList.remove('active')); btn.classList.add('active');
-    Object.values(sections).forEach(s=> s.classList.add('hidden'));
-    sections[btn.dataset.tab].classList.remove('hidden');
-  };
-});
+        // Handle form submission
+        authForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = this.querySelector('input[type="email"]').value;
+            const password = this.querySelector('input[type="password"]').value;
+            
+            if (!email || !password) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            // Simulate login process
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Connexion...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                if (selectedType === 'louer') {
+                    showOwnerPage();
+                } else {
+                    showClientPage();
+                }
+                
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
 
-/* ================== Drag & Drop (KYC & Car photos) ================== */
-function setupDrop(zoneId,inputId,previewId){
-  const zone = document.getElementById(zoneId);
-  const input = document.getElementById(inputId);
-  const prev = document.getElementById(previewId);
-  const selectFiles = ()=> input.click();
-  zone.onclick = selectFiles;
-  ['dragenter','dragover'].forEach(ev=> zone.addEventListener(ev, e=>{e.preventDefault(); zone.classList.add('drag');}));
-  ['dragleave','drop'].forEach(ev=> zone.addEventListener(ev, e=>{e.preventDefault(); zone.classList.remove('drag');}));
-  zone.addEventListener('drop', e=> handleFiles(e.dataTransfer.files));
-  input.addEventListener('change', ()=> handleFiles(input.files));
-  function handleFiles(files){
-    [...files].forEach(f=>{
-      const reader = new FileReader();
-      reader.onload = e=>{
-        const img = new Image(); img.src = e.target.result; prev.appendChild(img);
-      };
-      reader.readAsDataURL(f);
-    });
-  }
-}
-setupDrop('dropKYC','inputKYC','kycPrev');
-setupDrop('dropCar','inputCar','carPrev');
+        function showClientPage() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('clientPage').classList.remove('hidden');
+            document.body.className = 'bg-gray-50';
+        }
 
-/* ================== Add Car ================== */
-document.getElementById('addCar').onclick = ()=>{
-  const name = document.getElementById('vName').value.trim() || 'Nouveau modèle';
-  const year = document.getElementById('vYear').value.trim() || '—';
-  const motor = document.getElementById('vMotor').value.trim() || '—';
-  const price = document.getElementById('vPrice').value.trim() || '—';
-  const row = document.createElement('tr');
-  row.innerHTML = `<td>${name}</td><td>${year}</td><td>${motor}</td><td>${price}</td><td class="table-actions"><button class="btn">Modifier</button><button class="btn">Supprimer</button></td>`;
-  document.querySelector('#carsTable tbody').appendChild(row);
-  // update KPI
-  const kpi = document.getElementById('kpiCars'); kpi.textContent = document.querySelectorAll('#carsTable tbody tr').length;
-  // reset minimal
-  ['vName','vYear','vMotor','vPrice','vOptions','vType'].forEach(id=>{const el=document.getElementById(id); if(el) el.value="";});
-  document.getElementById('carPrev').innerHTML="";
-  alert('Véhicule ajouté (démo).');
-};
+        function showOwnerPage() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('ownerPage').classList.remove('hidden');
+            document.body.className = 'bg-gray-50';
+            
+            // Load initial data
+            loadOwnerDashboard();
+        }
 
-/* ================== Reservations filter ================== */
-document.getElementById('filterStatus').onchange = (e)=>{
-  const val = e.target.value;
-  document.querySelectorAll('#resTable tbody tr').forEach(tr=>{
-    if(val==='all'){ tr.style.display=''; return; }
-    const st = tr.querySelector('.status').dataset.s;
-    tr.style.display = (st===val)?'':'none';
-  });
-};
+        function showClientSection(sectionName) {
+            document.querySelectorAll('#clientPage section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById('client' + sectionName.charAt(0).toUpperCase() + sectionName.slice(1) + 'Section').classList.remove('hidden');
+        }
 
-/* ================== Tiny calendar (catalogue hint) ================== */
-(function renderCalendar(){
-  const holder = document.querySelector('#tab-catalogue .card.padded + h4 + .drop + input + .preview + h4 + .card.padded');
-  const today = new Date();
-  for(let i=0;i<14;i++){
-    const d = new Date(today.getFullYear(), today.getMonth(), today.getDate()+i);
-    const cell = document.createElement('button');
-    cell.textContent = String(d.getDate()).padStart(2,'0');
-    cell.title = d.toLocaleDateString('fr-FR');
-    cell.style.cssText = 'padding:.6rem;border:1px solid var(--line);border-radius:10px;background:#fff;font-weight:700';
-    cell.onclick = ()=> { cell.style.background = cell.style.background==='' || cell.style.background==='rgb(255, 255, 255)' ? '#e8fff1' : '#fff'; };
-    holder.appendChild(cell);
-  }
-})();
-</script>
-</body>
+        function showOwnerSection(sectionName) {
+            document.querySelectorAll('#ownerPage section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById('owner' + sectionName.charAt(0).toUpperCase() + sectionName.slice(1) + 'Section').classList.remove('hidden');
+            
+            // Load data when switching sections
+            if (sectionName === 'dashboard') {
+                loadOwnerDashboard();
+            } else if (sectionName === 'vehicles') {
+                loadVehicles();
+            } else if (sectionName === 'bookings') {
+                loadAllBookings();
+            }
+        }
+
+        function searchVehicles() {
+            document.getElementById('vehicleResults').classList.remove('hidden');
+        }
+
+        function reserveVehicle(vehicleName) {
+            alert('Réservation de ' + vehicleName + ' en cours...');
+        }
+
+        // Owner functions
+        function loadOwnerDashboard() {
+            loadRecentBookings();
+            updateStats();
+        }
+
+        function loadRecentBookings() {
+            const recentBookings = document.getElementById('recentBookings');
+            const pendingBookings = bookings.filter(booking => booking.status === 'pending');
+            
+            recentBookings.innerHTML = '';
+            
+            if (pendingBookings.length === 0) {
+                recentBookings.innerHTML = `
+                    <div class="text-center py-8">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 font-medium">Aucune réservation en attente</p>
+                        <p class="text-sm text-gray-400 mt-1">Toutes vos réservations sont traitées !</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            pendingBookings.forEach(booking => {
+                const bookingElement = document.createElement('div');
+                bookingElement.className = 'bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl p-4 hover:shadow-md transition-all duration-200';
+                bookingElement.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <h3 class="font-semibold text-gray-900">${booking.vehicleName}</h3>
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full font-medium">En attente</span>
+                            </div>
+                            <div class="space-y-1 text-sm text-gray-600">
+                                <p class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    <span>${booking.clientName}</span>
+                                </p>
+                                <p class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span>${formatDate(booking.startDate)} - ${formatDate(booking.endDate)}</span>
+                                </p>
+                                <p class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                    </svg>
+                                    <span class="font-semibold text-gray-900">${booking.totalPrice}€</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="acceptBooking(${booking.id})" class="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Accepter</span>
+                        </button>
+                        <button onclick="rejectBooking(${booking.id})" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors flex items-center justify-center space-x-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            <span>Refuser</span>
+                        </button>
+                        <button onclick="showBookingDetail(${booking.id})" class="px-4 py-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 rounded-lg text-sm font-medium transition-colors">
+                            Détails
+                        </button>
+                    </div>
+                `;
+                recentBookings.appendChild(bookingElement);
+            });
+        }
+
+        function updateStats() {
+            const confirmedBookings = bookings.filter(b => b.status === 'confirmed');
+            const pendingBookings = bookings.filter(b => b.status === 'pending');
+            const totalRevenue = confirmedBookings.reduce((sum, booking) => sum + booking.totalPrice, 0);
+            const occupancyRate = Math.round((confirmedBookings.length / bookings.length) * 100) || 0;
+            
+            // Update dashboard stats
+            document.getElementById('monthlyRevenue').textContent = totalRevenue + '€';
+            document.getElementById('totalBookings').textContent = bookings.length;
+            document.getElementById('totalVehicles').textContent = vehicles.length;
+            document.getElementById('occupancyRate').textContent = occupancyRate + '%';
+            document.getElementById('occupancyBar').style.width = occupancyRate + '%';
+            document.getElementById('pendingBadge').textContent = pendingBookings.length + ' en attente';
+        }
+
+        function acceptBooking(bookingId) {
+            const booking = bookings.find(b => b.id === bookingId);
+            if (booking) {
+                booking.status = 'confirmed';
+                loadRecentBookings();
+                loadAllBookings();
+                updateStats();
+                alert(`Réservation de ${booking.clientName} acceptée !`);
+            }
+        }
+
+        function rejectBooking(bookingId) {
+            const booking = bookings.find(b => b.id === bookingId);
+            if (booking) {
+                booking.status = 'rejected';
+                loadRecentBookings();
+                loadAllBookings();
+                updateStats();
+                alert(`Réservation de ${booking.clientName} refusée.`);
+            }
+        }
+
+        function showAddVehicleModal() {
+            document.getElementById('addVehicleModal').classList.remove('hidden');
+        }
+
+        function closeAddVehicleModal() {
+            document.getElementById('addVehicleModal').classList.add('hidden');
+            document.getElementById('addVehicleForm').reset();
+        }
+
+        function showBookingDetail(bookingId) {
+            const booking = bookings.find(b => b.id === bookingId);
+            if (!booking) return;
+            
+            const content = document.getElementById('bookingDetailContent');
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-medium text-gray-900">Véhicule</h3>
+                        <p class="text-gray-600">${booking.vehicleName}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Client</h3>
+                        <p class="text-gray-600">${booking.clientName}</p>
+                        <p class="text-sm text-gray-500">${booking.clientEmail}</p>
+                        <p class="text-sm text-gray-500">${booking.clientPhone}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Période</h3>
+                        <p class="text-gray-600">${formatDate(booking.startDate)} - ${formatDate(booking.endDate)}</p>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Prix total</h3>
+                        <p class="text-gray-600">${booking.totalPrice}€</p>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-900">Statut</h3>
+                        <span class="px-2 py-1 text-xs rounded-full ${getStatusClass(booking.status)}">${getStatusText(booking.status)}</span>
+                    </div>
+                    ${booking.status === 'pending' ? `
+                        <div class="flex space-x-2 pt-4">
+                            <button onclick="acceptBooking(${booking.id}); closeBookingDetailModal();" class="flex-1 bg-green-600 text-white py-2 rounded-lg">Accepter</button>
+                            <button onclick="rejectBooking(${booking.id}); closeBookingDetailModal();" class="flex-1 bg-red-600 text-white py-2 rounded-lg">Refuser</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            document.getElementById('bookingDetailModal').classList.remove('hidden');
+        }
+
+        function closeBookingDetailModal() {
+            document.getElementById('bookingDetailModal').classList.add('hidden');
+        }
+
+        function loadVehicles() {
+            const vehiclesList = document.getElementById('vehiclesList');
+            vehiclesList.innerHTML = '';
+            
+            vehicles.forEach(vehicle => {
+                const vehicleElement = document.createElement('div');
+                vehicleElement.className = 'bg-white rounded-lg border border-gray-200 p-4';
+                
+                const imageHtml = vehicle.images && vehicle.images.length > 0 
+                    ? `<img src="${vehicle.images[0]}" alt="${vehicle.name}" class="w-full h-32 object-cover rounded-lg mb-3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                       <div class="w-full h-32 bg-gray-200 rounded-lg mb-3 hidden items-center justify-center">
+                           <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                           </svg>
+                       </div>`
+                    : `<div class="w-full h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+                           <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                           </svg>
+                       </div>`;
+                
+                vehicleElement.innerHTML = `
+                    ${imageHtml}
+                    <h3 class="font-medium mb-1">${vehicle.name}</h3>
+                    <p class="text-sm text-gray-600 mb-2">${vehicle.price}€/jour • ${vehicle.available ? 'Disponible' : 'Indisponible'}</p>
+                    <p class="text-xs text-gray-500 mb-3">${vehicle.type} • ${vehicle.fuel} • ${vehicle.seats} places</p>
+                    <div class="flex space-x-2">
+                        <button onclick="editVehicle(${vehicle.id})" class="flex-1 bg-gray-100 text-gray-700 py-1 rounded text-xs hover:bg-gray-200">Modifier</button>
+                        <button onclick="toggleVehicleAvailability(${vehicle.id})" class="flex-1 ${vehicle.available ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'} py-1 rounded text-xs">
+                            ${vehicle.available ? 'Désactiver' : 'Activer'}
+                        </button>
+                    </div>
+                `;
+                vehiclesList.appendChild(vehicleElement);
+            });
+        }
+
+        function loadAllBookings() {
+            const allBookings = document.getElementById('allBookings');
+            const bookingsCount = document.getElementById('bookingsCount');
+            const filter = document.getElementById('bookingFilter').value;
+            
+            let filteredBookings = bookings;
+            if (filter !== 'all') {
+                filteredBookings = bookings.filter(booking => booking.status === filter);
+            }
+            
+            // Update count
+            bookingsCount.textContent = `${filteredBookings.length} réservation${filteredBookings.length > 1 ? 's' : ''}`;
+            
+            allBookings.innerHTML = '';
+            
+            if (filteredBookings.length === 0) {
+                allBookings.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 font-medium">Aucune réservation trouvée</p>
+                        <p class="text-sm text-gray-400 mt-1">Essayez de changer le filtre</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            filteredBookings.forEach(booking => {
+                const bookingElement = document.createElement('div');
+                bookingElement.className = 'bg-white border border-gray-200 rounded-xl p-5 cursor-pointer hover:shadow-md hover:border-gray-300 transition-all duration-200';
+                bookingElement.onclick = () => showBookingDetail(booking.id);
+                
+                const statusColors = {
+                    'pending': 'bg-yellow-100 text-yellow-800 border-yellow-200',
+                    'confirmed': 'bg-green-100 text-green-800 border-green-200',
+                    'rejected': 'bg-red-100 text-red-800 border-red-200'
+                };
+                
+                bookingElement.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <h3 class="text-lg font-semibold text-gray-900">${booking.vehicleName}</h3>
+                                <span class="px-3 py-1 text-xs font-medium rounded-full border ${statusColors[booking.status]}">${getStatusText(booking.status)}</span>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-gray-900">${booking.clientName}</p>
+                                        <p class="text-gray-500">${booking.clientEmail}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Période</p>
+                                        <p class="text-gray-500">${formatDate(booking.startDate)} - ${formatDate(booking.endDate)}</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-gray-900">Total</p>
+                                        <p class="text-lg font-bold text-gray-900">${booking.totalPrice}€</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="ml-4">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+                allBookings.appendChild(bookingElement);
+            });
+        }
+
+
+
+        function filterBookings() {
+            loadAllBookings();
+        }
+
+        function editVehicle(vehicleId) {
+            alert(`Modification du véhicule ${vehicleId} (à implémenter)`);
+        }
+
+        function toggleVehicleAvailability(vehicleId) {
+            const vehicle = vehicles.find(v => v.id === vehicleId);
+            if (vehicle) {
+                vehicle.available = !vehicle.available;
+                loadVehicles();
+                alert(`Véhicule ${vehicle.available ? 'activé' : 'désactivé'}`);
+            }
+        }
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'pending': return 'bg-yellow-100 text-yellow-800';
+                case 'confirmed': return 'bg-green-100 text-green-800';
+                case 'rejected': return 'bg-red-100 text-red-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        function getStatusText(status) {
+            switch (status) {
+                case 'pending': return 'En attente';
+                case 'confirmed': return 'Confirmée';
+                case 'rejected': return 'Refusée';
+                default: return 'Inconnu';
+            }
+        }
+
+        // Global variable to store uploaded images
+        let uploadedImages = [];
+
+        // Handle image upload
+        function handleImageUpload(event) {
+            const files = Array.from(event.target.files);
+            const imagePreview = document.getElementById('imagePreview');
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            
+            uploadedImages = []; // Reset uploaded images
+            imagePreview.innerHTML = '';
+            
+            if (files.length > 0) {
+                imagePreview.classList.remove('hidden');
+                imageUploadArea.style.display = 'none';
+                
+                files.forEach((file, index) => {
+                    if (file.type.startsWith('image/') && file.size <= 5 * 1024 * 1024) { // 5MB limit
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            uploadedImages.push(e.target.result);
+                            
+                            const imageContainer = document.createElement('div');
+                            imageContainer.className = 'relative group';
+                            imageContainer.innerHTML = `
+                                <img src="${e.target.result}" alt="Preview" class="w-full h-24 object-cover rounded-lg">
+                                <button type="button" onclick="removeImage(${index})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                                    ×
+                                </button>
+                            `;
+                            imagePreview.appendChild(imageContainer);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            } else {
+                imagePreview.classList.add('hidden');
+                imageUploadArea.style.display = 'block';
+            }
+        }
+
+        // Remove image from preview
+        function removeImage(index) {
+            uploadedImages.splice(index, 1);
+            const imagePreview = document.getElementById('imagePreview');
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            
+            if (uploadedImages.length === 0) {
+                imagePreview.classList.add('hidden');
+                imageUploadArea.style.display = 'block';
+                document.getElementById('vehicleImages').value = '';
+            } else {
+                // Rebuild preview
+                imagePreview.innerHTML = '';
+                uploadedImages.forEach((imageSrc, newIndex) => {
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'relative group';
+                    imageContainer.innerHTML = `
+                        <img src="${imageSrc}" alt="Preview" class="w-full h-24 object-cover rounded-lg">
+                        <button type="button" onclick="removeImage(${newIndex})" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity">
+                            ×
+                        </button>
+                    `;
+                    imagePreview.appendChild(imageContainer);
+                });
+            }
+        }
+
+        // Add vehicle form submission
+        document.getElementById('addVehicleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const equipmentCheckboxes = this.querySelectorAll('input[name="equipment"]:checked');
+            const equipment = Array.from(equipmentCheckboxes).map(cb => cb.value);
+            
+            const newVehicle = {
+                id: nextVehicleId++,
+                name: formData.get('name'),
+                type: formData.get('type'),
+                price: parseInt(formData.get('price')),
+                fuel: formData.get('fuel'),
+                transmission: formData.get('transmission'),
+                seats: parseInt(formData.get('seats')),
+                year: parseInt(formData.get('year')),
+                brand: formData.get('brand') || '',
+                description: formData.get('description') || '',
+                equipment: equipment,
+                images: [...uploadedImages], // Copy uploaded images
+                available: true
+            };
+            
+            vehicles.push(newVehicle);
+            loadVehicles();
+            updateStats();
+            closeAddVehicleModal();
+            
+            // Reset form and images
+            uploadedImages = [];
+            document.getElementById('imagePreview').classList.add('hidden');
+            document.getElementById('imageUploadArea').style.display = 'block';
+            
+            alert(`Véhicule "${newVehicle.name}" ajouté avec succès !`);
+        });
+
+        function logout() {
+            document.getElementById('clientPage').classList.add('hidden');
+            document.getElementById('ownerPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.body.className = 'gradient-bg min-h-screen flex items-center justify-center p-6 relative overflow-hidden';
+            
+            // Reset form
+            loginForm.classList.add('hidden');
+            choiceSection.style.display = 'grid';
+            choiceCards.forEach(c => c.classList.remove('selected'));
+            selectedType = '';
+            authForm.reset();
+        }
+
+        // Add input validation effects
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+                
+                // Simple validation
+                if (this.type === 'email' && this.value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(this.value)) {
+                        this.style.borderColor = '#ef4444';
+                    } else {
+                        this.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                    }
+                }
+            });
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !loginForm.classList.contains('hidden')) {
+                backBtn.click();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'982d54b2b0f3d3e0',t:'MTc1ODQ5NzIyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
