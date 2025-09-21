@@ -57,9 +57,15 @@ section.active{display:block}
 
 /* Loueur Section */
 #loueur h2{margin-bottom:20px}
+.dashboard{display:grid;gap:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px}
+.stat{background:#f8f8f8;border-radius:12px;padding:20px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,.05)}
+.stat h3{font-size:24px;margin-bottom:6px}
+.stat p{color:#666;font-size:14px}
+.table-card{background:#fff;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
 .table{width:100%;border-collapse:collapse}
 .table th,.table td{padding:10px;border-bottom:1px solid #ddd;text-align:left}
-.add-form{margin-top:20px;display:flex;gap:10px}
+.add-form{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
 .add-form input{flex:1;padding:10px;border:1px solid #ccc;border-radius:8px}
 .add-form button{padding:10px 16px;border-radius:8px;background:#111;color:#fff;font-weight:600}
 </style>
@@ -128,21 +134,29 @@ section.active{display:block}
 
 <!-- Loueur Section -->
 <section id="loueur">
-  <h2>Espace Loueur – Gérez vos annonces</h2>
-  <table class="table" id="carsTable">
-    <thead>
-      <tr><th>Nom</th><th>Type</th><th>Prix</th></tr>
-    </thead>
-    <tbody>
-      <tr><td>Tesla Model 3</td><td>Électrique</td><td>129 €</td></tr>
-    </tbody>
-  </table>
-  <form class="add-form" id="addCarForm">
-    <input type="text" id="carName" placeholder="Nom de la voiture" required>
-    <input type="text" id="carType" placeholder="Type" required>
-    <input type="text" id="carPrice" placeholder="Prix" required>
-    <button type="submit">Ajouter</button>
-  </form>
+  <h2>Espace Loueur – Tableau de bord</h2>
+  <div class="dashboard">
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat"><h3 id="statCars">1</h3><p>Voitures disponibles</p></div>
+      <div class="stat"><h3 id="statBookings">12</h3><p>Réservations</p></div>
+      <div class="stat"><h3 id="statRevenue">3 450 €</h3><p>Revenus estimés</p></div>
+    </div>
+    <!-- Table annonces -->
+    <div class="table-card">
+      <h3 style="margin-bottom:10px">Mes annonces</h3>
+      <table class="table" id="carsTable">
+        <thead><tr><th>Nom</th><th>Type</th><th>Prix</th></tr></thead>
+        <tbody><tr><td>Tesla Model 3</td><td>Électrique</td><td>129 €</td></tr></tbody>
+      </table>
+      <form class="add-form" id="addCarForm">
+        <input type="text" id="carName" placeholder="Nom de la voiture" required>
+        <input type="text" id="carType" placeholder="Type" required>
+        <input type="text" id="carPrice" placeholder="Prix" required>
+        <button type="submit">Ajouter</button>
+      </form>
+    </div>
+  </div>
 </section>
 
 <script>
@@ -155,11 +169,9 @@ const confirmField=document.getElementById("confirmField");
 const modalTitle=document.getElementById("modal-title");
 let userRole="client"; // client ou loueur
 
-// Open modal for client
+// Open modal
 document.getElementById("btn-client").onclick=()=>{userRole="client";modal.classList.add("open");};
-// Open modal for loueur
 document.getElementById("btn-loueur").onclick=()=>{userRole="loueur";modal.classList.add("open");};
-// Close
 closeBtn.onclick=()=>modal.classList.remove("open");
 
 // Tabs
@@ -183,7 +195,7 @@ document.getElementById("authForm").onsubmit=(e)=>{
   else{document.getElementById("loueur").classList.add("active");}
 };
 
-// Add car (loueur)
+// Loueur - add car
 document.getElementById("addCarForm").onsubmit=(e)=>{
   e.preventDefault();
   const name=document.getElementById("carName").value;
@@ -192,6 +204,7 @@ document.getElementById("addCarForm").onsubmit=(e)=>{
   const row=document.createElement("tr");
   row.innerHTML=`<td>${name}</td><td>${type}</td><td>${price}</td>`;
   document.querySelector("#carsTable tbody").appendChild(row);
+  document.getElementById("statCars").textContent=document.querySelectorAll("#carsTable tbody tr").length;
   e.target.reset();
 };
 </script>
